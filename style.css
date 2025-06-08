@@ -81,6 +81,7 @@ body::before {
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  padding-top: 20px; /* Adjusted as scrolling banner is removed */
 }
 
 /* Header section */
@@ -298,7 +299,8 @@ h1 {
   }
 }
 
-/* Scrolling banner styles */
+/* Removed Scrolling banner styles */
+/*
 .scrolling-banner {
   position: fixed;
   top: 0;
@@ -328,6 +330,107 @@ h1 {
     transform: translateX(-100%);
   }
 }
+*/
+
+/* Hamburger menu icon */
+.menu-icon {
+  position: fixed;
+  top: 20px; /* Adjusted top position as banner is removed */
+  left: 20px; /* Adjusted left position */
+  width: 50px; /* Even bigger */
+  height: 40px; /* Even bigger */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 101;
+}
+
+.menu-icon .bar {
+  width: 100%;
+  height: 5px; /* Even thicker bars */
+  /* Replaced background-color with a gradient for rainbow effect */
+  background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+  background-size: 400% 100%; /* For the animation */
+  animation: rainbow-fade 5s linear infinite; /* Rainbow animation */
+  border-radius: 3px; /* Slightly rounded bars */
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes rainbow-fade {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.menu-icon.active .bar:nth-child(1) {
+  transform: translateY(17.5px) rotate(45deg); /* Adjusted for new size */
+}
+
+.menu-icon.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-icon.active .bar:nth-child(3) {
+  transform: translateY(-17.5px) rotate(-45deg); /* Adjusted for new size */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: fixed;
+  top: 0; /* Menu starts from top */
+  left: 0;
+  width: 250px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(15px);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  padding-top: 80px; /* Adjusted padding to accommodate bigger icon */
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 40px); /* Adjusted max-height to prevent overflowing, consider icon top offset */
+  overflow-y: auto;
+  border-bottom-right-radius: 10px; /* Optional: adds a slight curve to the bottom right */
+}
+
+.dropdown-menu.open {
+  transform: translateX(0);
+}
+
+.dropdown-item {
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #2d3748;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Cyan and Pink Faded Hover Animation for Dropdown Items */
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #00BCD4, #FF4081); /* Cyan to Pink */
+  transform: translateX(-100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.dropdown-item:hover::before {
+  transform: translateX(0);
+}
+
+.dropdown-item:hover {
+  color: white;
+}
 
 /* Responsive design */
 @media (max-width: 768px) {
@@ -350,6 +453,7 @@ h1 {
 
   .main-container {
     padding: 1rem;
+    padding-top: 20px; /* Adjusted */
   }
 
   .header-section {
@@ -363,6 +467,28 @@ h1 {
 
   .magnetic-button-wrapper:hover .fragment-2 {
     transform: translateX(10px) translateY(3px) rotate(2deg);
+  }
+
+  .dropdown-menu {
+    width: 200px;
+    padding-top: 70px; /* Adjusted for smaller screens */
+  }
+
+  /* Adjust menu icon for smaller screens */
+  .menu-icon {
+    width: 45px;
+    height: 35px;
+    top: 15px;
+    left: 15px;
+  }
+  .menu-icon .bar {
+    height: 4px;
+  }
+  .menu-icon.active .bar:nth-child(1) {
+    transform: translateY(15px) rotate(45deg);
+  }
+  .menu-icon.active .bar:nth-child(3) {
+    transform: translateY(-15px) rotate(-45deg);
   }
 }
 
@@ -387,5 +513,27 @@ h1 {
 
   .magnetic-button-wrapper:hover .fragment-2 {
     transform: translateX(8px) translateY(2px) rotate(0.5deg);
+  }
+
+  .dropdown-menu {
+    width: 180px;
+    padding-top: 60px; /* Adjusted for smallest screens */
+  }
+
+  /* Adjust menu icon for smallest screens */
+  .menu-icon {
+    width: 40px;
+    height: 30px;
+    top: 10px;
+    left: 10px;
+  }
+  .menu-icon .bar {
+    height: 3px;
+  }
+  .menu-icon.active .bar:nth-child(1) {
+    transform: translateY(13.5px) rotate(45deg);
+  }
+  .menu-icon.active .bar:nth-child(3) {
+    transform: translateY(-13.5px) rotate(-45deg);
   }
 }

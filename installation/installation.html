@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Venge.io Mod Installation Guide</title>
+  <link rel="stylesheet" href="installation.css" />
+</head>
+<body>
+  <div class="installation-guide">
+    <h1>📋 Venge.io Mod Installation Guide</h1>
+    <p class="tagline">Follow the steps below to properly install and use the mod on your computer.</p>
+    
+    <div class="guide-section">
+      <h2>🖥️ The mod can only be used on Venge Client:</h2>
+      <p>Official Venge Client Download Link: <a href="https://social.venge.io/client.html" target="_blank" class="guide-link">https://social.venge.io/client.html</a></p>
+    </div>
+
+    <div class="guide-section">
+      <h2>📁 Folder Structure:</h2>
+      <div class="folder-structure">
+        <pre>CharmMod
+│
+├── ReadMe.txt         ← This installation guide  
+└── Venge Client       ← The main mod folder</pre>
+      </div>
+    </div>
+
+    <div class="guide-section">
+      <h2>📥 Installation Steps:</h2>
+      <ol class="installation-steps">
+        <li>Move the entire <strong>Venge Client</strong> folder to your Documents directory.</li>
+        <li>Example path: <code>C:\Users\YourName\Documents\Venge Client</code></li>
+        <li>Ensure the folder name remains exactly as <strong>"Venge Client"</strong> for proper functioning.</li>
+      </ol>
+    </div>
+
+    <div class="guide-section support-section">
+      <p>For further queries, support, or to join the community, visit our official Discord server:</p>
+      <p>🔗 <a href="https://discord.com/invite/VpdV8X87P5" target="_blank" class="guide-link">https://discord.com/invite/VpdV8X87P5</a></p>
+    </div>
+
+    <div class="back-button-container">
+      <a href="../index.html" class="link-button" style="--btn-color: #6c5ce7"><span>← Back</span></a>
+    </div>
+  </div>
+
+  <!-- Floating Discord box -->
+  <div class="discord-float">
+    Friend me on Discord as: "clouds_forever"
+  </div>
+
+  <script>
+    // Mouse-following background split
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      document.body.style.background = `linear-gradient(45deg, white ${Math.max(0, ((x + y) / (window.innerWidth + window.innerHeight)) * 100 - 25)}%, cyan ${Math.min(100, ((x + y) / (window.innerWidth + window.innerHeight)) * 100 + 25)}%)`;
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venge Hall of Fame - Global Clan Leaderboard</title>
+    <link rel="stylesheet" href="leaderboard.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 VENGE HALL OF FAME</h1>
+            <p>Global Clan Leaderboard Championship</p>
+        </div>
+
+        <div class="leaderboard" id="leaderboard">
+            <!-- Cards will be populated by JavaScript -->
+        </div>
+        
+        <div class="back-button-container">
+            <button class="back-button" onclick="window.location.href='../index.html'">
+                <span class="button-icon">🏠</span>
+                <span class="button-text">Back</span>
+                <div class="button-ripple"></div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const clans = [
+            { tag: "SHOT", name: "↖SHOT↗", owner: "BO$$." },
+            { tag: "SWAT", name: "SWAT", owner: "Nand8" },
+            { tag: "HELL", name: "Abyss", owner: "Franciscus" },
+            { tag: "ICED", name: "Icicle", owner: "Frosty_J8cko" },
+            { tag: "FEAR", name: "Raging Beasts", owner: "RevengeH" },
+            { tag: "USSR", name: "USSR", owner: "MrCubiqs" },
+            { tag: "POGI", name: "VORTEX PH", owner: "AttiIa" },
+            { tag: "AFK", name: "AFK", owner: "adam2008" },
+            { tag: "SMKT", name: "SALMONEIGHT", owner: "salmonea" },
+            { tag: "NIKE", name: "NIKE", owner: "xC_old" },
+            { tag: "ENDR", name: "Ender Gang", owner: "x7$" },
+            { tag: "1VS4", name: "1vs4", owner: "LUCKY-!" },
+            { tag: "LS", name: "Los_Milanesos", owner: "Twitch_geronsyt" },
+            { tag: "N00N", name: "NO ONE", owner: "polip8" },
+            { tag: "VOID", name: "VOID player", owner: "SnIPeeRroLd" },
+            { tag: "AG", name: "AvYaV Gaming", owner: "#AVYAV#" },
+            { tag: "PRAP", name: "Praporschik", owner: "JohnVein" },
+            { tag: "2FLY", name: "2FLY", owner: "M@" },
+            { tag: "TC", name: "Kral TÜRKLER", owner: "Muhammed,tr" },
+            { tag: "PINK", name: "Pink Army", owner: "pinkyhair" },
+            { tag: "GOVE", name: "Angkan", owner: "Angkan" },
+            { tag: "4FUN", name: "JUST FOR FUN", owner: "unknown_killer_" },
+            { tag: "VGVN", name: "VNnumber1", owner: "minhius" },
+            { tag: "KAG", name: "KnightsAcademyG", owner: "GGJay" },
+            { tag: "LION", name: "LION", owner: "lionking54" },
+            { tag: "VVS", name: "VVS", owner: "Quit." },
+            { tag: "CHOZ", name: "Chouzetsu!", owner: "averagejoe247" },
+            { tag: "ILU", name: "BEST CLAN EVER", owner: "djsk" },
+            { tag: "LQ", name: "Loss Quick", owner: "RAMIQ" },
+            { tag: "LUXE", name: "Luxe", owner: "Repttars" },
+            { tag: "IKON", name: "Luxury Squad", owner: "xSv_1" },
+            { tag: "NERD", name: "ThatNerd", owner: "ThatNerdChris" },
+            { tag: "CYRG", name: "Cyborgs Clan", owner: "randomTyp" },
+            { tag: "SUAK", name: "Suaaak", owner: "MPdoor" },
+            { tag: "SYME", name: "Syme", owner: "delux" },
+            { tag: "EXP", name: "Virus", owner: "*Xvirus*" },
+            { tag: "CRKD", name: "Cracked", owner: "Crackedgamer69" },
+            { tag: "KREW", name: "Karma Krew", owner: "TPhins_Gaming_YT" },
+            { tag: "CUBE", name: "CUBEIT", owner: "SugarCubezzz" },
+            { tag: "SHEL", name: "Shell", owner: "twoshell" },
+            { tag: "GLXY", name: "Galaxy Clan", owner: "Dry-Cloud" },
+            { tag: "TZN", name: "TzN Clan", owner: "R7AN?" },
+            { tag: "OZIO", name: "DOG", owner: "bazibazi" },
+            { tag: "ILM", name: "ILM", owner: "Nateftw" },
+            { tag: "YO", name: "PROPLAYERS", owner: "PROPLAYER1.11" },
+            { tag: "2LIE", name: "NO | LIE", owner: "Smex_Bank" },
+            { tag: "BNGZ", name: "BoyzAndGirlz", owner: "SLslelvo" },
+            { tag: "D2D", name: "DeadlyCriminal", owner: "AbhiramStreamer" },
+            { tag: "GO", name: "GAME OVER", owner: "ConejitaUwU" },
+            { tag: "6SEA", name: "6SEA", owner: "Protemehus1" }
+        ];
+
+        const leaderboard = document.getElementById('leaderboard');
+        
+        function createClanCard(clan, index) {
+            const rank = index + 1;
+            const isTopThree = rank <= 3;
+            const crown = rank === 1 ? '👑' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+            
+            const card = document.createElement('div');
+            card.className = `clan-card ${isTopThree ? 'top-3-card' : ''}`;
+            
+            card.innerHTML = `
+                ${crown ? `<div class="crown">${crown}</div>` : ''}
+                <div class="rank">${rank}</div>
+                <div class="clan-tag">${clan.tag}</div>
+                <div class="clan-name">${clan.name}</div>
+                <div class="clan-owner">
+                    <div class="owner-icon">👤</div>
+                    <span>${clan.owner}</span>
+                </div>
+                <div class="stats-bar"></div>
+            `;
+            
+            // Add click event to navigate to clan website
+            card.addEventListener('click', () => {
+                window.open(`https://social.venge.io/?clans#${clan.tag}`, '_blank');
+            });
+            
+            return card;
+        }
+
+        function populateLeaderboard() {
+            // Create top 3 section
+            if (clans.length >= 3) {
+                const topThreeContainer = document.createElement('div');
+                topThreeContainer.className = 'top-3';
+                
+                for (let i = 0; i < 3; i++) {
+                    const card = createClanCard(clans[i], i);
+                    topThreeContainer.appendChild(card);
+                }
+                
+                leaderboard.appendChild(topThreeContainer);
+            }
+            
+            // Create remaining cards
+            for (let i = 3; i < clans.length; i++) {
+                const card = createClanCard(clans[i], i);
+                leaderboard.appendChild(card);
+            }
+        }
+
+        function animateCards() {
+            const cards = document.querySelectorAll('.clan-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('animate-in');
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => observer.observe(card));
+        }
+
+        // Initialize the leaderboard
+        populateLeaderboard();
+        
+        // Animate cards on scroll with a slight delay for better UX
+        setTimeout(animateCards, 500);
+        
+        // Add some extra interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.clan-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.zIndex = '1';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
