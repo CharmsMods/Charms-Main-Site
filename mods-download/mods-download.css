@@ -1,0 +1,618 @@
+/*
+ * Updated mods-download.css
+ *
+ * This stylesheet defines the visual appearance of the mod download page,
+ * implementing a professional brown and tan color scheme with unique
+ * translucent, "glassy" mod cards using glass morphism principles.
+ */
+
+/* --- Color Palette Definition --- */
+/* These CSS variables define the primary shades of brown and tan used throughout the design. */
+:root {
+    --color-dark-brown: #4A3C30;   /* A deep, rich brown for backgrounds and strong text */
+    --color-medium-brown: #7A6A5E; /* A warm, mid-tone brown for accents and secondary text */
+    --color-light-brown: #C7B7A8;  /* A lighter, more desaturated brown for card bases */
+    --color-tan: #EADFCD;         /* A soft, neutral tan for highlights and hover states */
+    --color-cream: #FAF7F0;        /* A very light, almost off-white tan for text on dark backgrounds */
+    --color-accent-gold: #B8860B;  /* A subtle goldenrod for professional accents */
+
+    /* RGB values for rgba() usage - these are derived from the above hex colors */
+    --color-dark-brown-rgb: 74, 60, 48;
+    --color-medium-brown-rgb: 122, 106, 94;
+    --color-light-brown-rgb: 199, 183, 168;
+    --color-tan-rgb: 234, 223, 205;
+    --color-cream-rgb: 250, 247, 240; /* Added for glass morphism background */
+}
+
+/* --- General Body and Container Styling --- */
+/* Sets the overall background and font for the page to establish the theme. */
+body {
+    font-family: 'Inter', sans-serif; /* Using Inter for a clean, modern look */
+    background-color: var(--color-dark-brown); /* The main background color */
+    color: var(--color-cream); /* Default text color for good contrast */
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align items to the start to allow scrolling */
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    overflow-y: auto; /* Enable scrolling for content */
+    perspective: 1000px; /* Essential for 3D transforms on children */
+    position: relative; /* Needed for positioning background circles */
+    overflow-x: hidden; /* Prevent horizontal scroll from circles */
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px; /* Max width for content to keep it readable */
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 10; /* Ensure content is above background circles */
+    position: relative; /* Create new stacking context */
+}
+
+/* --- Header Styling --- */
+/* Styles for the main title and subtitle, ensuring they are prominent and legible. */
+header {
+    margin-bottom: 40px;
+}
+
+header h1 {
+    font-size: 3.5em;
+    font-weight: 700;
+    color: var(--color-cream);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle text shadow for depth */
+}
+
+header .subtitle {
+    font-size: 1.2em;
+    color: var(--color-light-brown);
+    margin-top: 0;
+    font-weight: 400;
+}
+
+/* --- Mods Grid Layout --- */
+/* Uses CSS Grid to create a responsive layout for the mod cards. */
+.mods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 30px; /* Spacing between cards */
+    padding: 20px 0;
+}
+
+/* --- Mod Card Styling (The "Glassy" Effect with Glass Morphism) --- */
+/*
+ * This is the core styling for the mod cards, featuring a unique cut-corner
+ * shape, a translucent background, and a subtle "floating" effect.
+ * The backdrop-filter creates the privacy window / frosted glass effect.
+ */
+.mod-card {
+    /* Glass Morphism Base */
+    background: rgba(var(--color-cream-rgb), 0.08); /* Very light, very transparent base */
+    border: 1px solid rgba(var(--color-cream-rgb), 0.2); /* Subtle, light border */
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.1), /* Closer shadow */
+        0 10px 20px rgba(0, 0, 0, 0.15), /* Elevation shadow */
+        0 30px 60px rgba(0, 0, 0, 0.18); /* Diffused elevation shadow (slightly reduced opacity) */
+    backdrop-filter: blur(8px) saturate(180%); /* Stronger blur and saturation for glass effect */
+    -webkit-backdrop-filter: blur(8px) saturate(180%); /* Safari support */
+    border-radius: 12px; /* Slightly rounded corners for softness */
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, more dramatic transitions */
+
+    /* Unique Cut-Corner Shape */
+    /* This clip-path creates the cut-off top-right and bottom-left corners */
+    clip-path: polygon(
+        0% 15px,       /* Top-left (start 15px down) */
+        15px 0%,       /* Top-left (end 15px right) */
+        calc(100% - 15px) 0%, /* Top-right (start 15px left) */
+        100% 15px,     /* Top-right (end 15px down) */
+        100% calc(100% - 15px), /* Bottom-right (start 15px up) */
+        calc(100% - 15px) 100%, /* Bottom-right (end 15px left) */
+        15px 100%,     /* Bottom-left (start 15px right) */
+        0% calc(100% - 15px) /* Bottom-left (end 15px up) */
+    );
+
+    /* Initial animation for cards to fade in */
+    opacity: 0;
+    transform: translateY(30px) translateZ(0); /* Start slightly lower, 0 Z for initial state */
+    animation: fadeInSlideUp 0.8s forwards ease-out; /* Longer animation for softer entry */
+    transform-style: preserve-3d; /* Allows child elements to exist in 3D space relative to parent */
+    position: relative; /* Needed for stacking context with shadows/transforms */
+}
+
+/* Keyframe for initial card fade-in animation */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) translateZ(0);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) translateZ(0);
+    }
+}
+
+/* --- Mod Card Hover Effect --- */
+/*
+ * On hover, the card becomes more translucent and the blur increases,
+ * simulating a "privacy window" or "ice" effect.
+ * Increased transform values for a more dramatic hover lift and subtle 3D tilt.
+ */
+.mod-card:hover {
+    background: rgba(var(--color-cream-rgb), 0.15); /* Slightly less transparent on hover */
+    box-shadow:
+        0 8px 12px rgba(0, 0, 0, 0.15), /* Closer shadow on hover */
+        0 20px 40px rgba(0, 0, 0, 0.25), /* Medium shadow for more pronounced lift */
+        0 60px 120px rgba(0, 0, 0, 0.35); /* Large, diffused shadow for strong elevation */
+    backdrop-filter: blur(12px) saturate(200%); /* Even stronger blur/saturation on hover */
+    -webkit-backdrop-filter: blur(12px) saturate(200%); /* Safari support */
+    /* More pronounced lift and a subtle 3D rotation */
+    transform: translateY(-15px) translateZ(50px) rotateX(2deg) rotateY(-2deg);
+}
+
+/* --- Mod Card Content Styling --- */
+.mod-card h2 {
+    font-size: 1.8em;
+    color: var(--color-cream); /* Mod name text color */
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.mod-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Added for smooth hiding */
+}
+
+/* --- Download Button Styling --- */
+/* Professional and inviting download button. */
+.download-button {
+    background-color: var(--color-medium-brown);
+    color: var(--color-cream);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px; /* Rounded corners for the button */
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px; /* Space below button */
+    outline: none; /* Remove outline on focus */
+}
+
+.download-button:hover {
+    background-color: var(--color-dark-brown); /* Darker on hover */
+    transform: translateY(-2px); /* Slight lift */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.download-button:active {
+    transform: translateY(0); /* Press effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for "Coming Soon" button */
+.download-button.coming-soon {
+    background-color: var(--color-light-brown); /* Muted color */
+    color: var(--color-dark-brown);
+    cursor: not-allowed;
+    opacity: 0.7;
+    font-style: italic;
+    box-shadow: none;
+}
+
+.download-button.coming-soon:hover {
+    background-color: var(--color-light-brown);
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Download Loading Animation --- */
+/* Adapts the download animation within cards to the new color scheme. */
+.download-loading-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(var(--color-dark-brown-rgb), 0.8); /* Semi-transparent dark brown overlay */
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    border-radius: 12px; /* Match card border-radius */
+    /* Reuse the same clip-path as the mod-card for consistent shape */
+    clip-path: polygon(
+        0% 15px,
+        15px 0%,
+        calc(100% - 15px) 0%,
+        100% 15px,
+        100% calc(100% - 15px),
+        calc(100% - 15px) 100%,
+        15px 100%,
+        0% calc(100% - 15px)
+    );
+    overflow: hidden; /* Important: ensures content stays within the clipped path */
+}
+
+.download-loading-animation.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* New animation CSS starts here */
+.download-loading-animation h1 {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Narrow', sans-serif; /* Keep original font for the animation */
+    font-weight: 100;
+    font-size: 1.1em; /* Adjust this to fit within your card if needed */
+    color: var(--color-cream); /* Use your color variable for consistency */
+    text-align: center;
+    width: 100%;
+}
+
+.download-loading-animation h1 span {
+    position: relative;
+    top: 0.63em;
+    display: inline-block;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: rotateX(-90deg);
+}
+
+/* Updated animation delays and colors to match your scheme */
+.download-loading-animation h1 .let1 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.1s; color: var(--color-cream); }
+.download-loading-animation h1 .let2 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.2s; color: var(--color-tan); }
+.download-loading-animation h1 .let3 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.3s; color: var(--color-cream); }
+.download-loading-animation h1 .let4 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.4s; color: var(--color-light-brown); }
+.download-loading-animation h1 .let5 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.5s; color: var(--color-tan); }
+.download-loading-animation h1 .let6 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.6s; color: var(--color-medium-brown); }
+.download-loading-animation h1 .let7 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.7s; color: var(--color-dark-brown); }
+
+@keyframes drop {
+    0% {
+        opacity: 0;
+        top: 0.63em;
+        transform: rotateX(-90deg);
+    }
+    10% {
+        opacity: 0.5;
+    }
+    20% {
+        opacity: 1;
+        top: 3.78em;
+        transform: rotateX(-360deg);
+    }
+    80% {
+        opacity: 1;
+        top: 3.78em;
+        transform: rotateX(-360deg);
+    }
+    90% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+        top: 6.94em;
+    }
+}
+/* New animation CSS ends here */
+
+
+/* --- Mod Tray and Image Grid --- */
+/* Styles for the expandable section of the card containing images. */
+.mod-tray {
+    max-height: 0; /* Initially hidden */
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+    width: 100%;
+    padding: 0 10px; /* Initial padding */
+}
+
+.mod-tray.show-images {
+    /* MaxHeight will be set by JS, but transition is here */
+    padding: 20px 10px; /* Padding when expanded */
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Flexible image columns */
+    gap: 15px; /* Spacing between images */
+    padding: 10px 0;
+    background-color: rgba(var(--color-medium-brown-rgb), 0.1); /* Subtle background for image tray */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+.image-grid img {
+    width: 100%;
+    height: 100px; /* Fixed height for image previews */
+    object-fit: cover; /* Cover the area, cropping if necessary */
+    border-radius: 8px;
+    cursor: zoom-in;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(var(--color-light-brown-rgb), 0.3);
+}
+
+.image-grid img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Fullscreen Modal for Images --- */
+/* Provides a clean, dark overlay for viewing images in detail. */
+.fullscreen-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(var(--color-dark-brown-rgb), 0.9); /* Dark, semi-transparent overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top */
+    display: none; /* Hidden by default */
+}
+
+.fullscreen-modal img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    border: 5px solid var(--color-cream); /* Cream border around the image */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.fullscreen-modal .close-button {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3em;
+    color: var(--color-cream);
+    cursor: pointer;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.fullscreen-modal .close-button:hover {
+    color: var(--color-accent-gold); /* Accent color on hover */
+    transform: rotate(90deg);
+}
+
+/* --- Custom Message Modal (for "Coming Soon") --- */
+/* Styled to be consistent with the overall theme. */
+#messageModal {
+    background-color: rgba(var(--color-dark-brown-rgb), 0.8); /* Slightly lighter overlay than fullscreen image */
+}
+
+.modal-content {
+    background-color: var(--color-tan); /* Light background for the message box */
+    color: var(--color-dark-brown);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    width: 90%;
+    transform: translateY(-20px); /* Initial state for animation */
+    animation: fadeInSlideDown 0.3s forwards ease-out;
+}
+
+@keyframes fadeInSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#modalMessage {
+    font-size: 1.4em;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+#modalCloseButton {
+    background-color: var(--color-medium-brown);
+    color: var(--color-cream);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#modalCloseButton:hover {
+    background-color: var(--color-dark-brown);
+}
+
+/* --- Back to Home Button --- */
+.back-button {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 12px 30px;
+    background-color: var(--color-medium-brown);
+    color: var(--color-cream);
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.back-button:hover {
+    background-color: var(--color-dark-brown);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Background Circles for Glass Morphism Effect --- */
+/* These circles provide a visual element behind the cards to make the blur effect noticeable. */
+.background-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(var(--color-tan-rgb), 0.1); /* Subtle, semi-transparent tan */
+    filter: blur(50px); /* Heavy blur to create soft glows */
+    z-index: 1; /* Ensure they are behind the content (.container has z-index 10) */
+    animation: floatCircles 15s infinite ease-in-out alternate; /* Gentle floating animation */
+}
+
+/* Specific positioning and sizing for individual circles */
+.background-circle:nth-child(1) {
+    width: 300px;
+    height: 300px;
+    top: 10%;
+    left: -10%;
+    background: rgba(var(--color-cream-rgb), 0.15);
+    animation-delay: 0s;
+}
+
+.background-circle:nth-child(2) {
+    width: 400px;
+    height: 400px;
+    bottom: 5%;
+    right: -15%;
+    background: rgba(var(--color-light-brown-rgb), 0.1);
+    animation-delay: 3s;
+}
+
+.background-circle:nth-child(3) {
+    width: 250px;
+    height: 250px;
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    background: rgba(var(--color-tan-rgb), 0.12);
+    animation-delay: 6s;
+}
+
+.background-circle:nth-child(4) {
+    width: 350px;
+    height: 350px;
+    top: -5%;
+    right: 25%;
+    background: rgba(var(--color-medium-brown-rgb), 0.08);
+    animation-delay: 9s;
+}
+
+/* Keyframe for floating animation */
+@keyframes floatCircles {
+    0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-20px) translateX(20px) scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0.8;
+    }
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+
+    header .subtitle {
+        font-size: 1em;
+    }
+
+    .mods-grid {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
+    }
+
+    .mod-card {
+        padding: 20px;
+        /* Adjust clip-path for smaller screens if needed, or keep consistent */
+        clip-path: polygon(
+            0% 12px,
+            12px 0%,
+            calc(100% - 12px) 0%,
+            100% 12px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            12px 100%,
+            0% calc(100% - 12px)
+        );
+    }
+
+    .mod-card h2 {
+        font-size: 1.5em;
+    }
+
+    .download-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .image-grid {
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+    }
+
+    .image-grid img {
+        height: 80px;
+    }
+
+    .fullscreen-modal .close-button {
+        font-size: 2.5em;
+        top: 15px;
+        right: 20px;
+    }
+
+    #modalMessage {
+        font-size: 1.2em;
+    }
+
+    #modalCloseButton {
+        font-size: 1em;
+    }
+
+    /* Adjust background circles for smaller screens */
+    .background-circle {
+        filter: blur(30px); /* Less blur on smaller screens */
+    }
+    .background-circle:nth-child(1) { width: 150px; height: 150px; top: 5%; left: -10%; }
+    .background-circle:nth-child(2) { width: 200px; height: 200px; bottom: 10%; right: -15%; }
+    .background-circle:nth-child(3) { width: 120px; height: 120px; top: 40%; left: 15%; }
+    .background-circle:nth-child(4) { width: 180px; height: 180px; top: -5%; right: 10%; }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 2em;
+    }
+
+    header .subtitle {
+        font-size: 0.9em;
+    }
+}

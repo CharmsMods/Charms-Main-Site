@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps</title>
+    <link rel="stylesheet" href="maps.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Explore the Maps</h1>
+            <p class="subtitle">Discover the diverse environments and challenges of the game's maps.</p>
+        </header>
+
+        <div class="maps-grid">
+            <!-- Map Card 1: Sierra -->
+            <div class="map-card">
+                <span class="game-mode">Capture the Flag</span>
+                <h2>Sierra</h2>
+                <p class="map-description">
+                    A rugged mountain terrain map with various elevation changes and cover points, perfect for strategic flag captures.
+                </p>
+                <div class="map-tray">
+                    <div class="image-grid">
+                        <img src="mod-pictures/mappage-pictures/sierra/1.png" alt="Sierra Map Image 1">
+                        <img src="mod-pictures/mappage-pictures/sierra/2.png" alt="Sierra Map Image 2">
+                        <img src="mod-pictures/mappage-pictures/sierra/3.png" alt="Sierra Map Image 3">
+                        <img src="mod-pictures/mappage-pictures/sierra/4.png" alt="Sierra Map Image 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Card 2: Xibalba -->
+            <div class="map-card">
+                <span class="game-mode">Team Deathmatch</span>
+                <h2>Xibalba</h2>
+                <p class="map-description">
+                    An ancient, atmospheric map set in a mystical underworld. Features close-quarters combat and hidden pathways.
+                </p>
+                 <div class="map-tray">
+                    <div class="image-grid">
+                        <img src="mod-pictures/mappage-pictures/xibalba/1.png" alt="Xibalba Map Image 1">
+                        <img src="mod-pictures/mappage-pictures/xibalba/2.png" alt="Xibalba Map Image 2">
+                        <img src="mod-pictures/mappage-pictures/xibalba/3.png" alt="Xibalba Map Image 3">
+                        <img src="mod-pictures/mappage-pictures/xibalba/4.png" alt="Xibalba Map Image 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Card 3: Tundra -->
+            <div class="map-card">
+                <span class="game-mode">King of the Hill</span>
+                <h2>Tundra</h2>
+                <p class="map-description">
+                    A vast, open snowy landscape with limited cover, emphasizing long-range engagements and control of key points.
+                </p>
+                 <div class="map-tray">
+                    <div class="image-grid">
+                        <img src="mod-pictures/mappage-pictures/tundra/1.png" alt="Tundra Map Image 1">
+                        <img src="mod-pictures/mappage-pictures/tundra/2.png" alt="Tundra Map Image 2">
+                        <img src="mod-pictures/mappage-pictures/tundra/3.png" alt="Tundra Map Image 3">
+                        <img src="mod-pictures/mappage-pictures/tundra/4.png" alt="Tundra Map Image 4">
+                    </div>
+                </div>
+            </div>
+
+             <!-- Map Card 4: Oasis -->
+            <div class="map-card">
+                <span class="game-mode">Capture the Flag</span>
+                <h2>Oasis</h2>
+                <p class="map-description">
+                   A vibrant desert map with a central oasis providing a critical control point and unique combat scenarios.
+                </p>
+                 <div class="map-tray">
+                    </div>
+            </div>
+
+             <!-- Map Card 5: Facility -->
+            <div class="map-card">
+                <span class="game-mode">Team Deathmatch</span>
+                <h2>Facility</h2>
+                <p class="map-description">
+                   An indoor, multi-level research facility with tight corridors and strategic choke points.
+                </p>
+                 <div class="map-tray">
+                    </div>
+            </div>
+
+             <!-- Map Card 6: Ruins -->
+            <div class="map-card">
+                <span class="game-mode">King of the Hill</span>
+                <h2>Ruins</h2>
+                <p class="map-description">
+                   Ancient, overgrown ruins offering a mix of open areas and broken structures for varied combat.
+                </p>
+                 <div class="map-tray">
+                    </div>
+            </div>
+        </div>
+
+        <a href="../index.html" class="back-button">Back to Home</a>
+
+    </div>
+
+    <!-- Fullscreen Modal for Images -->
+    <div class="fullscreen-modal">
+        <img src="" alt="Fullscreen Map Image">
+        <span class="close-button">&times;</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mapCards = document.querySelectorAll('.map-card');
+            const fullscreenModal = document.querySelector('.fullscreen-modal');
+            const modalImage = document.querySelector('.fullscreen-modal img');
+            const closeModal = document.querySelector('.close-button');
+
+            mapCards.forEach(card => {
+                const mapTray = card.querySelector('.map-tray');
+
+                // Toggle the clicked card's expansion
+                card.addEventListener('click', () => {
+                    const isExpanded = card.classList.contains('expanded');
+
+                    // Close all other expanded cards
+                    mapCards.forEach(otherCard => {
+                        if (otherCard !== card && otherCard.classList.contains('expanded')) {
+                            otherCard.classList.remove('expanded');
+                            otherCard.querySelector('.map-tray').style.maxHeight = '0';
+                             otherCard.querySelector('.map-tray').classList.remove('show-images'); // Hide images immediately
+                        }
+                    });
+
+                    if (isExpanded) {
+                        card.classList.remove('expanded');
+                        mapTray.style.maxHeight = '0'; // Collapse the tray
+                         mapTray.classList.remove('show-images'); // Hide images immediately
+                    } else {
+                        card.classList.add('expanded');
+                         // Set a max-height that is large enough to contain all images and text for smooth transition
+                         // Use scrollHeight + a buffer to ensure content fits
+                        mapTray.style.maxHeight = mapTray.scrollHeight + 50 + 'px';
+                        mapTray.classList.add('show-images'); // Show images after a short delay
+                    }
+                });
+
+                // Add hover effect (partial expansion)
+                 card.addEventListener('mouseenter', () => {
+                     // Only apply partial expansion on hover if not already fully expanded
+                     if (!card.classList.contains('expanded')) {
+                         mapTray.style.maxHeight = '80px'; // Adjusted for partial expansion height to show image tops
+                    }
+                });
+
+                 card.addEventListener('mouseleave', () => {
+                     // Collapse partial expansion only if not fully expanded and mouse leaves the card
+                     if (!card.classList.contains('expanded')) {
+                        mapTray.style.maxHeight = '0'; // Collapse back on mouse leave
+                    }
+                });
+
+
+                // Add event listeners to images within trays
+                const images = mapTray.querySelectorAll('.image-grid img');
+                images.forEach(image => {
+                    image.addEventListener('click', (event) => {
+                        event.stopPropagation(); // Prevent the map card click from toggling the tray
+                        modalImage.src = event.target.src;
+                        fullscreenModal.style.display = 'flex'; // Use flex to center
+                    });
+                });
+            });
+
+            // Close modal when clicking the close button
+            closeModal.addEventListener('click', () => {
+                fullscreenModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside the image
+            fullscreenModal.addEventListener('click', (event) => {
+                if (event.target === fullscreenModal) {
+                    fullscreenModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

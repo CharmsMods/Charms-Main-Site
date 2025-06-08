@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Charm? - Pre-Made Code</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="codedownload.css" />
+</head>
+<body>
+  <div class="bg-particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+  </div>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>✨ Pre-Made Code Snippets</h1>
+      <p class="tagline">Download and use these ready-to-go JavaScript mods for visual enhancements.</p>
+      <div class="warning-note">
+        <span class="icon">⚠️</span>
+        <p>
+          <strong>Important Note on Lighting:</strong> The provided <code>settings.js</code> code, as it is, will make the overall game lighting significantly darker. However, player characters will retain their brightness and texture, which can create a distinct visual effect where players stand out against a darker environment.
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>settings.js Script</h2>
+      <p>
+        The <code>settings.js</code> script is a powerful JavaScript mod designed to customize various in-game visual and UI elements. It primarily focuses on:
+      </p>
+      <ul>
+        <li>
+          <strong>Character Skin Effects:</strong> Overrides the default <code>setHeroSkin</code> function to apply a bright white emission effect to character skins, making them glow intensely. It also includes specific handling for the "Shin" character, applying a unique glowing texture.
+        </li>
+        <li>
+          <strong>Player Initialization:</strong> Modifies the <code>createPlayer</code> function to customize how new players are initialized in the game, including setting their username, team, level, skin, and weapon.
+        </li>
+        <li>
+          <strong>Automated UI Interactions:</strong> Implements auto-clicking functionality for certain in-game options when the application loads or when a player leaves, streamlining user experience.
+        </li>
+        <li>
+          <strong>Extensive UI Customization:</strong> Upon map loading, this script makes significant adjustments to the game's overlay and UI. This includes:
+          <ul>
+            <li>Repositioning elements like the announcement bar and health UI.</li>
+            <li>Disabling or hiding non-essential UI elements such as achievement notifications, task displays, subtitles, quest messages, weapon ability binds, background elements, banners, and ads.</li>
+            <li>Hiding objectives and related timers.</li>
+            <li>Adjusting the position and font size of player stats.</li>
+            <li>Making the leaderboard transparent to provide a cleaner, less cluttered interface.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Map-Specific Lighting Adjustments:</strong> Dynamically changes environmental lighting properties (exposure, skybox intensity, and main light color) based on the current map (e.g., "Sierra," "Mistle," "Xibalba," "Tundra") to enhance the visual atmosphere.
+        </li>
+      </ul>
+      <p>
+        This script is ideal for players looking to personalize their visual experience, declutter the UI, and apply unique character effects, all while adhering to "Equitable Visual Adjustment" guidelines as mentioned in the mod creation guide.
+      </p>
+
+      <div class="code-block-wrapper">
+        <button class="copy-button" onclick="copyCode()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-copy"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy Code</span>
+        </button>
+        <pre class="code-block" id="settingsCode">
+//==================== Game Script ======================//
+// Credit to IGLOO?, NEXI, KING BOWSER, and CHARM?
+
+// Initialize custom settings when application loads
+pc.Application.getApplication().once("postrender", function () {
+    
+    // Override setHeroSkin function for custom character effects
+    pc.app.scripts.list()[11].prototype.setHeroSkin = function(){
+        var self = this;
+        var skinName = this.heroSkin;
+
+        if(this.heroSkin == 'Default'){
+            skinName = this.hero + '-' + this.heroSkin + '.jpg';
+        }
+
+        if(skinName && this.characterEntity){
+            if(skinName.search('Model-') > -1 || skinName.search('.glb') > -1){
+                var assetID = this.app.assets.find(skinName).id;
+                this.characterEntity.model.asset = assetID;
+
+                var asset = this.app.assets.get(assetID);
+                asset.ready(function(){
+                    self.handEntity = self.characterEntity.findByName(self.handEntityName);
+                    self.weaponHolder.reparent(self.handEntity);
+                    console.log('Loaded model skin ' + self.username);
+                });
+            }else{
+                var material = this.characterEntity.model.material.clone();
+                var texture = pc.app.assets.find(this.hero + '-' + this.heroSkin + '.jpg');
+                var meshInstances = this.characterEntity.model.meshInstances;
+
+                if(meshInstances && meshInstances.length > 0){
+                    for (var i = 0; i < meshInstances.length; ++i) {
+                        var mesh = meshInstances[i];
+                        mesh.material = material;
+
+                        // Add bright white emission effect
+                        material.emissive = new pc.Color(1, 1, 1);
+                        material.emissiveIntensity = 10000;
+                        material.update();
+                    }
+
+                    if(texture){
+                        material.diffuseMap = texture.resource;
+                        material.update();
+                    }
+                }
+                this.weaponHolder.reparent(this.handEntity);
+            }
+            this.characterEntity.animation.play('Idle');
+        }else{
+            this.weaponHolder.reparent(this.handEntity);
+        }
+    };
+
+    // Override createPlayer function
+    pc.app.scripts.list()[9].prototype.createPlayer = function(data){
+        var player = this.enemyEntity.clone();
+        player.enabled = true;
+        player.script.enemy.playerId = data.playerId;
+        player.script.enemy.username = data.username;
+        player.script.enemy.team = data.team;
+        player.script.enemy.level = data.level;
+        player.script.enemy.group = data.group;
+
+        player.script.enemy.skin = data.skin;
+        player.script.enemy.heroSkin = data.heroSkin;
+
+        player.script.enemy.setUsername(data.username, data.team, data.level);
+        player.script.enemy.killMessage = data.killMessage;
+
+        // Set weapon
+        player.script.enemy.weaponSkins = data.weaponSkins;
+        player.script.enemy.setWeapon(data.weapon);
+        player.script.enemy.setCharacterSkin(data.skin, 'Default', data.dance);
+
+        this.playerHolder.addChild(player);
+        this.players.push(player);
+    };
+});
+
+// Handle player join events with special Shin character effects
+pc.app.on("Game:PlayerJoin", (state) => {
+    var shinTexture = pc.app.assets.find('Shin-Default.jpg');
+    if (state) {
+        for (let i = 2; i <= pc.app.root.findByName("Game").findByName("PlayerHolder").children.length - 1; i++) {
+            let player = pc.app.root.findByName('PlayerHolder').children[i];
+            if(player.script.enemy.skin != 'Shin'){
+                player.script.enemy.setCharacterSkin(player.script.enemy.skin, "Default", player.script.enemy.danceName);
+            }else{
+                let shinMaterial = player.findByName('ModelHolder').findByName('Shin').model.meshInstances[0].material;
+                shinMaterial.diffuse = shinTexture.resource;
+                shinMaterial.emissive = new pc.Color(1, 1, 1);
+                shinMaterial.emissiveIntensity = 10000;
+                shinMaterial.update();
+            }
+        }
+    }
+});
+
+// Auto-click functionality
+setTimeout(() => {
+    document.querySelectorAll('.options a')[3].click();
+}, 2000);
+
+pc.app.on("Player:Leave", () => {
+    setTimeout(() => {
+        document.querySelectorAll('.options a')[3].click();
+    }, 1500);
+});
+
+// Main overlay and map customization when map loads
+pc.app.on("Map:Loaded", () => {
+    setTimeout(() => {
+        // UI Element positioning and visibility changes
+        pc.app.root.findByName("Overlay").findByName("Announce").setLocalPosition(0, -530, 0);
+
+        // Disable achievement notifications
+        for(let i = 0; i < 8; i++) {
+            pc.app.root.findByName("Achievement").children[i].enabled = false;
+        }
+
+        // Hide various UI elements
+        pc.app.root.findByName("Container").element.opacity = 0;
+        
+        // Disable task elements
+        for(let i = 0; i < 7; i++) {
+            pc.app.root.findByName("Task").children[i].enabled = false;
+        }
+        pc.app.root.findByName("Task").enabled = false;
+        
+        // Hide subtitle and quest messages
+        pc.app.root.findByName("Overlay").findByName("Subtitle").enabled = false;
+        pc.app.root.findByName("Overlay").findByName("QuestMessage").element.opacity = 0;
+        pc.app.root.findByName("Overlay").findByName("QuestMessage").findByName("Icon").element.opacity = 0;
+        pc.app.root.findByName("Overlay").findByName("QuestMessage").findByName("Text").element.opacity = 0;
+
+        // Hide weapon ability binds and backgrounds
+        pc.app.root.findByName("Overlay").findByName("Weapons").findByName("AbilityGroup").findByName("AbilityBind").enabled = false;
+        pc.app.root.findByName("Overlay").findByName("TimesAndScore").findByName("Background").enabled = false;
+        pc.app.root.findByName("BarBackground").enabled = false;
+
+        // Hide banners and ads
+        pc.app.root.findByName("Overlay").findByName("728x90-Banner").element.opacity = 0;
+        pc.app.root.findByName("Overlay").findByName("728x90-Banner").children[0].element.opacity = 0;
+
+        // Hide objectives
+        pc.app.root.findByName("Overlay").findByName("ObjectiveHolder").findByName("Objective").enabled = false;
+        pc.app.root.findByName("Overlay").findByName("TimesAndScore").findByName("ObjectiveTime").enabled = false;
+
+        // Position health UI
+        pc.app.root.findByName("Overlay").findByName("Health").setLocalPosition(30, 640, 0);
+
+        // Hide reminder and countdown elements
+        pc.app.root.findByName("Overlay").findByName("Reminder").enabled = false;
+        pc.app.root.findByName("Overlay").findByName("CountBack").enabled = false;
+
+        // Disable specific overlay children by index
+        [30, 31, 32, 33, 48].forEach(index => {
+            pc.app.root.findByName("Overlay").children[index].enabled = false;
+        });
+
+        // Position score and leaderboard
+        pc.app.root.findByName("Overlay").findByName("TimesAndScore").setLocalPosition(530, 0, 0);
+        pc.app.root.findByName("Overlay").findByName("Leaderboard").setLocalPosition(30, -660, 0);
+
+        // Hide weapon displays
+        pc.app.root.findByName("Overlay").findByName("Weapon").enabled = false;
+        pc.app.root.findByName("Overlay").findByName("Weapons").enabled = false;
+
+        // Position and style stats
+        pc.app.root.findByName("Stats").setLocalPosition(590, -0.93, 0);
+        pc.app.root.findByName("Stats").element.fontSize = 16;
+
+        // Make leaderboard transparent
+        pc.app.on("Overlay:Leaderboard", () => {
+            try {
+                for (let i = 0; i < pc.app.root.findByName("Overlay").findByName("Leaderboard").children.length; i++) {
+                    pc.app.root.findByName("Overlay").findByName("Leaderboard").children[i].element.opacity = 0.0;
+                }
+            } catch (error) { }
+        });
+        
+    }, 2000);
+
+    // Map-specific lighting and visual adjustments
+    setTimeout(() => {
+        if (pc.currentMap == "Sierra") {
+            pc.app.renderer.scene.exposure = 0.1;
+            pc.app.renderer.scene.skyboxIntensity = 10;
+            pc.app.root.findByName("Light").light.color = { r: 0.2, g: 0.2, b: 0.2, a: 1 };
+        }
+        
+        if (pc.currentMap == "Mistle") {
+            pc.app.renderer.scene.exposure = 0.2;
+            pc.app.renderer.scene.skyboxIntensity = 10;
+            pc.app.root.findByName("Light").light.color = { r: 0.25, g: 0.25, b: 0.25, a: 1 };
+        }
+        
+        if (pc.currentMap == "Xibalba") {
+            pc.app.renderer.scene.exposure = 0.2;
+            pc.app.renderer.scene.skyboxIntensity = 10;
+            pc.app.root.findByName("Light").light.color = { r: 0.2, g: 0.2, b: 0.2, a: 1 };
+        }
+        
+        if (pc.currentMap == "Tundra") {
+            pc.app.renderer.scene.exposure = 0.2;
+            pc.app.renderer.scene.skyboxIntensity = 10;
+            pc.app.root.findByName("Light").light.color = { r: 0.2, g: 0.2, b: 0.2, a: 1 };
+        }
+    }, 2000);
+});
+        </pre>
+      </div>
+    </div>
+
+    <div class="back-button-container">
+      <a href="../makeamod/makeamod.html" class="link-button" style="--btn-color: #2196f3">
+        <span>← Back to Mod Creation Guide</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    function copyCode() {
+      const codeElement = document.getElementById('settingsCode');
+      const textToCopy = codeElement.innerText;
+
+      // Use document.execCommand for broader compatibility in iframes
+      const textarea = document.createElement('textarea');
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        const button = document.querySelector('.copy-button');
+        const originalText = button.querySelector('span').innerText;
+        const originalSVG = button.querySelector('svg').outerHTML;
+
+        button.classList.add('copied');
+        button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-8.15"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> <span>Copied!</span>';
+
+        setTimeout(() => {
+          button.classList.remove('copied');
+          button.innerHTML = originalSVG + ' <span>' + originalText + '</span>';
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+        // Fallback for older browsers or environments where execCommand is restricted
+        // You might want to display a message to the user that copying failed.
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  </script>
+</body>
+</html>

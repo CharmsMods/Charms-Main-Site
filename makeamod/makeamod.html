@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Charm? - Mod Creation Guide</title>
+  <link rel="stylesheet" href="makeamod.css" />
+</head>
+<body>
+  <div class="bg-particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+  </div>
+
+  <div class="two-column-container">
+    <div class="guide-header">
+      <h1>🛠️ Mod Creation Guide</h1>
+      <p class="tagline">Unlock your creativity! Learn the fundamentals of modding and bring your ideas to life.</p>
+    </div>
+
+    <div class="warning-box" style="width: 100%;">
+      <span class="box-icon">🚨</span>
+      <div>
+        <strong style="color: #ff0000;">CRITICAL GUIDELINES:</strong>
+        <p>Before proceeding, please be aware of the following strict rules for modding:</p>
+        <p>
+          <strong style="color: #ff0000;">Prohibition of Old Map Files:</strong> The use of old map files is strictly prohibited due to exploits. All players must delete old map files from their clients. Any use will be treated as cheating.
+        </p>
+        <p>
+          <strong style="color: #ff0000;">Highly Recommended:</strong> Use only verified mods listed in the official channels.
+        </p>
+      </div>
+    </div>
+
+    <div class="column left-column">
+      <div class="guide-section">
+        <h2>Understanding Modding Guidelines</h2>
+        <p>It is crucial to understand and adhere to the official modding guidelines to ensure a fair and enjoyable experience for everyone. Violations can lead to serious consequences, including account termination.</p>
+        
+        <h3>Permitted Modifications:</h3>
+        <ul>
+          <li>Retexturing of Map Objects</li>
+          <li>Retexturing of Characters</li>
+          <li>Retexturing of UI Objects</li>
+          <li>Altering Weapon/Action Audio Files</li>
+          <li>Equitable Visual Adjustment (visual changes that do not provide an unfair advantage)</li>
+        </ul>
+
+        <h3>Prohibited Modifications:</h3>
+        <ul>
+          <li>Removal/Modification of Map Objects</li>
+          <li>Modification of Character Models</li>
+          <li><strong style="color: #ff0000;">Including Dynamic/Redirecting Links within the scripts</strong></li>
+          <li>Altering the Venge Verification/Season Badges</li>
+          <li>Scripts that provide an unfair advantage (e.g., adding <code style="color: #ff69b4;">.json</code> or <code style="color: #ff69b4;">.glb</code> files for new models)</li>
+        </ul>
+        <div class="warning-box">
+          <span class="box-icon">⚠️</span>
+          <div>
+            <strong style="color: #ff0000;">Violation Consequences:</strong> The use of prohibited modifications is regarded as cheating and will result in serious consequences, including account termination and other disciplinary actions.
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Your Very First Mod: Wall Textures!</h2>
+        <p>
+          If you're new to modding, the absolute best place to start is by changing a wall texture.
+          Walls are everywhere in the game, so it's incredibly easy to see if your mod worked the moment you launch the game!
+        </p>
+        <p>
+          Here are some examples of wall texture assets from the <a href="https://d0sob.github.io/vengeScraper/" target="_blank" class="guide-link">Venge Scraper website</a>.
+          These specific examples are for walls on the <a href="maps.html" class="guide-link">Sierra</a> map:
+        </p>
+        <ul>
+          <li><a href="https://venge.io/files/assets/30409946/1/Wall-Texture.jpg" target="_blank" class="guide-link">https://venge.io/files/assets/30409946/1/Wall-Texture.jpg</a></li>
+          <li><a href="https://venge.io/files/assets/40062797/1/Wall-Texture-Snow.jpg" target="_blank" class="guide-link">https://venge.io/files/assets/40062797/1/Wall-Texture-Snow.jpg</a></li>
+          <li><a href="https://venge.io/files/assets/50533048/1/Wall-Texture-v1.jpg" target="_blank" class="guide-link">https://venge.io/files/assets/50533048/1/Wall-Texture-v1.jpg</a></li>
+          <li><a href="https://venge.io/files/assets/81679790/1/Wall-Texture-dirty.jpg" target="_blank" class="guide-link">https://venge.io/files/assets/81679790/1/Wall-Texture-dirty.jpg</a></li>
+        </ul>
+        <div class="info-box">
+          <span class="box-icon">💡</span>
+          <div>
+            <strong>Map Specificity:</strong> The links above are for textures on the <a href="maps.html" class="guide-link">Sierra</a> map. If you want to change textures on other maps, or modify other types of assets (like weapon textures, character textures, or audio files), you'll need to use the search feature on the <a href="https://d0sob.github.io/vengeScraper/" target="_blank" class="guide-link">Venge Scraper website</a> to find the correct asset IDs and file names for what you're looking for.
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2>Visual & Audio Modding: Retexturing & Sound</h2>
+        <p>
+          This section focuses on how to replace existing game textures (for maps, characters, UI) and audio files.
+          This is a common and permitted way to personalize your game experience without altering core gameplay mechanics.
+        </p>
+        
+        <h3>Setting Up Your Modding Environment</h3>
+        <p>
+          To begin modding, you first need to ensure your game client is installed. Once installed, the game client
+          will recognize a specific folder structure within your computer's Documents directory.
+        </p>
+        <p>
+          Navigate to your "Documents" folder (e.g., <code style="color: #ff69b4;">C:\Users\YourName\Documents</code>).
+          Inside, you need to create a new folder named exactly:
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">Venge Client</code>
+        </div>
+        <p>
+          Inside this "Venge Client" folder, you will create four more sub-folders:
+        </p>
+        <ul>
+          <li><code style="color: #ff69b4;">CSS</code>: For custom CSS files that style the game's main menu and UI.</li>
+          <li><code style="color: #ff69b4;">Resource Swapper</code>: This is where you'll place your custom textures and audio files.</li>
+          <li><code style="color: #ff69b4;">Skin Swapper</code>: Used for character skin modifications (though retexturing is the focus here). This folder is where you place custom textures for the four main characters:
+            <ul>
+              <li><code style="color: #ff69b4;">Echo-Default.jpg</code></li>
+              <li><code style="color: #ff69b4;">Kulu-Default.jpg</code></li>
+              <li><code style="color: #ff69b4;">Lilium-Default.jpg</code></li>
+              <li><code style="color: #ff69b4;">Shin-Default.jpg</code></li>
+            </ul>
+            These are the default texture names for the four playable characters in the game. You can replace these files with your own custom textures to change the appearance of Echo, Kulu, Lilium, and Shin in-game.
+          </li>
+          <li><code style="color: #ff69b4;">Userscript</code>: For JavaScript files that modify game logic or visual behaviors.</li>
+        </ul>
+
+        <h3>The <code style="color: #ff69b4;">Resource Swapper</code> Folder Structure</h3>
+        <p>
+          The <code style="color: #ff69b4;">Resource Swapper</code> folder has a very specific internal structure that the game client uses to find and apply your custom assets.
+          Inside <code style="color: #ff69b4;">Resource Swapper</code>, you must create the following path:
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            Venge Client/Resource Swapper/files/assets/
+          </code>
+        </div>
+        <p>
+          The <code style="color: #ff69b4;">assets</code> folder will then contain many sub-folders, each named with a long number. This long number is a unique ID that the game uses to identify a specific asset (like a wall texture or a weapon sound).
+          Inside each of these "long number" folders, there's yet another folder named <code style="color: #ff69b4;">1</code>. Finally, your custom asset goes inside that <code style="color: #ff69b4;">1</code> folder.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            Venge Client/<br>
+            └── Resource Swapper/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;└── files/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── assets/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── [LONG_NUMBER_ASSET_ID]/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 1/<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── [YOUR_CUSTOM_TEXTURE_OR_AUDIO_FILE]
+          </code>
+        </div>
+
+        <h3>Finding Asset IDs with Venge Scraper</h3>
+        <p>
+          Most modders use the <a href="https://d0sob.github.io/vengeScraper/" target="_blank" class="guide-link">Venge Scraper website</a> to find the correct asset IDs and file names.
+        </p>
+        <ol>
+          <li>Go to <a href="https://d0sob.github.io/vengeScraper/" target="_blank" class="guide-link">https://d0sob.github.io/vengeScraper/</a>.</li>
+          <li>Use the search box to type in what you're looking for (e.g., "wall", "gun_sound", "UI_button").</li>
+          <li>When you click on a result on the website, the URL for the asset (image or MP3) will appear. This URL contains the crucial "long number" (asset ID) you need for your folder name, and the exact file name and extension.</li>
+        </ol>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            Example URL: https://venge.io/files/assets/<span style="color: #ff0000;">30409946</span>/1/<span style="color: #ff0000;">Wall-Texture.jpg</span><br>
+            <br>
+            From this URL:<br>
+            - The Asset ID (long number) is: <code style="color: #ff69b4;">30409946</code><br>
+            - The exact File Name and Extension is: <code style="color: #ff69b4;">Wall-Texture.jpg</code>
+          </code>
+        </div>
+
+        <h3>Performing Your First Texture/Audio Mod</h3>
+        <p>
+          Once you have your custom texture or audio file ready, and you've identified the target asset's ID and file name:
+        </p>
+        <ol>
+          <li>Create the full folder path in your Documents: <code style="color: #ff69b4;">Venge Client/Resource Swapper/files/assets/[Asset_ID]/1/</code>.</li>
+          <li>Place your custom texture (e.g., a square image, even a transparent PNG) or audio file (e.g., an MP3) inside the <code style="color: #ff69b4;">1</code> folder.</li>
+          <li><strong style="color: #ff0000;">CRITICAL RULE:</strong> Your custom file <strong style="color: #ff0000;">MUST</strong> have the <strong style="color: #ff0000;">exact same file name and extension</strong> as the original asset you found on Venge Scraper. For example, if the original is <code style="color: #ff69b4;">Wall-Texture.jpg</code>, your custom file must also be named <code style="color: #ff69b4;">Wall-Texture.jpg</code>. If you try to replace a <code style="color: #ff69b4;">.jpg</code> with a <code style="color: #ff69b4;">.png</code>, nothing will happen. This applies to all other file types as well (e.g., <code style="color: #ff69b4;">.mp3</code> for audio).</li>
+          <li>Launch the game client to see your changes!</li>
+        </ol>
+
+        <div class="warning-box">
+          <span class="box-icon">🚫</span>
+          <div>
+            <strong style="color: #ff0000;">Strict Compliance:</strong>
+            Remember, this method is for <strong style="color: #ff0000;">retexturing</strong> and <strong style="color: #ff0000;">altering audio files</strong> only. You are <strong style="color: #ff0000;">not permitted</strong> to modify character models.
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <span class="box-icon">💾</span>
+          <div>
+            <strong>Always Backup:</strong>
+            Before making any changes, always create a backup of the original game files you intend to modify. This allows you to easily revert your changes if something goes wrong or if you wish to uninstall your mod.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column right-column">
+      <div class="guide-section">
+        <h2>Beyond Textures: Scripting & Styling Visuals</h2>
+        <p>
+          Modding isn't just about replacing images; it's also about manipulating the game's
+          behavior and user interface through code. JavaScript and CSS files play a crucial role
+          in changing lighting, UI elements, and even character animations.
+        </p>
+        <div class="info-box">
+          <span class="box-icon">⚡</span>
+          <div>
+            <strong>Important Note on Competitive Modding:</strong>
+            Modding can be used not only to customize the game visually for fun but also to gain a competitive advantage.
+            However, there are strict limitations on what is allowed. You are <strong style="color: #ff0000;">prohibited</strong> from changing model files or adding new <code style="color: #ff69b4;">.json</code> or <code style="color: #ff69b4;">.glb</code> files that introduce new models or alter existing ones beyond retexturing. All changes must still fall under "Equitable Visual Adjustment."
+          </div>
+        </div>
+
+        <h3>JavaScript for In-Game Visuals</h3>
+        <p>
+          The game uses JavaScript to control various aspects of the in-game environment and UI.
+          By modifying these scripts, you can alter lighting, hide non-essential elements, and adjust
+          visual effects, as long as they comply with the "Equitable Visual Adjustment" guideline.
+          These files would typically be placed in the <code style="color: #ff69b4;">Userscript</code> folder within your <code style="color: #ff69b4;">Venge Client</code> directory.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h4>1. Game Settings & Lighting (<code style="color: #ff69b4;">settings.js</code>)</h4>
+        <p>
+          This script allows for overriding default game functions and adjusting map-specific visual properties.
+          You can change character skin rendering and modify environmental lighting.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            // Example: Adjusting map-specific lighting (from settings.js)<br>
+            // Ensure these adjustments are 'Equitable Visual Adjustments' and don't provide an unfair advantage.<br>
+            pc.app.on("Map:Loaded", () => {<br>
+            &nbsp;&nbsp;setTimeout(() => {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;if (pc.currentMap == "Sierra") {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pc.app.renderer.scene.exposure = 0.1; // Controls overall brightness<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pc.app.renderer.scene.skyboxIntensity = 10; // Controls skybox brightness<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("Light").light.color = { r: 0.2, g: 0.2, b: 0.2, a: 1 }; // Adjusts main light color<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+            &nbsp;&nbsp;}, 2000);<br>
+            });<br><br>
+            // Example: Character skin emission effect (from settings.js)<br>
+            // This can make character skins glow. Ensure it's an equitable visual adjustment.<br>
+            pc.app.scripts.list()[11].prototype.setHeroSkin = function(){<br>
+            &nbsp;&nbsp;/* ... (code omitted for brevity) ... */<br>
+            &nbsp;&nbsp;material.emissive = new pc.Color(1, 1, 1); // Sets emission color to white<br>
+            &nbsp;&nbsp;material.emissiveIntensity = 10000; // Sets emission intensity<br>
+            &nbsp;&nbsp;material.update();<br>
+            &nbsp;&nbsp;/* ... */<br>
+            };
+          </code>
+        </div>
+        <p>
+          The <code style="color: #ff69b4;">exposure</code>, <code style="color: #ff69b4;">skyboxIntensity</code>, and <code style="color: #ff69b4;">light.color</code> properties control the overall brightness,
+          skybox contribution, and color of the main light source, respectively. The <code style="color: #ff69b4;">emissive</code> and
+          <code style="color: #ff69b4;">emissiveIntensity</code> properties can make character skins glow. Always ensure these changes
+          do not create an unfair advantage by making players or objects unnaturally visible.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h4>2. UI Hiding & Placement (<code style="color: #ff69b4;">hide_ui.js</code>)</h4>
+        <p>
+          This script demonstrates how to disable or reposition various in-game UI elements.
+          You can hide non-essential elements like ads or reposition information displays.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            // Example: Hiding non-essential UI elements (from settings.js, similar to hide_ui.js)<br>
+            // Hiding ads and banners is generally permitted as it doesn't provide an unfair advantage.<br>
+            pc.app.on("Map:Loaded", () => {<br>
+            &nbsp;&nbsp;setTimeout(() => {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("Overlay").findByName("Announce").setLocalPosition(0, -530, 0); // Reposition an announcement<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("Achievement").children[0].enabled = false; // Disable an achievement notification<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("Overlay").findByName("728x90-Banner").element.opacity = 0; // Hide a banner ad<br>
+            &nbsp;&nbsp;}, 2000);<br>
+            });
+          </code>
+        </div>
+        <p>
+          By setting <code style="color: #ff69b4;">enabled = false</code> or <code style="color: #ff69b4;">element.opacity = 0</code>, you can make UI elements disappear.
+          <code style="color: #ff69b4;">setLocalPosition</code> allows you to move them around the screen.
+        </p>
+        <div class="warning-box">
+          <span class="box-icon">🚫</span>
+          <div>
+            <strong style="color: #ff0000;">Prohibited: Hiding Critical Game Information!</strong>
+            Hiding UI elements that provide crucial game information (e.g., player health bars,
+            objective markers, full leaderboard details that impact gameplay) is considered to
+            provide an unfair advantage and is strictly prohibited.
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h4>3. Weapon Visuals & Audio (<code style="color: #ff69b4;">weapon_pos.js</code>, <code style="color: #ff69b4;">weapon_vol.js</code>, <code style="color: #ff69b4;">hide_hands.js</code>)</h4>
+        <p>
+          These smaller scripts specifically target weapon appearance and sound.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            // Example: Adjusting weapon position (from weapon_pos.js)<br>
+            const weaponpos = { x: -0.01, y: 0, z: 0.45 } // Adjust X, Y, Z coordinates<br>
+            pc.app.on('Player:Focused', function (state) {<br>
+            &nbsp;&nbsp;if (!state) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("WeaponCenter").setLocalPosition(weaponpos.x, weaponpos.y, weaponpos.z)<br>
+            &nbsp;&nbsp;}<br>
+            });<br><br>
+            // Example: Hiding player hands (from hide_hands.js)<br>
+            pc.app.on("Map:Loaded", () => {<br>
+            &nbsp;&nbsp;setTimeout(() => {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.app.root.findByName("WeaponCenter").findByName("CharacterHandsHolder").setLocalScale(0, 0, 0); // Sets scale to zero to hide<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;pc.settings.hideArms = true // Sets a game setting to hide arms<br>
+            &nbsp;&nbsp;}, 2000);<br>
+            });<br><br>
+            // Example: Setting weapon volume (from weapon_vol.js)<br>
+            // Altering weapon audio is a Permitted Modification.<br>
+            const weaponVolume = 0.5; // Value ranges from 0 to 1<br>
+            pc.app.on('Map:Loaded', () => {<br>
+            &nbsp;&nbsp;pc.app.root.findByName('Scar').sound.volume = weaponVolume;<br>
+            &nbsp;&nbsp;// Apply to other weapons as needed<br>
+            });
+          </code>
+        </div>
+        <p>
+          <code style="color: #ff69b4;">setLocalPosition</code> on <code style="color: #ff69b4;">WeaponCenter</code> changes where your weapon appears on screen. <code style="color: #ff69b4;">setLocalScale(0, 0, 0)</code> effectively hides the player's hands. <code style="color: #ff69b4;">sound.volume</code> directly controls the audio level of specific game objects. These are examples of "Equitable Visual Adjustments" that can be used for competitive purposes without violating core rules.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h4>4. Chat Messages (<code style="color: #ff69b4;">message.js</code>)</h4>
+        <p>
+          This script demonstrates how to inject custom, pre-defined messages into the in-game chat.
+          This is generally permissible as it does not offer an unfair advantage.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            // Example: Sending a random chat message (from message.js)<br>
+            const messages = [<br>
+            &nbsp;&nbsp;"RVNG ON TOP GG EZ!",<br>
+            &nbsp;&nbsp;"RVNG EZ WIN!",<br>
+            ];<br>
+            function sendRandomMessage() {<br>
+            &nbsp;&nbsp;const randomIndex = Math.floor(Math.random() * messages.length);<br>
+            &nbsp;&nbsp;const message = messages[randomIndex];<br>
+            &nbsp;&nbsp;pc.app.fire("Network:Chat", message); // Fires an event to send the message to chat<br>
+            }<br>
+            document.addEventListener("keydown", handleKeyPress); // Triggers on key press
+          </code>
+        </div>
+        <p>
+          This shows how to interact with the game's internal events, in this case, firing a "Network:Chat" event to send a message.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h3>CSS for Main Menu & UI Styling</h3>
+        <p>
+          CSS files are used to completely overhaul the appearance of the game's main menu, popups, and other UI elements.
+          You can change colors, fonts, sizes, and even hide default elements, provided these are "Retexturing of UI Objects"
+          and do not alter verification badges or provide an unfair advantage. These files would typically be placed in the <code style="color: #ff69b4;">CSS</code> folder within your <code style="color: #ff69b4;">Venge Client</code> directory.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h4>1. Grey Mod Styling (<code style="color: #ff69b4;">Grey.css</code>)</h4>
+        <p>
+          This CSS file provides a black and white theme with red accents. It heavily modifies the main menu's navigation,
+          buttons, and information displays.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            /* Example: Navigation Tab Hover Effects (from Grey.css) */<br>
+            .match:hover {<br>
+            &nbsp;&nbsp;color: #ffffff !important;<br>
+            &nbsp;&nbsp;transition: 0.5s !important;<br>
+            &nbsp;&nbsp;scale: 125% !important;<br>
+            &nbsp;&nbsp;font-size: 2.0rem !important;<br>
+            &nbsp;&nbsp;font-weight: 800 !important;<br>
+            &nbsp;&nbsp;box-shadow: 0 0 10px 5px rgb(255, 255, 255) !important;<br>
+            }<br><br>
+            /* Example: Hiding specific ads/buttons (from Grey.css) */<br>
+            /* Hiding elements like social media buttons or ads is generally permitted. */<br>
+            .poki.button-sound,<br>
+            .twitter.button-sound {<br>
+            &nbsp;&nbsp;display: none !important;<br>
+            }<br>
+            #news-area > div,<br>
+            #mobile-banner,<br>
+            #venge-io_728x90,<br>
+            #reward-ads,<br>
+            .alert-danger,<br>
+            #poki-ZF5kzJqL8FBxp7hh48Meaw {<br>
+            &nbsp;&nbsp;display: none !important;<br>
+            }
+          </code>
+        </div>
+        <p>
+          The <code style="color: #ff69b4;">!important</code> flag is used extensively to override existing game styles. You can see changes to <code style="color: #ff69b4;">color</code>, <code style="color: #ff69b4;">scale</code>, <code style="color: #ff69b4;">font-size</code>, <code style="color: #ff69b4;">font-weight</code>, and <code style="color: #ff69b4;">box-shadow</code> on hover. Elements are hidden using <code style="color: #ff69b4;">display: none</code>.
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h4>2. VVS Mod Styling (<code style="color: #ff69b4;">VVS.css</code>)</h4>
+        <p>
+          The VVS CSS file applies a distinct cyan/teal color scheme, altering backgrounds, borders, and text colors
+          across various UI components, including the menu bar, buttons, and popups.
+        </p>
+        <div class="code-block">
+          <code style="color: #ff69b4;">
+            /* Example: Menu Bar background and border (from VVS.css) */<br>
+            #menu-bar {<br>
+            &nbsp;&nbsp;background: url("https://iili.io/3Raeyn1.jpg") !important; /* Custom background image */<br>
+            &nbsp;&nbsp;border-bottom: 2px solid rgb(0, 128, 255) !important; /* Custom border */<br>
+            }<br><br>
+            /* Example: Button styling (from VVS.css) */<br>
+            .big-button {<br>
+            &nbsp;&nbsp;border: 1px solid rgb(0, 255, 221)!important;<br>
+            &nbsp;&nbsp;background-color: #00fff2!important;<br>
+            &nbsp;&nbsp;background: #00ffe1!important;<br>
+            }<br><br>
+            /* Example: Custom text content (from VVS.css) */<br>
+            /* This is a 'Retexturing of UI Objects' by changing text content. */<br>
+            .popup-bottom-left-text p {<br>
+            &nbsp;&nbsp;display: none !important;<br>
+            }<br>
+            .popup-bottom-left-text:after {<br>
+            &nbsp;&nbsp;content:'Join RVNG clan for weekly giveaways!' !important;<br>
+            &nbsp;&nbsp;font-size: 23px !important;<br>
+            }
+          </code>
+        </div>
+        <p>
+          This CSS shows how to change background images, border colors, and even inject custom text content using <code style="color: #ff69b4;">::after</code> pseudo-elements. It also demonstrates how to hide default elements (<code style="color: #ff69b4;">display: none</code>).
+        </p>
+        <div class="tip-box">
+          <span class="box-icon">💡</span>
+          <div>
+            <strong>CSS Specificity:</strong>
+            Notice the frequent use of <code style="color: #ff69b4;">!important</code>. This is often necessary in modding to override
+            the game's default inline styles or highly specific CSS rules. Use it judiciously.
+          </div>
+        </div>
+        <div class="warning-box">
+          <span class="box-icon">🚫</span>
+          <div>
+            <strong style="color: #ff0000;">Prohibited: Altering Badges & Dynamic Links!</strong>
+            Remember, "Altering the Venge Verification/Season Badges" and "Including Dynamic/Redirecting Links within the scripts"
+            are strictly prohibited. Ensure your CSS changes do not affect these elements.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-button-container">
+      <a href="../index.html" class="link-button" style="--btn-color: #2196f3">
+        <span>← Back to Home</span>
+      </a>
+    </div>
+  </div>
+
+  <a href="../codedownload/codedownload.html" class="download-button-fixed">
+    <span>Pre-Made Code Download!</span>
+  </a>
+</body>
+</html>
