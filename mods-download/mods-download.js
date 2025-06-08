@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // 'images' now explicitly lists the images available for each mod.
     const modsConfig = [
     { name: "2fly.zip", folder: "2fly", images: ["1.png", "2.png", "3.png", "4.png"] },
-    { name: "2FLYOG.zip", folder: "2FLYOG", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "aim_trainer.zip", folder: "aim_trainer", images: ["1.png", "2.png"] },
     { name: "ANIMALS HELL-Mod.zip", folder: "ANIMALS HELL-Mod", images: ["1.png"] },
     { name: "AQUA-Mod.zip", folder: "AQUA-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
