@@ -21,7 +21,7 @@ body::before {
   width: 100%;
   height: 100%;
   background: url('background.png') center center / cover no-repeat fixed;
-  filter: blur(5px); /* Apply blur to the background */
+  /* Removed filter: blur(5px); to unblur the background */
   z-index: -1; /* Place behind other content */
 }
 
@@ -81,19 +81,14 @@ body::before {
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  padding-top: 20px; /* Adjusted as scrolling banner is removed */
+  padding-top: 20px;
 }
 
 /* Header section */
 .header-section {
   text-align: center;
   margin-bottom: 3rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 3rem 2rem;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Removed background, padding, border-radius, box-shadow, and border for a "no box" look */
   animation: slideInDown 1s ease-out;
   width: 100%;
   max-width: 600px;
@@ -145,12 +140,12 @@ h1 {
   text-align: center;
 }
 
-/* Main navigation container */
+/* Main navigation container - now a 2x2 grid */
 .main-nav-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
-  max-width: 500px;
+  max-width: 1000px;
   width: 100%;
   animation: fadeInUp 1s ease-out 0.3s both;
 }
@@ -181,7 +176,7 @@ h1 {
   text-align: center;
 }
 
-/* Sliding overlay animation for main nav buttons */
+/* Sliding overlay animation for main nav buttons - now matching dropdown colors */
 .main-nav-button.magnetic-button::after {
   content: '';
   position: absolute;
@@ -189,7 +184,7 @@ h1 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, #2d3748, #4a5568);
+  background: linear-gradient(45deg, #00BCD4, #FF4081); /* Cyan to Pink gradient */
   transform: skewX(-45deg);
   transform-origin: center;
   transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -299,46 +294,13 @@ h1 {
   }
 }
 
-/* Removed Scrolling banner styles */
-/*
-.scrolling-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background-color: #b2ebf2;
-  overflow: hidden;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-}
-
-.banner-text {
-  white-space: nowrap;
-  font-size: 1rem;
-  color: #2d3748;
-  animation: scroll-left 15s linear infinite;
-  padding-left: 100%;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-*/
-
 /* Hamburger menu icon */
 .menu-icon {
   position: fixed;
-  top: 20px; /* Adjusted top position as banner is removed */
-  left: 20px; /* Adjusted left position */
-  width: 50px; /* Even bigger */
-  height: 40px; /* Even bigger */
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -348,22 +310,15 @@ h1 {
 
 .menu-icon .bar {
   width: 100%;
-  height: 5px; /* Even thicker bars */
-  /* Replaced background-color with a gradient for rainbow effect */
-  background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
-  background-size: 400% 100%; /* For the animation */
-  animation: rainbow-fade 5s linear infinite; /* Rainbow animation */
-  border-radius: 3px; /* Slightly rounded bars */
+  height: 5px;
+  background: #00BCD4; /* Changed to solid cyan */
+  /* Removed rainbow-fade animation */
+  border-radius: 3px;
   transition: all 0.3s ease-in-out;
 }
 
-@keyframes rainbow-fade {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
 .menu-icon.active .bar:nth-child(1) {
-  transform: translateY(17.5px) rotate(45deg); /* Adjusted for new size */
+  transform: translateY(17.5px) rotate(45deg);
 }
 
 .menu-icon.active .bar:nth-child(2) {
@@ -371,13 +326,13 @@ h1 {
 }
 
 .menu-icon.active .bar:nth-child(3) {
-  transform: translateY(-17.5px) rotate(-45deg); /* Adjusted for new size */
+  transform: translateY(-17.5px) rotate(-45deg);
 }
 
 /* Dropdown menu */
 .dropdown-menu {
   position: fixed;
-  top: 0; /* Menu starts from top */
+  top: 0;
   left: 0;
   width: 250px;
   background: rgba(255, 255, 255, 0.98);
@@ -385,13 +340,13 @@ h1 {
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transform: translateX(-100%);
   transition: transform 0.4s ease-in-out;
-  padding-top: 80px; /* Adjusted padding to accommodate bigger icon */
+  padding-top: 80px;
   z-index: 99;
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 40px); /* Adjusted max-height to prevent overflowing, consider icon top offset */
+  max-height: calc(100vh - 40px);
   overflow-y: auto;
-  border-bottom-right-radius: 10px; /* Optional: adds a slight curve to the bottom right */
+  border-bottom-right-radius: 10px;
 }
 
 .dropdown-menu.open {
@@ -436,6 +391,7 @@ h1 {
 @media (max-width: 768px) {
   .main-nav-container {
     max-width: 100%;
+    grid-template-columns: repeat(1, 1fr); /* Stack on smaller screens */
   }
 
   .header-section {
@@ -453,11 +409,11 @@ h1 {
 
   .main-container {
     padding: 1rem;
-    padding-top: 20px; /* Adjusted */
+    padding-top: 20px;
   }
 
   .header-section {
-    padding: 2rem 1.5rem;
+    padding: 0; /* Removed padding as box is gone */
   }
 
   /* Adjust break effect for mobile */
@@ -471,7 +427,7 @@ h1 {
 
   .dropdown-menu {
     width: 200px;
-    padding-top: 70px; /* Adjusted for smaller screens */
+    padding-top: 70px;
   }
 
   /* Adjust menu icon for smaller screens */
@@ -517,7 +473,7 @@ h1 {
 
   .dropdown-menu {
     width: 180px;
-    padding-top: 60px; /* Adjusted for smallest screens */
+    padding-top: 60px;
   }
 
   /* Adjust menu icon for smallest screens */
