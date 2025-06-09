@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Illumination Mod.zip", folder: "Illumination Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "Jolt_Mod_v1.zip", folder: "Jolt_Mod_v1", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "Lava_mod.zip", folder: "Lava_mod", images: ["1.png"] },
-    { name: "LQ mod.zip", folder: "LQ mod", images: ["1.png"] },
     { name: "Minogue-Mod-Oficial.zip", folder: "Minogue-Mod-Oficial", images: ["1.png"] },
     { name: "Minty V2.zip", folder: "Minty V2", images: ["1.png"] },
     { name: "Nexi Client Mod Beta.zip", folder: "Nexi Client Mod Beta", images: ["1.png"] },
