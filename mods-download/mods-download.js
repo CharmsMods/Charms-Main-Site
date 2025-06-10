@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modsConfig = [
     { name: "2fly.zip", folder: "2fly", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "aim_trainer.zip", folder: "aim_trainer", images: ["1.png", "2.png"] },
-    { name: "ANIMALS HELL-Mod.zip", folder: "ANIMALS HELL-Mod", images: ["1.png"] },
+    { name: "Brick Mod.zip", folder: "Brick Mod", images: ["1.png"] },
     { name: "AQUA-Mod.zip", folder: "AQUA-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "BO$$ MOD V8 - enjoy!.zip", folder: "BO$$ MOD V8 - enjoy!", images: ["1.png", "2.png"] },
     { name: "Charm Mod.zip", folder: "Charm Mod", images: ["1.png", "2.png", "3.png"] },
@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Lava_mod.zip", folder: "Lava_mod", images: ["1.png"] },
     { name: "Minogue-Mod-Oficial.zip", folder: "Minogue-Mod-Oficial", images: ["1.png"] },
     { name: "Minty V2.zip", folder: "Minty V2", images: ["1.png"] },
+    { name: "HELL Mod.zip", folder: "HELL Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "Nio-mod-purple-main.zip", folder: "Nio-mod-purple-main", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "NticxMod-v6.zip", folder: "NticxMod-v6", images: ["1.png", "2.png", "3.png"] },
     { name: "OOOPS-Mod.zip", folder: "OOOPS-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },

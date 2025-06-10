@@ -1,0 +1,334 @@
+/* Define common variables for clarity and easy theming */
+:root {
+    /* Dark Mode Colors */
+    --color-bg-darkest: #000000; /* Pure Black */
+    --color-bg-dark: #1a1a1a;   /* Very Dark Gray */
+    --color-bg-medium: #222222;  /* Dark Gray */
+    --color-bg-light: #333333;   /* Medium Dark Gray */
+    --color-text-lightest: #ffffff; /* Pure White */
+    --color-text-light: #eeeeee;   /* Light Gray */
+    --color-text-medium: #cccccc;  /* Medium Gray */
+    --color-border: #444444;    /* Darker Border Gray */
+    --color-accent-active: #ffffff; /* White for active state/highlights */
+
+    /* Layout Variables */
+    --sidebar-width: 200px;
+    --content-max-width: 960px;
+    --main-padding: 30px 20px;
+    --main-margin-tb: 30px;
+}
+
+/* Basic Reset & Body Styles */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-dark); /* Very Dark Gray background */
+    color: var(--color-text-light); /* Light Gray text */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Revert body to block display for fixed nav interaction */
+    display: block;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--color-bg-darkest); /* Black header */
+    color: var(--color-text-lightest); /* White text */
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--color-border); /* Darker border */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Darker, more pronounced shadow */
+    width: 100%; /* Ensure header spans full width of the body */
+    z-index: 10;
+}
+
+/* New div to center header content */
+.header-inner {
+    max-width: var(--content-max-width); /* Match main's max-width for alignment */
+    margin: 0 auto; /* Center horizontally within header's full width */
+    padding: 0 var(--main-padding); /* Add padding to match main's side padding */
+    box-sizing: border-box;
+    text-align: center; /* Center text within this inner div */
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--color-text-lightest); /* White for heading */
+}
+
+header p {
+    font-size: 1.2rem;
+    color: var(--color-text-medium); /* Medium Gray for paragraph */
+}
+
+/* Navigation Menu Styles */
+.category-navigation {
+    position: fixed; /* Keep navigation fixed on screen */
+    left: 20px; /* Distance from the left edge of the viewport */
+    top: 50%; /* Vertically center */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between buttons */
+    padding: 15px;
+    background-color: var(--color-bg-medium); /* Dark Gray background for navigation */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* Darker shadow for the nav */
+    width: var(--sidebar-width); /* Fixed width for the sidebar */
+    z-index: 1000; /* Ensure it stays on top */
+    box-sizing: border-box;
+}
+
+.nav-button {
+    background-color: var(--color-bg-light); /* Medium Dark Gray */
+    color: var(--color-text-light); /* Light Gray text */
+    border: 1px solid var(--color-border); /* Darker border */
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    text-align: left; /* Align text to the left */
+    width: 100%; /* Make buttons take full width of the nav */
+    box-sizing: border-box;
+}
+
+.nav-button:hover {
+    background-color: #444444; /* Slightly lighter gray on hover */
+    border-color: #666666;
+    transform: translateX(3px); /* Slight slide effect to the right */
+}
+
+.nav-button.active {
+    background-color: var(--color-accent-active); /* White for active button highlight */
+    color: var(--color-bg-darkest); /* Black text for active button */
+    border-color: var(--color-accent-active);
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.3); /* White shadow for active */
+}
+
+/* Content Wrapper to push main content past the fixed nav */
+.content-wrapper {
+    margin-left: var(--sidebar-width); /* This pushes the entire content block past the fixed nav */
+    padding: 0 var(--main-padding-right-left, 20px); /* Add some overall padding for the content block */
+    box-sizing: border-box;
+}
+
+/* Main Content Area */
+main {
+    padding: var(--main-padding); /* Main's own padding */
+    max-width: var(--content-max-width); /* Max width for the main content block */
+    margin: var(--main-margin-tb) auto; /* This centers main horizontally within the content-wrapper */
+    background-color: var(--color-bg-darkest); /* Black content background */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Darker, more pronounced shadow */
+}
+
+/* Section Styles */
+.mod-section {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--color-border); /* Darker separator */
+}
+
+.mod-section:last-child {
+    border-bottom: none; /* No border for the last section */
+}
+
+h2 {
+    color: var(--color-text-lightest); /* White for headings */
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    padding-left: 15px;
+    border-left: 4px solid var(--color-accent-active); /* White accent */
+    font-weight: 600;
+}
+
+h3 {
+    color: var(--color-text-light); /* Light Gray for subheadings */
+    font-size: 1.6rem;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+h4 {
+    color: var(--color-text-medium); /* Medium Gray for code titles */
+    font-size: 1.1rem;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+/* Mod Category Styling */
+.mod-category {
+    background-color: var(--color-bg-medium); /* Dark Gray for categories */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.mod-category:hover {
+    background-color: #444444; /* Slightly lighter gray on hover */
+}
+
+/* Paragraph Text */
+p {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: var(--color-text-light); /* Light Gray */
+}
+
+/* Code Examples */
+.code-example {
+    background-color: var(--color-bg-darkest); /* Black background for code blocks */
+    border: 1px solid var(--color-border); /* Darker border */
+    border-left: 5px solid var(--color-accent-active); /* White accent border */
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow-x: auto; /* Enable horizontal scrolling for long code lines */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4); /* Darker inner shadow */
+    position: relative; /* Needed for absolute positioning of copy button */
+}
+
+pre {
+    margin: 0;
+}
+
+code {
+    font-family: 'Fira Code', 'JetBrains Mono', 'Consolas', 'monospace';
+    font-size: 0.9em;
+    color: var(--color-text-medium); /* Medium Gray for code text */
+}
+
+/* Syntax highlighting inspired by Atom One Dark theme (adapted for B&W) */
+/* Important parts highlighted in white */
+.language-js .token.keyword,
+.language-js .token.function {
+    color: var(--color-text-lightest); /* Pure White for keywords and functions */
+    font-weight: bold;
+}
+.language-js .token.string { color: #cccccc; } /* Light Gray */
+.language-js .token.number { color: #aaaaaa; } /* Slightly darker Gray */
+.language-js .token.comment { color: #666666; } /* Dark Gray */
+.language-js .token.operator { color: #999999; } /* Medium Gray */
+.language-js .token.punctuation { color: #999999; } /* Medium Gray */
+.language-js .token.variable { color: #cccccc; } /* Light Gray */
+.language-js .token.boolean { color: #aaaaaa; } /* Slightly darker Gray */
+.language-js .token.property { color: #bbbbbb; } /* Medium Light Gray */
+.language-js .token.selector { color: #cccccc; } /* Light Gray */
+
+
+/* Copy Button Styles */
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #555555; /* Darker Gray */
+    color: var(--color-text-lightest); /* White text */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+    z-index: 1;
+}
+
+.copy-button:hover {
+    opacity: 1;
+    background-color: #777777; /* Lighter Gray on hover */
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    background-color: var(--color-bg-darkest); /* Black footer */
+    color: var(--color-text-medium); /* Medium Gray text */
+    border-top: 1px solid var(--color-border); /* Darker border */
+    font-size: 0.9rem;
+    border-radius: 0 0 12px 12px; /* Match main content border-radius */
+    max-width: var(--content-max-width); /* Match main's max-width for consistency */
+    margin: var(--main-margin-tb) auto; /* Centers footer horizontally within content-wrapper */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 992px) {
+    body {
+        display: block; /* Revert to block layout */
+    }
+
+    .header-inner {
+        padding: 0 10px; /* Adjust padding for smaller screens */
+    }
+
+    .category-navigation {
+        position: static; /* Remove fixed position */
+        transform: none; /* Remove vertical centering transform */
+        width: auto; /* Auto width */
+        margin: 20px auto; /* Center navigation horizontally */
+        flex-direction: row; /* Back to row layout */
+        flex-wrap: wrap; /* Allow wrapping */
+        justify-content: center; /* Center buttons */
+    }
+
+    .content-wrapper {
+        margin-left: 0; /* Remove left margin */
+        padding: 0; /* Remove wrapper padding */
+    }
+
+    main {
+        margin: 15px auto; /* Adjust margin for smaller screens */
+        padding: 20px; /* Keep padding */
+    }
+    footer {
+        margin: 15px auto; /* Adjust footer margin */
+        padding: 20px; /* Keep footer padding */
+    }
+
+    .nav-button {
+        width: auto; /* Auto width for buttons */
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    .mod-section {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .code-example {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
