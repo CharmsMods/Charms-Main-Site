@@ -1,0 +1,275 @@
+/* General Styling - Dark Mode */
+:root {
+    --bg-dark: #1a1a1a;
+    --text-light: #f0f0f0;
+    --text-neutral: #b0b0b0;
+    --accent-color: #007bff; /* A subtle blue for highlights */
+    --border-color: #333;
+    --code-bg: #2a2a2a;
+    --code-text: #e0e0e0;
+    --sidebar-bg: #222;
+    --header-bg: #111;
+    --button-bg: #333;
+    --button-hover-bg: #444;
+    --copy-button-bg: #0056b3;
+    --copy-button-hover-bg: #003d7a;
+    --link-color: #9cf;
+
+    /* Bright Code Highlight Colors */
+    --code-color-selector: #FFD700; /* Gold Yellow for Selectors (#element, .class) */
+    --code-color-property: #00FFFF; /* Cyan for Properties (background-color, padding) */
+    --code-color-value: #FF69B4;    /* Hot Pink for Values (#aabbcc, 10px, solid) */
+    --code-color-keyword: #7FFF00;  /* Chartreuse Green for Keywords (important, inherit) */
+    --code-color-comment: #808080;  /* Gray for Comments */
+    --code-color-punctuation: #FFFFFF; /* White for Brackets, Semicolons */
+    --code-color-string: #FFA500;   /* Orange for URL strings */
+    --code-color-function: #FF00FF; /* Magenta for functions (linear-gradient, rgba) */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    margin: 0;
+    padding: 0;
+    display: flex; /* Enables flexbox for sidebar and main content wrapper */
+    min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+    position: fixed; /* Keep sidebar fixed */
+    height: 100%;
+    overflow-y: auto; /* Enable scrolling for many links */
+    z-index: 1000; /* Ensure sidebar is above main content */
+}
+
+.sidebar h2 {
+    color: var(--accent-color);
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 5px; /* Reduced margin for more links */
+}
+
+.sidebar ul li a {
+    color: var(--text-neutral);
+    text-decoration: none;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--button-bg);
+    color: var(--text-light);
+}
+
+.sidebar-heading {
+    color: var(--accent-color);
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+    font-size: 1.1em;
+}
+
+/* Main Content Wrapper - Holds both columns */
+.main-content-wrapper {
+    flex-grow: 1;
+    display: flex; /* Enables flexbox for the two columns */
+    margin-left: 250px; /* Offset for fixed sidebar */
+    overflow-x: hidden; /* Prevent horizontal scroll from columns */
+}
+
+/* Individual Columns */
+.main-column {
+    flex: 1; /* Each column takes equal available space */
+    padding: 20px;
+    overflow-y: auto; /* Enable vertical scrolling for each column independently */
+    max-height: 100vh; /* Limit height to viewport for scrolling */
+    box-sizing: border-box; /* Include padding in element's total width/height */
+}
+
+.left-column {
+    border-right: 1px solid var(--border-color); /* Separator between columns */
+}
+
+.header {
+    background-color: var(--header-bg);
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header h1 {
+    color: var(--text-light);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.section {
+    background-color: #222;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.section h3 {
+    color: var(--accent-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8em;
+    margin-top: 0;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.section p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: var(--text-neutral);
+}
+
+/* Code Block Styling */
+.code-block {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-top: 15px;
+    position: relative;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 15px;
+    overflow-x: auto;
+    color: var(--code-text); /* Default code text color */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+    white-space: pre-wrap; /* Ensures long lines wrap */
+    word-wrap: break-word; /* Breaks words if necessary */
+}
+
+/* Bright Syntax Highlighting for CSS (Prism.js will add these classes) */
+.code-block code span.token.selector,
+.code-block code span.token.tag,
+.code-block code span.token.attr-name {
+    color: var(--code-color-selector) !important;
+}
+
+.code-block code span.token.property {
+    color: var(--code-color-property) !important;
+}
+
+.code-block code span.token.number,
+.code-block code span.token.unit,
+.code-block code span.token.color,
+.code-block code span.token.boolean {
+    color: var(--code-color-value) !important;
+}
+
+.code-block code span.token.keyword {
+    color: var(--code-color-keyword) !important;
+    font-weight: bold;
+}
+
+.code-block code span.token.comment {
+    color: var(--code-color-comment) !important;
+    font-style: italic;
+}
+
+.code-block code span.token.punctuation {
+    color: var(--code-color-punctuation) !important;
+}
+
+.code-block code span.token.string {
+    color: var(--code-color-string) !important;
+}
+
+.code-block code span.token.function {
+    color: var(--code-color-function) !important;
+}
+
+.code-block code span.token.operator {
+    color: var(--code-color-punctuation) !important;
+}
+
+
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--copy-button-bg);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.3s ease;
+}
+
+.copy-button:hover {
+    background-color: var(--copy-button-hover-bg);
+}
+
+.copy-button:active {
+    background-color: #002c5f;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) { /* Adjust breakpoint for two columns */
+    .main-content-wrapper {
+        flex-direction: column; /* Stack columns vertically on smaller screens */
+        margin-left: 0;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+        box-shadow: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .main-column {
+        max-height: unset; /* Remove fixed height when stacked */
+    }
+
+    .left-column {
+        border-right: none; /* Remove vertical separator */
+        border-bottom: 1px solid var(--border-color); /* Add horizontal separator */
+    }
+}
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.8em;
+    }
+    .section h3 {
+        font-size: 1.5em;
+    }
+    .code-block pre {
+        font-size: 0.8em;
+    }
+}

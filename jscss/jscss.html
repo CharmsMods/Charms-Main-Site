@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Modding Guide - CSS & JavaScript</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="jscss.css"> 
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Modding Sections</h2>
+        <ul>
+            <li class="sidebar-heading">CSS Modding</li>
+            <li><a href="#css-general-ui-elements">General UI Elements</a></li>
+            <li><a href="#css-menu-and-navigation">Menu & Navigation</a></li>
+            <li><a href="#css-buttons-and-inputs">Buttons & Input Fields</a></li>
+            <li><a href="#css-popups-and-modals">Popups & Modals</a></li>
+            <li><a href="#css-lists-and-tables">Lists & Tables</a></li>
+            <li><a href="#css-game-specific-elements">Game-Specific Elements</a></li>
+            
+            <li class="sidebar-heading">JavaScript Modding</li>
+            <li><a href="#js-game-settings-toggles">Game Settings & Toggles</a></li>
+            <li><a href="#js-player-character-customization">Player & Character Customization</a></li>
+            <li><a href="#js-ui-visibility">UI Visibility</a></li>
+            <li><a href="#js-weapon-reticle-control">Weapon & Reticle Control</a></li>
+            <li><a href="#js-game-mechanics-tweaks">Game Mechanics Tweaks</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content-wrapper">
+        <div class="main-column left-column">
+            <div class="header">
+                <h1>CSS Modding Guide</h1>
+                <p>Customize your game's user interface with these CSS modifications!</p>
+            </div>
+
+            <div id="css-general-ui-elements" class="section">
+                <h3>General UI Elements</h3>
+                <p>These styles affect the global look of your game's UI, including main background colors, text colors, and the logo's appearance.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Change Global Background Color */
+body, html {
+    background-color: #1a1a1a !important; /* Dark grey */
+    color: #f0f0f0 !important; /* Light text */
+}
+
+/* Adjust Logo Appearance */
+#logo {
+    height: 60px !important;
+    margin-left: 10px !important;
+    margin-top: 0px !important;
+    cursor: pointer !important; /* or 'none' for no cursor */
+    float: left !important;
+    filter: grayscale(100%) brightness(0.8); /* Apply grayscale and brightness */
+}
+
+/* Hide Option Information/Icons (e.g., in menu lists) */
+.option-box .option-info,
+#menu-items li img {
+    display: none !important;
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="css-menu-and-navigation" class="section">
+                <h3>Menu & Navigation</h3>
+                <p>Styles for the main menu bar, individual menu items, and their active/hover states.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Style the Main Menu Bar */
+#menu-bar {
+    background: linear-gradient(to right, #101010, #202020) !important; /* Gradient background */
+    /* Or use an image: background: url("your-image-url.png") !important; */
+    padding: 0 3.5vw !important;
+    border-bottom: 2px solid #333333 !important; /* Bottom border */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+}
+
+/* Style Individual Menu Items */
+#menu-items li {
+    color: #cccccc !important; /* Text color */
+    background-color: transparent !important; /* Transparent background */
+    border: none !important; /* No default border */
+    transition: 0.2s !important; /* Smooth transitions */
+}
+
+/* Style Menu Items on Hover/Active */
+#menu-items li.active,
+#menu-items li:hover {
+    background: rgba(255, 255, 255, 0.1) !important; /* Semi-transparent background */
+    color: #ffffff !important; /* White text */
+    scale: 105% !important; /* Slightly larger on hover */
+    transition: 0.2s !important;
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="css-buttons-and-inputs" class="section">
+                <h3>Buttons & Input Fields</h3>
+                <p>Customize the look and feel of interactive elements like buttons, text input fields, and sliders.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Style Primary Buttons */
+.button-primary {
+    background-color: #333333 !important; /* Dark grey background */
+    /* Or use an image: background: url("your-button-image.png") !important; */
+    color: #ffffff !important; /* White text */
+    border: 1px solid #555555 !important; /* Border color */
+    border-radius: 4px !important; /* Rounded corners */
+    padding: 10px 15px; /* Padding */
+    transition: 0.2s !important;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.05); /* Subtle shadow */
+}
+
+/* Button Hover Effects */
+.button-primary:hover {
+    background-color: #555555 !important; /* Lighter background on hover */
+    scale: 105% !important; /* Slightly larger on hover */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+/* Style Input Fields (general) */
+.field {
+    background: transparent !important; /* Transparent background */
+    border-right: 0px solid transparent !important; /* Remove right border */
+}
+
+/* Style Deposit/Text Input Fields */
+.deposit-field input {
+    border: 1px solid #333333 !important; /* Border color */
+    background: rgba(10, 10, 10, 0.7) !important; /* Semi-transparent background */
+    color: #f0f0f0 !important; /* Text color */
+}
+
+/* Style Range Slider Thumb (Webkit - Chrome/Safari) */
+input[type="range"]::-webkit-slider-thumb {
+    background-color: #007bff !important; /* Accent color for slider thumb */
+    border: 1px solid #0056b3 !important;
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="css-popups-and-modals" class="section">
+                <h3>Popups & Modals</h3>
+                <p>Modify the appearance of pop-up windows, modal dialogs, their headers, and close buttons.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Style Popups and Modals (main container) */
+.popup,
+.modal-content,
+.popup-bottom-content,
+.popup-side-content,
+.popup-reverse .popup-side-content,
+.popup-reverse .popup-side-menu {
+    background: rgba(0, 0, 0, 0.27) !important; /* Semi-transparent dark background */
+    border-radius: 8px !important; /* Rounded corners */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) !important; /* Shadow effect */
+    color: #f0f0f0 !important; /* Text color */
+}
+
+/* Style Popup Headers */
+.popup-header {
+    background: linear-gradient(to right, #101010, #202020) !important; /* Gradient background */
+    /* Or use an image: background: url("your-header-image.png") !important; */
+    border-bottom: 1px solid #333333 !important; /* Bottom border */
+}
+
+/* Style Popup Close Button */
+.popup-header .popup-close {
+    background-color: #333333 !important; /* Dark grey background */
+    /* Or use an image: background: url("your-close-button-image.png") !important; */
+    color: #ffffff !important; /* White text */
+    border-radius: 4px !important; /* Rounded corners */
+    border: 1px solid #555555 !important; /* Border color */
+    transition: 0.2s !important;
+}
+
+/* Popup Close Button Hover Effect */
+.popup-close:hover {
+    background-color: #555555 !important; /* Lighter background on hover */
+}
+
+/* Style Side Menu Items within Popups */
+.popup-side-menu li {
+    background: rgba(15, 15, 15, 0.8) !important; /* Semi-transparent dark background */
+    border: solid 1px #333333 !important; /* Border color */
+    transition: ease all 0.25s;
+    user-select: text;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.05); /* Subtle shadow */
+    color: #f5e8d3; /* Text color */
+}
+
+/* Style Active Side Menu Item */
+.popup-side-menu li.active {
+    background-color: #d9b98d !important; /* Highlight color */
+    color: #3b2f24 !important; /* Dark text for contrast */
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.3); /* Text shadow */
+}
+
+/* Style Specific Settings Panel (if applicable) */
+#settings {
+    background: linear-gradient(135deg, rgba(5, 5, 5, 0.95), rgba(15, 15, 15, 0.95)) !important; /* Gradient background */
+    /* Or use an image: background: url("your-settings-image.png") !important; */
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="css-lists-and-tables" class="section">
+                <h3>Lists & Tables (Leaderboards, Messages)</h3>
+                <p>Customize the look of data displays like leaderboards, score panels, and chat message lists.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Style Leaderboard/Score Panels */
+#game-score .score-panel,
+.leaderboard-content,
+.leaderboard-header,
+.daily-reward-wrapper,
+.daily-reward-content ul li,
+.daily-reward-header,
+.content { /* General content panel */
+    background: rgba(0, 0, 0, 0.27) !important; /* Semi-transparent dark background */
+    border-radius: 8px !important; /* Rounded corners */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5) !important; /* Shadow effect */
+    border: 1px solid #6a5643 !important; /* Optional: border color */
+    color: #f0f0f0 !important; /* Text color */
+}
+
+/* Style Leaderboard Header */
+.leaderboard-header {
+    background: linear-gradient(to right, #101010, #202020) !important; /* Gradient background */
+    border-bottom: 1px solid #333333 !important; /* Bottom border */
+}
+
+/* Style Even Rows in Tables (e.g., Leaderboard) */
+table tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.1) !important; /* Slightly transparent background for even rows */
+}
+
+/* Style Chat Input Box */
+#chat-input-box {
+    background: rgba(0, 0, 0, 0.27) !important; /* Semi-transparent dark background */
+    border: 1px solid #333333 !important; /* Border color */
+    color: #ffffff !important; /* Text color */
+    border-radius: 4px !important; /* Rounded corners */
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3) !important; /* Shadow effect */
+}
+
+/* Placeholder text for chat input */
+#chat-input-box::placeholder {
+    color: #b0b0b0; /* Light grey placeholder text */
+}
+
+/* Style Individual Messages in Chat List */
+.message-list li {
+    background: transparent !important; /* Transparent background */
+    border: solid 1px #ffffff !important; /* Border color */
+    /* For a specific accent color border: border: solid 1px #00ffea97 !important; */
+    transition: ease all 0.25s;
+    user-select: text; /* Allow text selection */
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="css-game-specific-elements" class="section">
+                <h3>Game-Specific Elements</h3>
+                <p>Target elements unique to gameplay, such as loading screens, game info displays, and progress bars.</p>
+                <div class="code-block">
+                    <pre><code class="language-css">
+/* Style Loading Screen */
+#loading-screen {
+    background: rgba(0, 0, 0, 0.8) !important; /* Semi-transparent dark overlay */
+}
+
+/* Loading screen text */
+#loading-screen p {
+    color: #ffffff !important; /* White text */
+}
+
+/* Style Game Info Display */
+#game-info {
+    font-family: 'Passion One', Arial, Helvetica, sans-serif; /* Custom font */
+    letter-spacing: 0.05rem;
+    color: #ffffff !important; /* White text */
+    text-align: center !important;
+    background-color: transparent !important; /* Transparent background */
+    transition: 0.2s !important;
+}
+
+/* Game Info Hover Effect */
+#game-info:hover {
+    background: rgba(255, 255, 255, 0.1) !important; /* Semi-transparent background on hover */
+    scale: 105% !important; /* Slightly larger on hover */
+}
+
+/* Icons within Game Info */
+#game-info i {
+    color: #cccccc !important; /* Icon color */
+}
+
+/* Text within Game Info */
+#game-info p {
+    font-family: 'Passion One', Arial, Helvetica, sans-serif;
+    letter-spacing: 0.05rem;
+    color: #ffffff !important;
+    margin: 0;
+}
+
+/* Style Progress Bar */
+#progress-bar {
+    height: 100%;
+    background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(192, 192, 192, 0.8) 100%) !important; /* Gradient progress bar */
+}
+
+/* Style Game Mode Banners */
+#game-mode-banner {
+    background: #4e3f33 !important; /* Example solid background */
+    color: #f5e8d3 !important; /* Example text color */
+    border: 1px solid #6a5643 !important; /* Example border */
+}
+
+/* Game Options layout (e.g., in a settings menu) */
+.game-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+        </div><div class="main-column right-column">
+            <div class="header">
+                <h1>JavaScript Modding Guide</h1>
+                <p>Enhance gameplay and add custom functionalities with these JavaScript modifications!</p>
+            </div>
+
+            <div id="js-game-settings-toggles" class="section">
+                <h3>Game Settings & Toggles</h3>
+                <p>Adjust core game behaviors like weapon positioning and map lighting modes.</p>
+                <div class="code-block">
+                    <pre><code class="language-javascript">
+// --- Global Game Settings & Toggles ---
+
+// Adjust Weapon Position (0 = down, 1 = default, 2 = high)
+// Tweak the values for weaponPosition, e.g., 0.5 for slightly down.
+window.weaponPosition = 0; // Current setting: Weapon down
+
+// Set Map Lighting Mode: "golden" for golden hour, "dark" for a darker feel
+// If you want default lighting, you can set this to anything else, or remove it.
+window.mapMode = "golden"; // Current setting: Golden hour lighting
+
+// Adjust Global Weapon Volume (0 to 1, 1 being 100% volume)
+const weaponVolume = 0.5; // Example: 50% volume for all weapons
+
+pc.app.on('Map:Loaded', () => {
+    // Apply weapon volume on map load
+    const weapons = [
+        'Scar', 'Shotgun', 'Sniper', 'Tec-9', 'M4',
+        'LMG', 'Desert-Eagle', 'Dagger', 'AK-47', 'AWP'
+    ];
+    weapons.forEach((weaponName) => {
+        const weaponEntity = pc.app.root.findByName(weaponName);
+        if (weaponEntity && weaponEntity.sound) {
+            weaponEntity.sound.volume = weaponVolume;
+        }
+    });
+
+    // Apply map lighting based on window.mapMode
+    // This function needs to be defined elsewhere in your script, e.g., in save 3 UI.js
+    // For manual tweaking:
+    let exposure = 1.0;
+    let skyboxIntensity = 1.0;
+    let lightColor = { r: 1, g: 1, b: 1, a: 1 }; // Default white lighting
+
+    if (window.mapMode === "golden") {
+        exposure = 0.4; // Darker scene exposure
+        skyboxIntensity = 2.0; // Brighter skybox
+        lightColor = { r: 1.0, g: 0.85, b: 0.6, a: 1 }; // Golden light tint
+    } else if (window.mapMode === "dark") {
+        exposure = 0.1; // Very dark exposure
+        skyboxIntensity = 0.5; // Dim skybox
+        lightColor = { r: 0.2, g: 0.2, b: 0.2, a: 1 }; // Dark ambient light
+    }
+
+    pc.app.renderer.scene.exposure = exposure;
+    pc.app.renderer.scene.skyboxIntensity = skyboxIntensity;
+    const sceneLight = pc.app.root.findByName("Light");
+    if (sceneLight && sceneLight.light) {
+        sceneLight.light.color = lightColor;
+    }
+
+    // Apply weapon position on map load if desired
+    // This is a more direct way than overriding setHeroSkin if global position is enough
+    const weaponposGlobal = { x: -0.01, y: 0, z: 0.45 }; // Example: Slightly left, default height, pulled back
+    if (window.weaponPosition === 0) { // Example for "weapon down"
+        weaponposGlobal.y = -0.15; // Move down
+        weaponposGlobal.z = 0.6; // Pull back slightly more
+    } else if (window.weaponPosition === 2) { // Example for "weapon high"
+        weaponposGlobal.y = 0.1; // Move up
+        weaponposGlobal.z = 0.3; // Push forward slightly
+    }
+
+    // Apply to the WeaponCenter entity
+    pc.app.root.findByName("WeaponCenter").setLocalPosition(
+        weaponposGlobal.x,
+        weaponposGlobal.y,
+        weaponposGlobal.z
+    );
+});
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="js-player-character-customization" class="section">
+                <h3>Player & Character Customization</h3>
+                <p>Modify character appearance, materials, and visibility of elements like hands.</p>
+                <div class="code-block">
+                    <pre><code class="language-javascript">
+// --- Character Skin Material & Emission ---
+// This function overrides the game's default setHeroSkin method to add custom material properties.
+// Example: Adds a white emission effect to character skins.
+pc.Application.getApplication().once("postrender", function () {
+    // Assuming pc.app.scripts.list()[11] is the correct script containing setHeroSkin.
+    // This index might vary in different game versions.
+    if (pc.app.scripts.list()[11]) {
+        const originalSetHeroSkin = pc.app.scripts.list()[11].prototype.setHeroSkin;
+
+        pc.app.scripts.list()[11].prototype.setHeroSkin = function () {
+            originalSetHeroSkin.apply(this, arguments); // Call original method first
+
+            var self = this;
+            var skinName = this.heroSkin;
+            var characterModel = this.characterEntity.model;
+
+            if (characterModel && characterModel.meshInstances && characterModel.meshInstances.length > 0) {
+                // Apply emission to all meshes of the character model
+                for (var i = 0; i < characterModel.meshInstances.length; ++i) {
+                    var mesh = characterModel.meshInstances[i];
+                    if (mesh.material) {
+                        // Clone the material to avoid modifying the original asset directly
+                        const customMaterial = mesh.material.clone();
+
+                        // Enable emission
+                        customMaterial.emissiveFactor = 1; // Full emission strength
+                        customMaterial.emissive = new pc.Color(1, 1, 1); // White emission color
+                        customMaterial.update(); // Apply changes
+
+                        mesh.material = customMaterial; // Assign the new material
+                    }
+                }
+            }
+        };
+        console.log('Custom setHeroSkin override enabled for emission.');
+    }
+});
+
+// --- Hide Character Hands / Arms ---
+// Makes the player character's hands invisible.
+pc.app.on("Map:Loaded", () => {
+    setTimeout(() => {
+        const weaponCenter = pc.app.root.findByName("WeaponCenter");
+        if (weaponCenter) {
+            const characterHandsHolder = weaponCenter.findByName("CharacterHandsHolder");
+            if (characterHandsHolder) {
+                characterHandsHolder.setLocalScale(0, 0, 0); // Scale to zero to hide
+                pc.settings.hideArms = true; // Set a game-specific setting if it exists
+                console.log('Character hands hidden.');
+            }
+        }
+    }, 2000); // Delay to ensure elements are loaded
+});
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="js-ui-visibility" class="section">
+                <h3>UI Visibility</h3>
+                <p>Hide or show various user interface elements like banners, scoreboards, and health bars.</p>
+                <div class="code-block">
+                    <pre><code class="language-javascript">
+// --- Hide Specific UI Elements ---
+// This function aims to hide a variety of UI elements within the game.
+function applyAdditionalUIChanges() {
+    try {
+        const overlay = pc.app.root.findByName("Overlay");
+        if (overlay) {
+            // Hide Time and Score background
+            const timesAndScoreBg = overlay.findByName("TimesAndScore")?.findByName("Background");
+            if (timesAndScoreBg) timesAndScoreBg.enabled = false;
+
+            // Hide 728x90 Banner (e.g., ad banner)
+            const banner728x90 = overlay.findByName("728x90-Banner");
+            if (banner728x90 && banner728x90.element) {
+                banner728x90.element.opacity = 0; // Make it completely transparent
+            }
+
+            // Hide Objective Holder elements
+            const objectiveHolder = overlay.findByName("ObjectiveHolder");
+            if (objectiveHolder) {
+                const objective = objectiveHolder.findByName("Objective");
+                if (objective) objective.enabled = false;
+                const objectiveTime = objectiveHolder.findByName("ObjectiveTime");
+                if (objectiveTime) objectiveTime.enabled = false;
+            }
+
+            // Hide the actual health bar element
+            const healthBar = overlay.findByName("Health");
+            if (healthBar && healthBar.element) {
+                healthBar.element.opacity = 0; // Make health bar invisible
+            }
+
+            // Hide Unlock Item Reward notification
+            const unlockItemReward = pc.app.root.findByName("Game")?.findByName("UnlockItemReward");
+            if (unlockItemReward) {
+                unlockItemReward.enabled = false;
+            }
+
+            console.log("Additional UI changes applied.");
+        }
+    } catch (e) {
+        console.error("Error applying additional UI changes:", e);
+    }
+}
+
+// Call the function on map load with a delay
+pc.app.on("Map:Loaded", () => {
+    setTimeout(applyAdditionalUIChanges, 2000); // 2-second delay to ensure UI elements are rendered
+});
+
+// --- Hide Leaderboard Content ---
+// Makes all entries in the leaderboard invisible when it opens.
+pc.app.on("Overlay:Leaderboard", () => {
+    try {
+        const leaderboard = pc.app.root.findByName("Overlay")?.findByName("Leaderboard");
+        if (leaderboard) {
+            for (let i = 0; i < leaderboard.children.length; i++) {
+                if (leaderboard.children[i].element) {
+                    leaderboard.children[i].element.opacity = 0.0; // Hide each child element
+                }
+            }
+            console.log("Leaderboard content hidden.");
+        }
+    } catch (error) {
+        console.error("Error hiding leaderboard:", error);
+    }
+});
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="js-weapon-reticle-control" class="section">
+                <h3>Weapon & Reticle Control</h3>
+                <p>Implement custom crosshairs/reticles for different weapons.</p>
+                <div class="code-block">
+                    <pre><code class="language-javascript">
+// --- Custom Reticle Implementation ---
+// Creates a canvas overlay for drawing custom reticles based on the equipped weapon.
+const canvas2 = document.createElement('canvas');
+const ctx2 = canvas2.getContext('2d');
+canvas2.width = 250; // Set the desired width for your reticle canvas
+canvas2.height = 250; // Set the desired height
+document.body.appendChild(canvas2);
+
+canvas2.style.position = 'absolute';
+canvas2.style.top = '50%';
+canvas2.style.left = '50%';
+canvas2.style.transform = 'translate(-50%, -50%)';
+canvas2.style.pointerEvents = 'none'; // Important: allows mouse events to pass through
+
+// Function to clear the reticle canvas
+function clearCanvas() {
+    ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+}
+
+// Example Reticle Drawing Functions (customize these!)
+function drawRedDotReticle() {
+    clearCanvas();
+    ctx2.beginPath();
+    ctx2.arc(canvas2.width / 2, canvas2.height / 2, 2, 0, Math.PI * 2, true); // Red dot
+    ctx2.fillStyle = 'red';
+    ctx2.fill();
+    ctx2.closePath();
+}
+
+function drawACSSReticle() {
+    clearCanvas();
+    // Example: Simple crosshair with center dot
+    ctx2.strokeStyle = 'cyan';
+    ctx2.lineWidth = 1.5;
+
+    // Center dot
+    ctx2.beginPath();
+    ctx2.arc(canvas2.width / 2, canvas2.height / 2, 1, 0, Math.PI * 2, true);
+    ctx2.fillStyle = 'cyan';
+    ctx2.fill();
+    ctx2.closePath();
+
+    // Horizontal line
+    ctx2.beginPath();
+    ctx2.moveTo((canvas2.width / 2) - 10, canvas2.height / 2);
+    ctx2.lineTo((canvas2.width / 2) + 10, canvas2.height / 2);
+    ctx2.stroke();
+
+    // Vertical line
+    ctx2.beginPath();
+    ctx2.moveTo(canvas2.width / 2, (canvas2.height / 2) - 10);
+    ctx2.lineTo(canvas2.width / 2, (canvas2.height / 2) + 10);
+    ctx2.stroke();
+}
+
+function drawSMGReticle() {
+    clearCanvas();
+    // Example: Small circle
+    ctx2.beginPath();
+    ctx2.arc(canvas2.width / 2, canvas2.height / 2, 5, 0, Math.PI * 2, true);
+    ctx2.strokeStyle = 'lime';
+    ctx2.lineWidth = 1.5;
+    ctx2.stroke();
+    ctx2.closePath();
+}
+
+// Event listener to show/hide/change reticle based on player focus and weapon
+pc.app.on('Player:Focused', (state) => {
+    if (state) {
+        // Delay to ensure weapon is fully equipped
+        setTimeout(() => {
+            let currentWeapon = pc.app.root.findByName('Player')?.script?.player?.weaponManager?.currentWeaponName;
+            console.log("Current Weapon:", currentWeapon);
+            if (currentWeapon === "Scar" || currentWeapon === "AK-47") {
+                drawRedDotReticle();
+            } else if (currentWeapon === "Sniper" || currentWeapon === "AWP") {
+                drawACSSReticle();
+            } else if (currentWeapon === "Tec-9" || currentWeapon === "M4") {
+                drawSMGReticle();
+            } else {
+                clearCanvas(); // Clear if no specific reticle is defined
+            }
+        }, 100);
+    } else {
+        clearCanvas(); // Clear reticle when player unfocused
+    }
+});
+
+// --- Fine-tune Weapon Position Per Weapon Type (Experimental) ---
+// This overrides the game's setHeroSkin method, adjusting weapon position
+// *after* the skin is loaded. Use with caution as it might conflict with global weaponpos.
+pc.Application.getApplication().once("postrender", function () {
+    if (pc.app.scripts.list()[11]) {
+        const originalSetHeroSkin = pc.app.scripts.list()[11].prototype.setHeroSkin;
+
+        pc.app.scripts.list()[11].prototype.setHeroSkin = function () {
+            originalSetHeroSkin.apply(this, arguments); // Call original method first
+
+            var self = this;
+            var weaponName = this.weaponManager.currentWeaponName; // Get current weapon name
+
+            // Apply a slight delay to ensure the weapon model is fully loaded and attached
+            setTimeout(() => {
+                if (self.weaponHolder) {
+                    const currentPos = self.weaponHolder.getLocalPosition();
+                    let newZ = currentPos.z; // Default to current Z
+
+                    if (weaponName === 'Sniper' || weaponName === 'AWP') {
+                        // Move sniper rifles closer to the player's face
+                        newZ = currentPos.z + 0.15; // Example adjustment
+                    } else if (weaponName === 'Shotgun') {
+                        // Push shotgun slightly out
+                        newZ = currentPos.z - 0.05;
+                    }
+                    // Add more weapon-specific adjustments here
+
+                    self.weaponHolder.setLocalPosition(currentPos.x, currentPos.y, newZ);
+                    console.log(`Weapon position adjusted for ${weaponName} to Z:${newZ.toFixed(2)}`);
+                }
+            }, 100);
+        };
+        console.log('Per-weapon position adjustment enabled (via setHeroSkin override).');
+    }
+});
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+            <div id="js-game-mechanics-tweaks" class="section">
+                <h3>Game Mechanics Tweaks</h3>
+                <p>Modify various in-game mechanics, like hitmarkers or automatic chat messages.</p>
+                <div class="code-block">
+                    <pre><code class="language-javascript">
+// --- Custom Headshot Hitmarker ---
+// Changes the visual effect of the headshot hitmarker.
+setTimeout(() => {
+    // Assuming pc.app.scripts.list()[7] is the script responsible for hitmarkers.
+    if (pc.app.scripts.list()[7]) {
+        pc.app.scripts.list()[7].prototype.onHeadshot = function (t, e) {
+            this.app.fire("DealtDamage:Trigger", e, t, true);
+            this.screenEntity.sound.play("Headshot"); // Play default headshot sound
+            this.hitmarkerEntity.element.opacity = 1; // Make hitmarker visible
+            this.hitmarkerEntity.setLocalScale(0.3, 0.3, 0.3); // Initial small size
+            this.hitmarkerEntity
+                .tween(this.hitmarkerEntity.getLocalScale())
+                .to(
+                    {
+                        x: 1.2, // Scale up to 1.2x
+                        y: 1.2,
+                        z: 1.2,
+                    },
+                    0.25,
+                    pc.BackOut // Easing function for a "pop" effect
+                )
+                .start();
+            this.lastHeadshot = Date.now();
+        };
+        console.log('Custom headshot hitmarker enabled.');
+    }
+}, 1000); // Delay to ensure script is loaded
+
+// --- Automatic Random Chat Messages ---
+// Sends a random predefined message to chat when a specific key is pressed.
+const messages = [
+  "RVNG ON TOP GG EZ!",
+  "RVNG EZ WIN!",
+  "RVNG IS THE BEST!",
+  "EZ LOL RVNG ON TOP!",
+  "SMOKED BY RVNG!",
+];
+
+function sendRandomMessage() {
+  const randomIndex = Math.floor(Math.random() * messages.length);
+  const message = messages[randomIndex];
+  pc.app.fire("Network:Chat", message); // Trigger the game's chat event
+  console.log("Sent random message:", message);
+}
+
+function handleKeyPress(event) {
+  const key = event.key;
+  if (key === "#") { // Change '#' to your desired hotkey
+    sendRandomMessage();
+  }
+}
+document.addEventListener("keydown", handleKeyPress);
+console.log("Random chat message script enabled (press # to send).");
+                    </code></pre>
+                    <button class="copy-button" onclick="copyCode(this)">Copy Code</button>
+                </div>
+            </div>
+
+        </div></div><script>
+        function copyCode(button) {
+            const codeBlock = button.previousElementSibling;
+            const textToCopy = codeBlock.textContent;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

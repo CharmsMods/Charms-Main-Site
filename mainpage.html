@@ -5,28 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modding Hub - Main</title>
   <link rel="stylesheet" href="mainpage.css" />
-  <!-- Font Awesome for icons (used for theme toggle, e.g., sun/moon) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <!--
-    --- Hamburger Menu Icon ---
-    This icon serves as the toggle for the side-panel dropdown menu.
-    It's composed of three horizontal bars that animate into an 'X' shape
-    when the menu is active, providing a clear visual indicator.
-  -->
   <div class="menu-icon" id="menuIcon">
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
   </div>
 
-  <!--
-    --- Dropdown Navigation Menu ---
-    This is a fixed-position side-panel menu. It's initially hidden off-screen
-    to the left and slides into view when activated by the menu icon.
-    It contains navigation links to various sections of the Modding Hub.
-  -->
   <div class="dropdown-menu" id="dropdownMenu">
     <a href="leaderboard/leaderboard.html" class="dropdown-item">Clan Leaderboard</a>
     <a href="installation/installation.html" class="dropdown-item">How to Install</a>
@@ -34,23 +21,9 @@
     <a href="https://discord.gg/jpKwHAZkEm" class="dropdown-item">My Discord server :)</a>
   </div>
 
-  <!--
-    --- Theme Toggle Button ---
-    This button enables users to switch between the light and dark themes of the page.
-    The icon visually represents the current theme (sun for light, moon for dark),
-    providing an intuitive user experience. Its position is fixed at the top-right.
-  -->
   <div class="theme-toggle" id="themeToggle">
-    <i class="fas fa-sun"></i> <!-- Default icon for light mode -->
-  </div>
+    <i class="fas fa-sun"></i> </div>
 
-  <!--
-    --- Background Particles ---
-    A decorative element consisting of multiple small, animated particles
-    that float across the background, adding a dynamic visual touch.
-    Each 'particle' div has unique inline styles for animation delays
-    to create a varied, non-repeating effect.
-  -->
   <div class="bg-particles">
     <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
     <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
@@ -63,88 +36,62 @@
     <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
   </div>
 
-  <!--
-    --- Main Content Container ---
-    This div acts as the primary layout wrapper for the page's main content,
-    centering it vertically and horizontally. It contains the header section
-    and the main navigation buttons.
-  -->
   <div class="main-container">
-    <!--
-      --- Header Section ---
-      Dedicated section for the main introductory content, including the
-      site's profile picture, main title, and a descriptive tagline.
-    -->
     <div class="header-section">
-      <!--
-        The profile picture. In dark mode, this image will animate upwards
-        and disappear, leaving only the text and navigation buttons.
-      -->
       <img src="pfp.png" class="profile-pic" alt="Profile Picture of Modding Hub owner" />
       <h1>Modding Hub</h1>
       <p class="tagline">Your complete modding resource center <br> Choose your adventure below</p>
     </div>
 
-    <!--
-      --- Main Navigation Container ---
-      Arranges the primary navigation links in a responsive grid.
-      Each link is designed as a "magnetic button" with interactive
-      hover effects for an engaging user experience.
-    -->
     <div class="main-nav-container">
-      <!--
-        --- Magnetic Button Example (Modding Repository) ---
-        Each navigation button is wrapped in a 'magnetic-button-wrapper'
-        to facilitate advanced hover effects. The 'button-fragments'
-        within create a distinct "breaking apart" visual effect on hover.
-      -->
       <div class="magnetic-button-wrapper">
         <a href="https://charmsmods.github.io/Modding-Repository-V2-Official-/" class="main-nav-button magnetic-button">
           <div class="button-fragments">
-            <div class="fragment fragment-1"><span>📦 Modding Repository</span></div>
+            <div class="fragment fragment-1"><span>Modding Repository</span></div>
             <div class="fragment fragment-2"><div class="nav-description">Access our comprehensive collection of modding resources</div></div>
           </div>
         </a>
       </div>
 
-      <!-- Magnetic Button Example (Pre-Made Mods) -->
       <div class="magnetic-button-wrapper">
         <a href="mods-download/mods-download.html" class="main-nav-button magnetic-button">
           <div class="button-fragments">
-            <div class="fragment fragment-1"><span>🎮 Pre-Made Mods</span></div>
+            <div class="fragment fragment-1"><span>Pre-Made Mods</span></div>
             <div class="fragment fragment-2"><div class="nav-description">Download ready-to-use modifications and enhancements</div></div>
           </div>
         </a>
       </div>
 
-      <!-- Magnetic Button Example (How to Make a Mod) -->
       <div class="magnetic-button-wrapper">
         <a href="makeamod/makeamod.html" class="main-nav-button magnetic-button">
           <div class="button-fragments">
-            <div class="fragment fragment-1"><span>📚 How to Make a Mod</span></div>
+            <div class="fragment fragment-1"><span>How to Make a Mod</span></div>
             <div class="fragment fragment-2"><div class="nav-description">Learn the art of modding with our step-by-step guides</div></div>
           </div>
         </a>
       </div>
 
-      <!-- Magnetic Button Example (Maps) -->
       <div class="magnetic-button-wrapper">
         <a href="maps/maps.html" class="main-nav-button magnetic-button">
           <div class="button-fragments">
-            <div class="fragment fragment-1"><span>🗺️ Maps</span></div>
+            <div class="fragment fragment-1"><span>Maps</span></div>
             <div class="fragment fragment-2"><div class="nav-description">Explore custom maps and level designs</div></div>
+          </div>
+        </a>
+      </div>
+
+      <div class="magnetic-button-wrapper">
+        <a href="jscss/jscss.html" class="main-nav-button magnetic-button">
+          <div class="button-fragments">
+            <div class="fragment fragment-1"><span>CSS and JS Code</span></div>
+            <div class="fragment fragment-2"><div class="nav-description">Learn How to use CSS and JS to change the way your game looks</div></div>
           </div>
         </a>
       </div>
     </div>
   </div>
 
-  <!--
-    --- JavaScript for Interactive Elements ---
-    This script provides the functionality for the hamburger menu to toggle
-    the dropdown, and for the theme toggle button to switch between
-    light and dark modes, updating the UI accordingly.
-  -->
+
   <script>
     // Get references to key DOM elements using their IDs.
     const menuIcon = document.getElementById('menuIcon');
