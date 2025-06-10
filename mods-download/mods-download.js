@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 'link' will be dynamically constructed based on 'name' and 'folder'
     // 'images' now explicitly lists the images available for each mod.
     const modsConfig = [
-    { name: "2Fly.zip", folder: "2Fly", images: ["1.png", "2.png", "3.png", "4.png"] },
+    { name: "2fly.zip", folder: "2fly", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "aim_trainer.zip", folder: "aim_trainer", images: ["1.png", "2.png"] },
     { name: "ANIMALS HELL-Mod.zip", folder: "ANIMALS HELL-Mod", images: ["1.png"] },
     { name: "AQUA-Mod.zip", folder: "AQUA-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Lava_mod.zip", folder: "Lava_mod", images: ["1.png"] },
     { name: "Minogue-Mod-Oficial.zip", folder: "Minogue-Mod-Oficial", images: ["1.png"] },
     { name: "Minty V2.zip", folder: "Minty V2", images: ["1.png"] },
-    { name: "Nexi Client Mod Beta.zip", folder: "Nexi Client Mod Beta", images: ["1.png"] },
     { name: "Nio-mod-purple-main.zip", folder: "Nio-mod-purple-main", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "NticxMod-v6.zip", folder: "NticxMod-v6", images: ["1.png", "2.png", "3.png"] },
     { name: "OOOPS-Mod.zip", folder: "OOOPS-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },

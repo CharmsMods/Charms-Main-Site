@@ -5,7 +5,8 @@
  * It includes styles for the overall layout, typography, interactive elements,
  * background effects, and implements a dynamic dark mode with a toggle.
  * The dark mode now features an animation for the profile picture to disappear
- * and re-centers the remaining content for a streamlined look.
+ * smoothly, ensuring it starts moving from its current position, and
+ * re-centers the remaining content for a streamlined look.
  */
 
 /*
@@ -247,8 +248,16 @@ body.dark-mode .header-section {
   display: block; /* Ensures that 'margin: auto' works for horizontal centering */
   box-shadow: 0 8px 24px var(--box-shadow-profile-pic); /* Dynamic box shadow based on theme */
   border: 4px solid var(--border-color-profile-pic); /* Dynamic border based on theme */
-  /* Updated transition: opacity fades out faster than the transform movement */
-  transition: transform 0.8s ease-out, opacity 0.4s ease-out, margin-bottom 0.8s ease-out;
+  transform: translateY(0); /* Explicitly set initial transform to prevent jumps */
+  /*
+   * Updated transition for smoother disappearance:
+   * - transform: 0.8s ease-out (smooth upward movement)
+   * - opacity: 0.3s ease-out (fast fade-out, completing well before transform finishes)
+   * - margin-bottom: 0.8s ease-out (smooth margin collapse)
+   * This ensures the profile picture fades completely before reaching its final upward position,
+   * making the disappearance look natural rather than a sudden jump followed by a fade.
+   */
+  transition: transform 0.8s ease-out, opacity 0.3s ease-out, margin-bottom 0.8s ease-out;
 }
 
 /*
@@ -262,7 +271,8 @@ body.dark-mode .header-section {
 /*
  * --- Profile Picture Animation in Dark Mode ---
  * When dark mode is active, the profile picture animates by shifting upwards
- * and fading out, then becomes non-interactive.
+ * and fading out, then becomes non-interactive. The opacity transition is
+ * shorter than the transform to ensure it disappears completely before its upward travel is done.
  */
 body.dark-mode .profile-pic {
   transform: translateY(-200px); /* Moves the image 200px upwards */
