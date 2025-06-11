@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discord Servers - Charm? Mods</title>
+  <link rel="stylesheet" href="discord-servers.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Discord Servers</h1>
+    <p class="tagline">Join these awesome communities! <br> Connect with fellow gamers and modders</p>
+    
+    <div class="button-grid">
+      <a href="https://discord.gg/JAdnVrBack" class="link-button" style="--btn-color: #e17055"><span>Da goats</span></a>
+      
+      <a href="https://discord.gg/qZTHgvUMU9" class="link-button" style="--btn-color: #d63031"><span>MRDR</span></a>
+      
+      <a href="https://discord.gg/6NedqDCUcK" class="link-button" style="--btn-color: #0984e3"><span>TzN</span></a>
+      
+      <a href="https://discord.gg/hB88xejBnX" class="link-button" style="--btn-color: #6c5ce7"><span>Xanolus Clan (IVX)</span></a>
+
+      <a href="https://discord.gg/SQgW9AkWYS" class="link-button" style="--btn-color: #6c5ce7"><span>SVC Clan</span></a>
+
+      <a href="https://discord.gg/VR3hzFMKJg" class="link-button" style="--btn-color: #6c5ce7"><span>24/7</span></a>
+
+      
+      <div style="text-align: center; margin: 2em 0; padding: 1em; background: rgba(255, 255, 255, 0.7); border-radius: 15px; color: #666; font-style: italic; font-size: 1.1em;">
+        ✨ More coming soon! ✨
+      </div>
+    </div>
+
+    <div class="back-button-container">
+      <a href="../mainpage.html" class="link-button" style="--btn-color: #74b9ff"><span>← Back</span></a>
+    </div>
+  </div>
+
+  <!-- Floating Discord box -->
+  <div class="discord-float">
+    Friend me on Discord as: "clouds_forever"
+  </div>
+
+  <script>
+    // Mouse-following background split
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+      document.body.style.background = `linear-gradient(45deg, white ${Math.max(0, ((x + y) / (window.innerWidth + window.innerHeight)) * 100 - 25)}%, cyan ${Math.min(100, ((x + y) / (window.innerWidth + window.innerHeight)) * 100 + 25)}%)`;
+    });
+  </script>
+
+</body>
+</html>

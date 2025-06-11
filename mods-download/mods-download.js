@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 'link' will be dynamically constructed based on 'name' and 'folder'
     // 'images' now explicitly lists the images available for each mod.
     const modsConfig = [
-    { name: "2fly.zip", folder: "2fly", images: ["1.png", "2.png", "3.png", "4.png"] },
+    { name: "2fly.zip", folder: "2fly", images: ["1.png", "2.png"] },
     { name: "aim_trainer.zip", folder: "aim_trainer", images: ["1.png", "2.png"] },
     { name: "Brick Mod.zip", folder: "Brick Mod", images: ["1.png"] },
     { name: "AQUA-Mod.zip", folder: "AQUA-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: "Ren-Mod.zip", folder: "Ren-Mod", images: ["1.png"] },
     { name: "RVNG Mod.zip", folder: "RVNG Mod", images: ["1.png"] },
     { name: "Samu-mod.zip", folder: "Samu-mod", images: ["1.png", "2.png", "3.png"] },
-    { name: "Sketch Mod.zip", folder: "Sketch Mod", images: ["1.png", "2.png"] },
+    { name: "Sketch Mod.zip", folder: "Sketch Mod", images: ["1.png", "2.png", "3.png", "4.png", "5.png", "6.png"] },
     { name: "Skipper-Mod.zip", folder: "Skipper-Mod", images: ["1.png", "2.png", "3.png", "4.png"] },
     { name: "skylux mod.zip", folder: "skylux mod", images: ["1.png"] },
     { name: "Summer_mod.zip", folder: "Summer_mod", images: ["1.png"] },

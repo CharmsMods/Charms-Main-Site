@@ -1,0 +1,458 @@
+:root {
+    --primary: #6366f1;
+    --secondary: #8b5cf6;
+    --accent: #06b6d4;
+    --bg: #0f172a;
+    --text: #e2e8f0;
+    --glow: #60a5fa;
+    --highlight: #f59e0b;
+    --tech: #10b981;
+    --ai: #ec4899;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1);
+    color: var(--text);
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition: background 2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/* Add a pseudo-element for smooth background transitions */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1);
+    z-index: -2;
+    transition: background 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dynamic background gradients with smooth fading */
+body[data-current-section="intro"]::before { 
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
+}
+
+body[data-current-section="passion"]::before { 
+    background: linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 30%, #e9d5ff 70%, #d8b4fe 100%);
+}
+
+body[data-current-section="mods"]::before { 
+    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 30%, #99f6e4 70%, #5eead4 100%);
+}
+
+body[data-current-section="journey"]::before { 
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 70%, #f59e0b 100%);
+}
+
+body[data-current-section="community"]::before { 
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 30%, #e9d5ff 70%, #c084fc 100%);
+}
+
+body[data-current-section="feedback"]::before { 
+    background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 30%, #fda4af 70%, #f87171 100%);
+}
+
+body[data-current-section="mission"]::before { 
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%, #bbf7d0 70%, #4ade80 100%);
+}
+
+body[data-current-section="inspiration"]::before { 
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%, #bfdbfe 70%, #60a5fa 100%);
+}
+
+body[data-current-section="closing"]::before { 
+    background: linear-gradient(135deg, #1f2937 0%, #374151 30%, #6b7280 70%, #9ca3af 100%);
+}
+
+/* Update text colors for better contrast on light backgrounds */
+body[data-current-section="intro"],
+body[data-current-section="passion"],
+body[data-current-section="mods"],
+body[data-current-section="journey"],
+body[data-current-section="community"],
+body[data-current-section="feedback"],
+body[data-current-section="mission"],
+body[data-current-section="inspiration"] {
+    color: #1f2937;
+}
+
+body[data-current-section="closing"] {
+    color: #f9fafb;
+}
+
+.container {
+    position: relative;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Text sections */
+.text-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.text-section.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Large text styling */
+.large-text {
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 1rem 0;
+    perspective: 1000px;
+}
+
+.signature .large-text {
+    font-size: clamp(2rem, 6vw, 4rem);
+}
+
+/* Individual word animations */
+.word-animate {
+    display: inline-block;
+    margin: 0 0.3rem;
+    opacity: 0;
+    transform: translateY(100px) rotateX(90deg);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: forwards;
+}
+
+.word-animate.reveal {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+}
+
+.word-animate.hide {
+    opacity: 0;
+    transform: translateY(-50px) rotateX(-45deg);
+}
+
+/* Text styling variations - updated for better contrast */
+.glow-text {
+    color: #3b82f6;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+    animation: glow-pulse 3s infinite ease-in-out;
+}
+
+/* Adjust glow text color for dark closing section */
+body[data-current-section="closing"] .glow-text {
+    color: #60a5fa;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.8), 0 0 40px rgba(96, 165, 250, 0.5);
+}
+
+@keyframes glow-pulse {
+    0%, 100% { 
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+    }
+    50% { 
+        text-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.5), 0 0 80px rgba(59, 130, 246, 0.3);
+    }
+}
+
+.highlight-text {
+    color: #f59e0b;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Adjust highlight text for dark closing section */
+body[data-current-section="closing"] .highlight-text {
+    color: #fbbf24;
+}
+
+.highlight-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.tech-text {
+    color: #059669;
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(45deg, #059669, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Adjust tech text for dark closing section */
+body[data-current-section="closing"] .tech-text {
+    color: #10b981;
+    background: linear-gradient(45deg, #10b981, #6ee7b7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ai-text {
+    color: #db2777;
+    animation: morph-colors 4s infinite ease-in-out;
+}
+
+/* Adjust AI text for dark closing section */
+body[data-current-section="closing"] .ai-text {
+    color: #ec4899;
+}
+
+@keyframes morph-colors {
+    0%, 100% { 
+        color: #db2777; 
+        text-shadow: 0 0 10px rgba(219, 39, 119, 0.5); 
+    }
+    33% { 
+        color: #0891b2; 
+        text-shadow: 0 0 10px rgba(8, 145, 178, 0.5); 
+    }
+    66% { 
+        color: #7c3aed; 
+        text-shadow: 0 0 10px rgba(124, 58, 237, 0.5); 
+    }
+}
+
+/* Discord link */
+.discord-link {
+    margin: 2rem 0;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.glow-link {
+    color: #6366f1;
+    text-decoration: none;
+    position: relative;
+    padding: 1rem 2rem;
+    border: 2px solid #6366f1;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    background: rgba(99, 102, 241, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.glow-link:hover {
+    color: white;
+    background: #6366f1;
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 0 60px rgba(99, 102, 241, 0.3);
+    transform: scale(1.05);
+}
+
+/* Floating particles */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #60a5fa;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float-particle 20s infinite linear;
+}
+
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 15s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 18s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+.particle:nth-child(4) { left: 50%; animation-delay: 6s; animation-duration: 16s; }
+.particle:nth-child(5) { left: 60%; animation-delay: 8s; animation-duration: 20s; }
+.particle:nth-child(6) { left: 70%; animation-delay: 10s; animation-duration: 19s; }
+.particle:nth-child(7) { left: 80%; animation-delay: 12s; animation-duration: 17s; }
+.particle:nth-child(8) { left: 90%; animation-delay: 14s; animation-duration: 21s; }
+
+@keyframes float-particle {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Interactive grid background */
+.grid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.1;
+}
+
+.grid-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    animation: grid-flow 8s infinite ease-in-out;
+}
+
+.grid-line:nth-child(1) {
+    top: 20%;
+    width: 100%;
+    height: 1px;
+    animation-delay: 0s;
+}
+
+.grid-line:nth-child(2) {
+    top: 40%;
+    width: 100%;
+    height: 1px;
+    animation-delay: 1.6s;
+}
+
+.grid-line:nth-child(3) {
+    top: 60%;
+    width: 100%;
+    height: 1px;
+    animation-delay: 3.2s;
+}
+
+.grid-line:nth-child(4) {
+    left: 25%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #8b5cf6, transparent);
+    animation-delay: 4.8s;
+}
+
+.grid-line:nth-child(5) {
+    left: 75%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #06b6d4, transparent);
+    animation-delay: 6.4s;
+}
+
+@keyframes grid-flow {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.02); }
+}
+
+/* Hover effects */
+.word-animate:hover {
+    transform: translateY(-5px) rotateX(15deg);
+    color: #3b82f6;
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    cursor: pointer;
+}
+
+/* Adjust hover effects for dark closing section */
+body[data-current-section="closing"] .word-animate:hover {
+    color: #60a5fa;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.8);
+}
+
+/* Glitch effect for special words */
+.glow-text:hover {
+    animation: glitch 0.3s infinite;
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .large-text {
+        font-size: clamp(1.8rem, 6vw, 3rem);
+    }
+    
+    .text-section {
+        padding: 2rem 1rem;
+    }
+    
+    .discord-link {
+        font-size: clamp(1rem, 3vw, 1.5rem);
+    }
+    
+    .glow-link {
+        padding: 0.8rem 1.5rem;
+    }
+}
+
+/* Magnetic cursor effect */
+@media (hover: hover) {
+    .word-animate {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .word-animate:hover {
+        transform: translateY(-8px) scale(1.1);
+    }
+}
+
+/* Progressive reveal stagger */
+.word-animate:nth-child(1) { transition-delay: 0.1s; }
+.word-animate:nth-child(2) { transition-delay: 0.2s; }
+.word-animate:nth-child(3) { transition-delay: 0.3s; }
+.word-animate:nth-child(4) { transition-delay: 0.4s; }
+.word-animate:nth-child(5) { transition-delay: 0.5s; }
+.word-animate:nth-child(6) { transition-delay: 0.6s; }
+.word-animate:nth-child(7) { transition-delay: 0.7s; }
+.word-animate:nth-child(8) { transition-delay: 0.8s; }
+.word-animate:nth-child(9) { transition-delay: 0.9s; }
+.word-animate:nth-child(10) { transition-delay: 1.0s; }
