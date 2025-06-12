@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentBgLayer = bgTransition1; // Start with bgTransition1 as the active layer
     let nextBgLayer = bgTransition2;
 
-    // Get navigation instruction element
+    // The navInstruction element is no longer in the HTML, so this line will simply get null.
+    // However, keeping it doesn't break anything.
     const navInstruction = document.getElementById('nav-instruction');
 
     // Map section data-section names to their respective background gradients
@@ -42,14 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
         currentBgLayer.style.background = sectionBackgrounds[initialSectionName];
         currentBgLayer.style.opacity = '1';
 
-        // Show instruction after a short delay
+        // The instruction display logic below is no longer relevant as the element is removed.
+        // It's safe to remove or keep commented out.
+        /*
         setTimeout(() => {
-            navInstruction.classList.add('show');
-            // Hide instruction after some time
-            setTimeout(() => {
-                navInstruction.classList.remove('show');
-            }, 5000); // Hide after 5 seconds
+            if (navInstruction) { // Check if navInstruction exists before trying to access its classList
+                navInstruction.classList.add('show');
+                setTimeout(() => {
+                    navInstruction.classList.remove('show');
+                }, 5000); // Hide after 5 seconds
+            }
         }, 1000); // Show after 1 second
+        */
     }
 
     // --- Custom Smooth Scrolling Logic ---
