@@ -112,8 +112,10 @@
     </div>
   </div>
 
-  <div id="page-visitor-counter">
-    Page Views: <span id="page-views-value">Loading...</span>
+  <div id="visitor-counter">
+      <a href="https://visitor-badge.la/status?id=charmsmods.github.io.Modding-Hub" target="_blank" rel="noopener noreferrer">
+          <img src="https://api.visitor-badge.la/badge?page_id=charmsmods.github.io.Modding-Hub&left_text=Visitors" alt="Visitor Count">
+      </a>
   </div>
 
   <script>
@@ -155,34 +157,6 @@
         themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Display sun icon for light mode.
       }
     });
-
-    // --- CountAPI.xyz Integration ---
-    const COUNTAPI_NAMESPACE = 'charmsmods.github.io.Charms-Main-Site';
-    const COUNTAPI_KEY = 'homepage_views';
-
-    async function updatePageViews() {
-        try {
-            // Increment the count and get the updated value
-            const response = await fetch(`https://api.countapi.xyz/hit/${COUNTAPI_NAMESPACE}/${COUNTAPI_KEY}`);
-            const data = await response.json();
-
-            // Update the HTML element with the new value
-            const pageViewsElement = document.getElementById('page-views-value');
-            if (pageViewsElement) {
-                pageViewsElement.textContent = data.value;
-            }
-        } catch (error) {
-            console.error('Error fetching page views from CountAPI:', error);
-            const pageViewsElement = document.getElementById('page-views-value');
-            if (pageViewsElement) {
-                pageViewsElement.textContent = 'Error loading views.';
-            }
-        }
-    }
-
-    // Call the function to update page views when the page loads
-    document.addEventListener('DOMContentLoaded', updatePageViews);
-
-  </script>
+</script>
 </body>
 </html>
