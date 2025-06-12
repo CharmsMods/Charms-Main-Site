@@ -198,6 +198,11 @@ body.dark-mode {
   transition: justify-content 0.8s ease-out; /* Smooth transition for vertical centering change */
 }
 
+/* Adjust margin in dark mode to compensate for disappearing profile pic */
+body.dark-mode .header-section {
+    margin-bottom: 1rem; /* Reduced margin to bring text/buttons closer */
+}
+
 /*
  * --- Header Section Styles ---
  * This section contains the main introductory elements: the profile picture,
@@ -250,13 +255,13 @@ body.dark-mode .header-section {
   border: 4px solid var(--border-color-profile-pic); /* Dynamic border based on theme */
   transform: translateY(0); /* Explicitly set initial transform to prevent jumps */
   /*
-   * Updated transition for smoother disappearance:
-   * - transform: 0.8s ease-out (smooth upward movement)
-   * - opacity: 0.3s ease-out (fast fade-out, completing well before transform finishes)
-   * - margin-bottom: 0.8s ease-out (smooth margin collapse)
-   * This ensures the profile picture fades completely before reaching its final upward position,
-   * making the disappearance look natural rather than a sudden jump followed by a fade.
-   */
+    * Updated transition for smoother disappearance:
+    * - transform: 0.8s ease-out (smooth upward movement)
+    * - opacity: 0.3s ease-out (fast fade-out, completing well before transform finishes)
+    * - margin-bottom: 0.8s ease-out (smooth margin collapse)
+    * This ensures the profile picture fades completely before reaching its final upward position,
+    * making the disappearance look natural rather than a sudden jump followed by a fade.
+    */
   transition: transform 0.8s ease-out, opacity 0.3s ease-out, margin-bottom 0.8s ease-out;
 }
 
@@ -661,36 +666,41 @@ h1 {
   display: block; /* Ensures the Font Awesome icon behaves as a block element */
 }
 
-/* --- New Page Visitor Counter Styles --- */
-#page-visitor-counter {
+/* --- New Global Page Visitor Counter Styles (using hits.secrethub.io) --- */
+#global-visitor-counter {
     position: fixed;
-    bottom: 20px; /* Position from the bottom */
-    right: 20px;  /* Position from the right */
-    z-index: 1000; /* Ensure it's on top of other content */
-    background: var(--bg-color-main); /* Match main content background */
-    backdrop-filter: blur(5px); /* Apply a slight blur */
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--bg-color-main);
+    backdrop-filter: blur(5px);
     padding: 10px 15px;
     border-radius: 8px;
-    box-shadow: 0 4px 15px var(--box-shadow-button); /* Subtle shadow */
-    color: var(--text-color-primary); /* Match main text color */
+    box-shadow: 0 4px 15px var(--box-shadow-button);
+    color: var(--text-color-primary);
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
-    display: flex; /* Use flexbox for alignment of text and number */
-    align-items: center; /* Vertically align items */
-    gap: 5px; /* Space between "Page Views:" and the number */
-    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease; /* Smooth transitions for theme changes */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
 }
 
-#page-visitor-counter #page-views-value {
-    font-weight: 700; /* Make the number bold */
-    font-size: 1.1em; /* Slightly larger than the "Page Views:" text */
+#global-visitor-counter #hit-count {
+    font-weight: 700;
+    font-size: 1.1em;
     color: #00FFFF; /* Aqua color for the number to make it stand out */
-    transition: color 0.5s ease; /* Smooth transition for number color */
+    transition: color 0.5s ease;
 }
 
-/* Dark mode specific styles for the counter */
-body.dark-mode #page-visitor-counter #page-views-value {
+/* Dark mode specific styles for the counter number */
+body.dark-mode #global-visitor-counter #hit-count {
     color: #fcccfd; /* Lighter pink for the number in dark mode */
+}
+
+/* Explicitly hide the old #visitor-counter if it still exists from previous attempts */
+#visitor-counter {
+    display: none;
 }
 
 /*
@@ -763,27 +773,16 @@ body.dark-mode #page-visitor-counter #page-views-value {
   .main-nav-button.magnetic-button {
     height: 180px; /* Adjusts the height of navigation buttons for tablets */
   }
-
-  /* Adjusts theme toggle icon size and position for tablets */
-  .theme-toggle {
-    font-size: 2rem; /* Reduced font size for tablets */
-    top: 15px;
-    right: 15px;
-  }
-
-  /* Adjust visitor counter for tablets */
-  #page-visitor-counter {
-    bottom: 15px;
-    right: 15px;
-    font-size: 0.85rem; /* Slightly smaller font for tablets */
-  }
 }
 
 /* Styles for screens up to 480px wide (typically mobile phones) */
 @media (max-width: 480px) {
-  .main-nav-button {
-    font-size: 1.1rem; /* Further reduces button text font size */
-    padding: 1.5rem 2rem;
+  .main-nav-container {
+    gap: 1.5rem; /* Further reduces spacing between buttons for smaller screens */
+  }
+
+  .main-nav-button.magnetic-button {
+    height: 160px; /* Further reduces button height */
   }
 
   .main-nav-button > span {
@@ -825,22 +824,10 @@ body.dark-mode #page-visitor-counter #page-views-value {
     transform: translateY(-13.5px) rotate(-45deg);
   }
 
-  .main-nav-button.magnetic-button {
-    height: 160px; /* Further adjusts navigation button height */
-  }
-
   /* Adjusts theme toggle icon size and position for mobile */
   .theme-toggle {
-    font-size: 1.8rem; /* Further reduced font size for mobile, but still larger than original */
+    font-size: 2rem; /* Reduces icon size */
     top: 10px;
     right: 10px;
-  }
-
-  /* Adjust visitor counter for mobile */
-  #page-visitor-counter {
-    bottom: 10px;
-    right: 10px;
-    font-size: 0.8rem; /* Even smaller font for mobile */
-    padding: 8px 12px; /* Adjust padding */
   }
 }
