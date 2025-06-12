@@ -112,8 +112,10 @@
     </div>
   </div>
 
-  <div id="global-visitor-counter">
-    Page Views: <span id="hit-count">Loading...</span>
+  <div id="image-visitor-counter">
+    <a href="https://hits.s5b.io/" target="_blank" rel="noopener noreferrer">
+      <img src="https://hits.s5b.io/vhit.svg?url=https://charmsmods.github.io.Modding-Hub" alt="Page Views: Global Visitor Count">
+    </a>
   </div>
 
   <script>
@@ -155,40 +157,6 @@
         themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Display sun icon for light mode.
       }
     });
-
-    // --- Global Page Visitor Counter with hits.secrethub.io ---
-    // You should replace 'charmsmods.github.io.Modding-Hub' with a unique ID for YOUR page/site.
-    // This ID is used by the hits.secrethub.io service to track counts for your specific page.
-    const PAGE_ID = 'charmsmods.github.io.Modding-Hub'; 
-
-    async function updateGlobalPageViews() {
-        try {
-            // This API is specifically designed to handle CORS for static sites
-            const response = await fetch(`https://hits.secrethub.io/hit/${PAGE_ID}`);
-            
-            // Check if the request was successful
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-
-            const hitCountElement = document.getElementById('hit-count');
-            if (hitCountElement) {
-                hitCountElement.textContent = data.count;
-            }
-        } catch (error) {
-            console.error('Error fetching page views from hits.secrethub.io:', error);
-            const hitCountElement = document.getElementById('hit-count');
-            if (hitCountElement) {
-                hitCountElement.textContent = 'Error'; // Display error message if the API call fails
-            }
-        }
-    }
-
-    // Call the function to update page views when the page loads
-    document.addEventListener('DOMContentLoaded', updateGlobalPageViews);
-
   </script>
 </body>
 </html>

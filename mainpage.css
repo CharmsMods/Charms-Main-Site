@@ -666,42 +666,27 @@ h1 {
   display: block; /* Ensures the Font Awesome icon behaves as a block element */
 }
 
-/* --- New Global Page Visitor Counter Styles (using hits.secrethub.io) --- */
-#global-visitor-counter {
+/* --- Image-based Global Visitor Counter Styles --- */
+#image-visitor-counter {
     position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 1000;
-    background: var(--bg-color-main);
-    backdrop-filter: blur(5px);
-    padding: 10px 15px;
+    /* Optional: If you want a background/padding around the image badge */
+    /* background: var(--bg-color-main); */
+    /* backdrop-filter: blur(5px); */
+    padding: 5px; /* Adjust padding as needed for the image badge */
     border-radius: 8px;
-    box-shadow: 0 4px 15px var(--box-shadow-button);
-    color: var(--text-color-primary);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+    /* box-shadow: 0 4px 15px var(--box-shadow-button); */
+    transition: background 0.5s ease, box-shadow 0.5s ease;
 }
 
-#global-visitor-counter #hit-count {
-    font-weight: 700;
-    font-size: 1.1em;
-    color: #00FFFF; /* Aqua color for the number to make it stand out */
-    transition: color 0.5s ease;
+#image-visitor-counter img {
+    display: block; /* Ensures the image behaves as a block element for consistent sizing */
+    height: 24px; /* Adjust height as needed, or remove to use badge's default size */
+    /* If you want to customize appearance, many badge services offer parameters in the URL */
 }
 
-/* Dark mode specific styles for the counter number */
-body.dark-mode #global-visitor-counter #hit-count {
-    color: #fcccfd; /* Lighter pink for the number in dark mode */
-}
-
-/* Explicitly hide the old #visitor-counter if it still exists from previous attempts */
-#visitor-counter {
-    display: none;
-}
 
 /*
  * --- Responsive Design Media Queries ---
