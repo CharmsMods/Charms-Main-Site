@@ -661,31 +661,37 @@ h1 {
   display: block; /* Ensures the Font Awesome icon behaves as a block element */
 }
 
-/* --- Visitor Counter Styles --- */
-#visitor-counter {
+/* --- New Page Visitor Counter Styles --- */
+#page-visitor-counter {
     position: fixed;
-    bottom: 20px; /* Adjust as needed for desired vertical position */
-    right: 20px;  /* Adjust as needed for desired horizontal position */
-    z-index: 1000; /* Ensures the badge appears above other content, higher than theme toggle */
-    opacity: 0.8; /* Optional: Makes it slightly transparent */
-    transition: opacity 0.3s ease-in-out; /* Optional: Smooth fade on hover */
+    bottom: 20px; /* Position from the bottom */
+    right: 20px;  /* Position from the right */
+    z-index: 1000; /* Ensure it's on top of other content */
+    background: var(--bg-color-main); /* Match main content background */
+    backdrop-filter: blur(5px); /* Apply a slight blur */
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px var(--box-shadow-button); /* Subtle shadow */
+    color: var(--text-color-primary); /* Match main text color */
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    display: flex; /* Use flexbox for alignment of text and number */
+    align-items: center; /* Vertically align items */
+    gap: 5px; /* Space between "Page Views:" and the number */
+    transition: background 0.5s ease, color 0.5s ease, box-shadow 0.5s ease; /* Smooth transitions for theme changes */
 }
 
-#visitor-counter:hover {
-    opacity: 1; /* Optional: Full opacity on hover */
+#page-visitor-counter #page-views-value {
+    font-weight: 700; /* Make the number bold */
+    font-size: 1.1em; /* Slightly larger than the "Page Views:" text */
+    color: #00FFFF; /* Aqua color for the number to make it stand out */
+    transition: color 0.5s ease; /* Smooth transition for number color */
 }
 
-#visitor-counter img {
-    border-radius: 5px; /* Optional: Slightly rounded corners for the badge */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Subtle shadow */
-    vertical-align: middle; /* Aligns the image nicely */
+/* Dark mode specific styles for the counter */
+body.dark-mode #page-visitor-counter #page-views-value {
+    color: #fcccfd; /* Lighter pink for the number in dark mode */
 }
-
-#visitor-counter a {
-    text-decoration: none; /* Removes underline from the link */
-    /* Add any other link styling you desire */
-}
-
 
 /*
  * --- Responsive Design Media Queries ---
@@ -766,9 +772,10 @@ h1 {
   }
 
   /* Adjust visitor counter for tablets */
-  #visitor-counter {
+  #page-visitor-counter {
     bottom: 15px;
     right: 15px;
+    font-size: 0.85rem; /* Slightly smaller font for tablets */
   }
 }
 
@@ -830,8 +837,10 @@ h1 {
   }
 
   /* Adjust visitor counter for mobile */
-  #visitor-counter {
+  #page-visitor-counter {
     bottom: 10px;
     right: 10px;
+    font-size: 0.8rem; /* Even smaller font for mobile */
+    padding: 8px 12px; /* Adjust padding */
   }
 }
