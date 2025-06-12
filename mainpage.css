@@ -661,6 +661,32 @@ h1 {
   display: block; /* Ensures the Font Awesome icon behaves as a block element */
 }
 
+/* --- Visitor Counter Styles --- */
+#visitor-counter {
+    position: fixed;
+    bottom: 20px; /* Adjust as needed for desired vertical position */
+    right: 20px;  /* Adjust as needed for desired horizontal position */
+    z-index: 1000; /* Ensures the badge appears above other content, higher than theme toggle */
+    opacity: 0.8; /* Optional: Makes it slightly transparent */
+    transition: opacity 0.3s ease-in-out; /* Optional: Smooth fade on hover */
+}
+
+#visitor-counter:hover {
+    opacity: 1; /* Optional: Full opacity on hover */
+}
+
+#visitor-counter img {
+    border-radius: 5px; /* Optional: Slightly rounded corners for the badge */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Optional: Subtle shadow */
+    vertical-align: middle; /* Aligns the image nicely */
+}
+
+#visitor-counter a {
+    text-decoration: none; /* Removes underline from the link */
+    /* Add any other link styling you desire */
+}
+
+
 /*
  * --- Responsive Design Media Queries ---
  * These rules adjust the layout and styling of elements for different screen sizes,
