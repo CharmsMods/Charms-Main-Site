@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2D Ball Simulation</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background-color: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d'); // Use 2D context
+    
+    if (!ctx) {
+      alert("2D context not supported! Try a different browser.");
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Ball class definition remains the same as before
+    class Ball {
+      constructor(x, y, dx, dy, radius, colors) {
+        this.x = x;
+        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
+        this.radius = radius;
+        this.colors = colors;
+      }
+
+      update(gravity, friction, mouseX, mouseY, balls) {
+        let dxToMouse = this.x - mouseX;
+        let dyToMouse = this.y - mouseY;
+        let distToMouse = Math.hypot(dxToMouse, dyToMouse);
+
+        let repelDistance = 1000;  // Increased repulsion range
+        let maxRepelStrength = 0.7; // Moderate repulsion strength
+        let repelStrength = Math.max(0, Math.min(maxRepelStrength, 1 - distToMouse / repelDistance));
+
+        if (distToMouse < repelDistance) {
+          let scale = Math.pow((repelDistance - distToMouse) / repelDistance, 2);
+          this.dx += (dxToMouse / distToMouse) * scale;
+          this.dy += (dyToMouse / distToMouse) * scale;
+        }
+
+        // Ball-to-ball repulsion with a larger force
+        let repulsionRange = 800; // Increased repulsion range
+        let repulsionStrength = 0.2; // Increased repulsion force to make it more noticeable
+
+        balls.forEach(otherBall => {
+          if (otherBall !== this) {
+            let dx = this.x - otherBall.x;
+            let dy = this.y - otherBall.y;
+            let dist = Math.hypot(dx, dy);
+
+            if (dist < repulsionRange) {
+              let overlap = (this.radius + otherBall.radius - dist);
+              if (overlap > 0) {
+                // Increase the repulsion force to make it stronger
+                let repelForce = overlap * repulsionStrength / dist;
+
+                this.dx += (dx / dist) * repelForce;
+                this.dy += (dy / dist) * repelForce;
+                otherBall.dx -= (dx / dist) * repelForce; // Apply opposite force on the other ball
+                otherBall.dy -= (dy / dist) * repelForce;
+              }
+            }
+          }
+        });
+
+        this.dy += gravity;
+        this.dx *= friction;
+        this.dy *= friction;
+
+        // Update position based on velocity
+        this.x += this.dx;
+        this.y += this.dy;
+
+        // Wall and floor collisions
+        if (this.x - this.radius < 0) {
+          this.x = this.radius;
+          this.dx *= -1;
+        } else if (this.x + this.radius > canvas.width) {
+          this.x = canvas.width - this.radius;
+          this.dx *= -1;
+        }
+
+        if (this.y - this.radius < 0) {
+          this.y = this.radius;
+          this.dy *= -1;
+        } else if (this.y + this.radius > canvas.height) {
+          this.y = canvas.height - this.radius;
+          this.dy *= -1;
+        }
+      }
+    }
+
+    let balls = [
+      new Ball(200, 200, 2, 2, 50, ['#D3A5A1', '#E0B6B0', '#F2F2F2', '#85D0C9', '#34A7B2']),
+      new Ball(400, 300, -2, -1.5, 60, ['#34A7B2', '#85D0C9', '#F2F2F2', '#E0B6B0', '#D3A5A1'])
+    ];
+
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+
+    window.addEventListener('mousemove', function(event) {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    });
+
+    // Function to generate random colors based on the original set
+    function generateRandomColors() {
+      const baseColors = ['#D3A5A1', '#E0B6B0', '#F2F2F2', '#85D0C9', '#34A7B2'];
+      let shuffled = baseColors.slice(); // Copy base colors
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Shuffle the colors
+      }
+      return shuffled;
+    }
+
+    function drawBall(ball) {
+      let ringCount = ball.colors.length;
+
+      for (let i = ringCount - 1; i >= 0; i--) {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius * (i + 1) / ringCount, 0, Math.PI * 2);
+        ctx.fillStyle = ball.colors[i];
+        ctx.fill();
+      }
+    }
+
+    function updateScene() {
+      // Clear the canvas and update the balls
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      balls.forEach(ball => {
+        ball.update(0.2, 0.99, mouseX, mouseY, balls);
+        drawBall(ball);
+      });
+
+      requestAnimationFrame(updateScene);
+    }
+
+    updateScene();
+  </script>
+</body>
+</html>

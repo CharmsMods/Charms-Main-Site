@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentBgLayer = bgTransition1; // Start with bgTransition1 as the active layer
     let nextBgLayer = bgTransition2;
 
-    // Map section data-section names to their respective background classes
+    // Get navigation instruction element
+    const navInstruction = document.getElementById('nav-instruction');
+
+    // Map section data-section names to their respective background gradients
     const sectionBackgrounds = {
         "intro": "linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%)",
         "passion": "linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 30%, #e9d5ff 70%, #d8b4fe 100%)",
@@ -25,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Current section tracking
-    let currentSection = 0;
-    let isScrolling = false;
+    let currentSectionIndex = 0;
+    let isTransitioning = false; // Flag to prevent rapid section changes
 
     // Initialize first section and background
     if (sections.length > 0) {
@@ -38,47 +41,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // Set the initial background for the first layer and make it visible
         currentBgLayer.style.background = sectionBackgrounds[initialSectionName];
         currentBgLayer.style.opacity = '1';
+
+        // Show instruction after a short delay
+        setTimeout(() => {
+            navInstruction.classList.add('show');
+            // Hide instruction after some time
+            setTimeout(() => {
+                navInstruction.classList.remove('show');
+            }, 5000); // Hide after 5 seconds
+        }, 1000); // Show after 1 second
     }
 
-    // Scroll event handler with throttling
-    let scrollTimeout;
-    window.addEventListener('scroll', function() {
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
+    // --- Custom Smooth Scrolling Logic ---
+    function scrollToSection(index) {
+        if (isTransitioning || index < 0 || index >= sections.length) {
+            return;
         }
-        scrollTimeout = setTimeout(handleScroll, 16); // ~60fps
-    });
 
-    function handleScroll() {
-        if (isScrolling) return;
+        isTransitioning = true; // Set flag to prevent further actions
 
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-
-        // Find which section should be active
-        let newCurrentSectionIndex = 0;
-        sections.forEach((section, index) => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-
-            if (scrollPosition >= sectionTop - windowHeight / 2 &&
-                scrollPosition < sectionTop + sectionHeight - windowHeight / 2) {
-                newCurrentSectionIndex = index;
-            }
-        });
-
-        // If section changed, update
-        if (newCurrentSectionIndex !== currentSection) {
-            changeSection(newCurrentSectionIndex);
-        }
-    }
-
-    function changeSection(newIndex) {
-        if (isScrolling || newIndex === currentSection) return;
-
-        isScrolling = true;
-        const oldSection = sections[currentSection];
-        const newSection = sections[newIndex];
+        const oldSection = sections[currentSectionIndex];
+        const newSection = sections[index];
         const newSectionName = newSection.getAttribute('data-section');
 
         // Hide old section words
@@ -94,39 +77,64 @@ document.addEventListener('DOMContentLoaded', function() {
         // Fade out the current background layer
         currentBgLayer.style.opacity = '0';
 
-        // Swap the layers after the transition
+        // Swap the layers after the CSS transition duration
         setTimeout(() => {
-            currentBgLayer.style.background = 'none'; // Clear background of the now hidden layer
+            // Clear background of the now hidden layer to free up memory/resources
+            currentBgLayer.style.background = 'none';
             // Swap references
             const temp = currentBgLayer;
             currentBgLayer = nextBgLayer;
             nextBgLayer = temp;
         }, 1500); // This timeout should match the CSS transition duration (1.5s = 1500ms)
 
-        // Update current section
-        currentSection = newIndex;
-
-        // Show new section text after delay
+        // Deactivate old section and activate new one (for text visibility and animations)
         setTimeout(() => {
-            // Remove active from all sections
             sections.forEach(section => section.classList.remove('active'));
-
-            // Add active to new section
             newSection.classList.add('active');
-
-            // Animate words in
             animateWordsIn(newSection);
-
-            isScrolling = false;
-        }, 300); // This timeout is for word animations, can be adjusted
+            currentSectionIndex = index; // Update current section index
+            isTransitioning = false; // Reset flag after animations complete
+        }, 1000); // Activate new section text and reset flag after 1 second (allows background to largely fade)
     }
+
+    // Prevent default scroll wheel behavior
+    window.addEventListener('wheel', function(e) {
+        e.preventDefault(); // Prevent default scroll
+        if (isTransitioning) return; // Ignore if already transitioning
+
+        const direction = e.deltaY > 0 ? 1 : -1; // Determine scroll direction
+        let nextIndex = currentSectionIndex + direction;
+
+        scrollToSection(nextIndex);
+    }, { passive: false }); // Use passive: false to allow preventDefault
+
+    // Keyboard navigation (Arrow Up/Down, Spacebar)
+    document.addEventListener('keydown', function(e) {
+        if (isTransitioning) return;
+
+        let nextIndex = currentSectionIndex;
+        if (e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault(); // Prevent default scroll
+            nextIndex = Math.min(sections.length - 1, currentSectionIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault(); // Prevent default scroll
+            nextIndex = Math.max(0, currentSectionIndex - 1);
+        }
+
+        if (nextIndex !== currentSectionIndex) {
+            scrollToSection(nextIndex);
+        }
+    });
+
+
+    // --- Existing functions (adjusted slightly) ---
 
     function animateWordsIn(section) {
         const sectionWords = section.querySelectorAll('.word-animate');
-
         sectionWords.forEach((word, index) => {
+            word.classList.remove('hide'); // Ensure 'hide' is removed first
+            // Use requestAnimationFrame for smoother animations if many words
             setTimeout(() => {
-                word.classList.remove('hide');
                 word.classList.add('reveal');
             }, index * 100); // Stagger the animations
         });
@@ -134,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function animateWordsOut(section) {
         const sectionWords = section.querySelectorAll('.word-animate');
-
         sectionWords.forEach((word, index) => {
+            // Use requestAnimationFrame for smoother animations if many words
             setTimeout(() => {
                 word.classList.remove('reveal');
                 word.classList.add('hide');
@@ -144,25 +152,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Mouse movement for magnetic effects
-    let mouseX = 0;
-    let mouseY = 0;
-
     document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+        document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
 
-        // Update custom cursor position (if you want to add one)
-        updateCursor(mouseX, mouseY);
-
-        // Magnetic effect for words
         applyMagneticEffect(e);
+        updateParticleAndGridInteraction(e); // Combined particle/grid interaction
     });
-
-    function updateCursor(x, y) {
-        // This would update a custom cursor if we add one
-        document.documentElement.style.setProperty('--mouse-x', x + 'px');
-        document.documentElement.style.setProperty('--mouse-y', y + 'px');
-    }
 
     function applyMagneticEffect(e) {
         const activeWords = document.querySelectorAll('.text-section.active .word-animate.reveal');
@@ -189,10 +185,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Particle interaction
-    const particles = document.querySelectorAll('.particle');
-
-    document.addEventListener('mousemove', function(e) {
+    function updateParticleAndGridInteraction(e) {
+        // Particle interaction
+        const particles = document.querySelectorAll('.particle');
         particles.forEach(particle => {
             const rect = particle.getBoundingClientRect();
             const particleCenterX = rect.left + rect.width / 2;
@@ -212,110 +207,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 particle.style.transform = '';
             }
         });
-    });
 
-    // Grid interaction
-    const gridLines = document.querySelectorAll('.grid-line');
-
-    document.addEventListener('mousemove', function(e) {
+        // Grid interaction
+        const gridLines = document.querySelectorAll('.grid-line');
         const mouseXPercent = (e.clientX / window.innerWidth) * 100;
         const mouseYPercent = (e.clientY / window.innerHeight) * 100;
 
         gridLines.forEach((line, index) => {
             if (index < 3) { // Horizontal lines
-                const lineY = parseInt(line.style.top);
+                const lineY = parseFloat(line.style.top);
                 const distance = Math.abs(mouseYPercent - lineY);
                 if (distance < 20) {
                     line.style.opacity = Math.min(0.5, 0.1 + (20 - distance) / 20 * 0.4);
+                } else {
+                    line.style.opacity = ''; // Reset to default CSS opacity
                 }
             } else { // Vertical lines
-                const lineX = parseInt(line.style.left);
+                const lineX = parseFloat(line.style.left);
                 const distance = Math.abs(mouseXPercent - lineX);
                 if (distance < 20) {
                     line.style.opacity = Math.min(0.5, 0.1 + (20 - distance) / 20 * 0.4);
+                } else {
+                    line.style.opacity = ''; // Reset to default CSS opacity
                 }
             }
         });
-    });
+    }
 
-    // Smooth scrolling for better experience
-    let scrolling = false;
-
-    window.addEventListener('wheel', function(e) {
-        if (scrolling) {
-            e.preventDefault();
-            return;
-        }
-
-        // Optional: Add smooth snap-to-section scrolling
-        // Uncomment below for snap scrolling behavior
-        /*
-        e.preventDefault();
-        scrolling = true;
-
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
-
-        if (nextSection !== currentSection) {
-            sections[nextSection].scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-
-        setTimeout(() => {
-            scrolling = false;
-        }, 1000);
-        */
-    }, { passive: false });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowDown' || e.key === ' ') {
-            e.preventDefault();
-            const nextSection = Math.min(sections.length - 1, currentSection + 1);
-            if (nextSection !== currentSection) {
-                sections[nextSection].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            const prevSection = Math.max(0, currentSection - 1);
-            if (prevSection !== currentSection) {
-                sections[prevSection].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        }
-    });
-
-    // Performance optimization: Intersection Observer for better scroll detection
-    const observerOptions = {
-        root: null,
-        rootMargin: '-20% 0px -20% 0px',
-        threshold: 0.5
-    };
-
-    const sectionObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const sectionIndex = Array.from(sections).indexOf(entry.target);
-                if (sectionIndex !== currentSection && !isScrolling) {
-                    changeSection(sectionIndex);
-                }
-            }
-        });
-    }, observerOptions);
-
-    // Observe all sections
-    sections.forEach(section => {
-        sectionObserver.observe(section);
-    });
-
-    // Add some Easter eggs
+    // Easter eggs (unchanged)
     let konamiCode = [];
     const correctCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
 
@@ -336,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Add rainbow animation
+    // Add rainbow animation style
     const style = document.createElement('style');
     style.textContent = `
         @keyframes rainbow-bg {

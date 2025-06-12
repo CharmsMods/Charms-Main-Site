@@ -8,7 +8,6 @@
     --highlight: #f59e0b;
     --tech: #10b981;
     --ai: #ec4899;
-    /* Remove --bg-opacity as we'll manage transitions differently */
 }
 
 * {
@@ -20,93 +19,24 @@
 body {
     font-family: 'Arial', sans-serif;
     color: var(--text);
-    overflow-x: hidden;
+    overflow: hidden; /* Prevent default scrolling */
     min-height: 100vh;
     position: relative;
-    /* Ensure body itself doesn't have a background that interferes */
-    background: none;
+    background: none; /* No default body background, handled by transition layers */
 }
 
 /* Base class for all background layers */
-.background-layer {
+.background-transition-layer {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: -1; /* Placed below content */
     opacity: 0; /* All layers start hidden */
     transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1); /* Longer transition for smoother crossfade */
 }
-
-/* Create a single element to hold the dynamic background */
-.container::before { /* Using .container::before for the dynamic background */
-    @extend .background-layer; /* Inherit common styles from background-layer */
-    z-index: -2; /* Place it below the sections if needed, but above the default fallback */
-}
-
-/* Default fallback background if no data-current-section is set, or during initial load */
-body {
-    background: linear-gradient(135deg, #f8fafc, #e2e8f0, #cbd5e1); /* This will be visible if no other background layer is active */
-}
-
-
-/* Section-specific backgrounds applied to .container::before */
-body[data-current-section="intro"] .background-layer-active { /* Using a helper class here */
-    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #cbd5e1 100%);
-}
-
-body[data-current-section="passion"] .background-layer-active {
-    background: linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 30%, #e9d5ff 70%, #d8b4fe 100%);
-}
-
-body[data-current-section="mods"] .background-layer-active {
-    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 30%, #99f6e4 70%, #5eead4 100%);
-}
-
-body[data-current-section="journey"] .background-layer-active {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%, #fde68a 70%, #f59e0b 100%);
-}
-
-body[data-current-section="community"] .background-layer-active {
-    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 30%, #e9d5ff 70%, #c084fc 100%);
-}
-
-body[data-current-section="feedback"] .background-layer-active {
-    background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 30%, #fda4af 70%, #f87171 100%);
-}
-
-body[data-current-section="mission"] .background-layer-active {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%, #bbf7d0 70%, #4ade80 100%);
-}
-
-body[data-current-section="inspiration"] .background-layer-active {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%, #bfdbfe 70%, #60a5fa 100%);
-}
-
-body[data-current-section="closing"] .background-layer-active {
-    background: linear-gradient(135deg, #1f2937 0%, #374151 30%, #6b7280 70%, #9ca3af 100%);
-}
-
-/* This is the key: two background layers that fade in and out */
-.background-transition-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Higher z-index than default body background */
-    opacity: 0;
-    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1); /* Long transition for smooth crossfade */
-}
-
-/* Add a new div in index.html for background transitions */
-/* In index.html, add this immediately after <body>:
-<div id="bg-transition-1" class="background-transition-layer"></div>
-<div id="bg-transition-2" class="background-transition-layer"></div>
-*/
-
 
 /* Update text colors for better contrast on light backgrounds */
 body[data-current-section="intro"],
@@ -417,5 +347,41 @@ body[data-current-section="closing"] .ai-text {
 /* Adjust hover effects for dark closing section */
 body[data-current-section="closing"] .word-animate:hover {
     color: #60a5fa;
-    text-shadow: 0 0 20px rgba(96, 165, 250, 0.
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+/* Styling for the navigation instruction */
+.nav-instruction {
+    position: fixed;
+    top: 20px; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background */
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    z-index: 100; /* Ensure it's above everything else */
+    opacity: 0; /* Start hidden */
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none; /* Allow clicks to pass through */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between text and arrows */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.nav-instruction.show {
+    opacity: 1;
+}
+
+.arrow-key {
+    display: inline-block;
+    padding: 2px 6px;
+    border: 1px solid var(--text);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9em;
+    background-color: rgba(255, 255, 255, 0.1);
 }
