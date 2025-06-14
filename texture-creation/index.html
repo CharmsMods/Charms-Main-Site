@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Code Creator</title>
+    <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="style.css">
+    <!-- Load Tailwind CSS from CDN for utility classes not overridden by custom CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         // Tailwind CSS configuration (placed here for demonstration,
@@ -35,13 +37,18 @@
 <body>
 
     <div id="app-container" class="flex flex-col md:flex-row h-screen font-mono text-green-400 bg-gray-900">
+        <!-- Sidebar -->
         <div id="sidebar" class="w-full md:w-1/4 p-4 border-b md:border-r border-green-700 flex flex-col">
+            <!-- Tabs for JPG/PNG lists -->
             <div class="flex mb-4">
                 <button id="jpg-tab" class="tab-button active flex-1 py-2 text-center rounded-tl-lg">JPG Files</button>
                 <button id="png-tab" class="tab-button flex-1 py-2 text-center rounded-tr-lg">PNG Files</button>
             </div>
+            <!-- Add this search input field -->
             <input type="text" id="file-search-input" placeholder="Search file names..." class="input-field w-full mb-4 px-3 py-2 text-sm">
+            <!-- List container for files -->
             <div id="file-list-container" class="flex-grow overflow-y-auto border border-green-700 rounded-lg p-2">
+                <!-- File lists will be injected here by JS -->
                 <ul id="jpg-file-list" class="hidden"></ul>
                 <ul id="png-file-list" class="hidden"></ul>
                 <div id="no-selection-message" class="text-center text-sm italic text-gray-500 mt-4">Select a file name from above.</div>
@@ -49,13 +56,18 @@
             </div>
         </div>
 
+        <!-- Main Content Area -->
         <div id="main-content" class="flex-1 p-4 flex flex-col items-center justify-center relative">
             <h1 class="text-2xl mb-4">Image Code Creator <span id="selected-file-display" class="text-sm text-green-500 ml-2"></span></h1>
 
+            <!-- Canvas and Controls -->
             <div class="canvas-container relative border-2 border-green-700 rounded-lg overflow-hidden mb-4">
                 <canvas id="drawingCanvas" class="block"></canvas>
-                <div id="overlay-message" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-90 text-red-500 hidden rounded-lg text-lg p-4"></div>
             </div>
+            
+            <!-- Moved overlay message here, outside the canvas container -->
+            <div id="overlay-message" class="text-red-500 text-sm italic p-2 hidden mb-4 text-center"></div>
+
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl mb-4">
                 <div class="input-group">
@@ -91,6 +103,7 @@
         </div>
     </div>
 
+    <!-- Link to the external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>

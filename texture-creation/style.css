@@ -292,6 +292,18 @@ input[type="range"]:focus::-moz-range-thumb {
     display: none; /* Hidden by default */
 }
 
+/* Moved overlay message (now transparency warning) styling */
+#overlay-message {
+    /* No longer absolute positioning over canvas */
+    padding: 0.5rem; /* p-2 */
+    margin-bottom: 1rem; /* mb-4 */
+    text-align: center; /* text-center */
+    color: #ef4444; /* text-red-500 */
+    font-size: 0.875rem; /* text-sm */
+    font-style: italic; /* italic */
+    /* It's now a regular block element, hidden by default via JS */
+}
+
 /* General input group styling */
 .input-group {
     margin-bottom: 0.5rem; /* Adjust as needed */
