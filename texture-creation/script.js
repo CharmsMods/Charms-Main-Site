@@ -22,6 +22,7 @@ const pngFileList = document.getElementById('png-file-list');
 const selectedFileDisplay = document.getElementById('selected-file-display');
 const noSelectionMessage = document.getElementById('no-selection-message');
 const loadingMessage = document.getElementById('loading-message');
+const fileSearchInput = document.getElementById('file-search-input'); // New: Get search input
 
 // Drawing state variables
 let isDrawing = false;
@@ -33,9 +34,9 @@ let canvasContent = null; // Store canvas content for clear and redraw
 let selectedFileName = '';
 let selectedFileType = 'jpg'; // Default to JPG
 
-// Arrays to store file names fetched from text files
-let jpgFileNames = [];
-let pngFileNames = [];
+// Arrays to store file names fetched from text files (full lists)
+let allJpgFileNames = []; // Stores the full list of JPG names
+let allPngFileNames = []; // Stores the full list of PNG names
 
 // --- Utility Functions ---
 
@@ -104,18 +105,19 @@ function clearCanvasDrawing() {
 }
 
 /**
- * Populates the file list based on the active tab.
- * @param {Array<string>} fileNames - Array of file names to display.
+ * Populates the file list based on the active tab and current search query.
+ * @param {Array<string>} fileNamesToDisplay - The (potentially filtered) array of file names to display.
  * @param {HTMLElement} listElement - The <ul> element to populate.
  * @param {string} type - 'jpg' or 'png'.
  */
-function populateFileList(fileNames, listElement, type) {
+function populateFileList(fileNamesToDisplay, listElement, type) {
     listElement.innerHTML = ''; // Clear existing list
-    if (fileNames.length === 0) {
-        listElement.innerHTML = '<li class="text-gray-500 italic">No files found.</li>';
+    if (fileNamesToDisplay.length === 0) {
+        listElement.innerHTML = '<li class="text-gray-500 italic">No matching files found.</li>';
+        noSelectionMessage.style.display = 'none'; // Hide if no matches
         return;
     }
-    fileNames.forEach(name => {
+    fileNamesToDisplay.forEach(name => {
         const li = document.createElement('li');
         // Remove .jpg or .png extension from the name if present
         const cleanName = name.replace(/\.(jpg|png)$/i, '');
@@ -125,16 +127,16 @@ function populateFileList(fileNames, listElement, type) {
         li.addEventListener('click', () => selectFile(li));
         listElement.appendChild(li);
     });
-    // Show the no selection message if no file is selected initially
-    if (!selectedFileName) {
-        noSelectionMessage.style.display = 'block';
-    } else {
+
+    // Re-highlight selected file if it's still in the filtered list
+    if (selectedFileName && listElement.querySelector(`[data-filename="${selectedFileName}"]`)) {
         noSelectionMessage.style.display = 'none';
-        // If a file was already selected, make sure it's highlighted in the new list
         const selectedLi = listElement.querySelector(`[data-filename="${selectedFileName}"]`);
         if (selectedLi) {
             selectedLi.classList.add('selected');
         }
+    } else {
+        noSelectionMessage.style.display = 'block';
     }
 }
 
@@ -237,11 +239,11 @@ async function fetchFileNames(url, type) {
         const names = text.split('\n').map(name => name.trim()).filter(name => name.length > 0);
 
         if (type === 'jpg') {
-            jpgFileNames = names;
-            populateFileList(jpgFileNames, jpgFileList, 'jpg');
+            allJpgFileNames = names; // Store full list
+            applySearchFilter(); // Apply filter immediately after fetching
         } else if (type === 'png') {
-            pngFileNames = names;
-            populateFileList(pngFileNames, pngFileList, 'png');
+            allPngFileNames = names; // Store full list
+            applySearchFilter(); // Apply filter immediately after fetching
         }
     } catch (error) {
         console.error(`Error fetching ${type} file names:`, error);
@@ -256,6 +258,31 @@ async function fetchFileNames(url, type) {
     }
 }
 
+/**
+ * Filters the file list based on the search input and repopulates the active list.
+ */
+function applySearchFilter() {
+    const searchTerm = fileSearchInput.value.toLowerCase();
+    let filesToFilter = [];
+    let listElementToPopulate;
+    let currentFileType;
+
+    if (jpgTab.classList.contains('active')) {
+        filesToFilter = allJpgFileNames;
+        listElementToPopulate = jpgFileList;
+        currentFileType = 'jpg';
+    } else if (pngTab.classList.contains('active')) {
+        filesToFilter = allPngFileNames;
+        listElementToPopulate = pngFileList;
+        currentFileType = 'png';
+    }
+
+    const filteredFiles = filesToFilter.filter(name =>
+        name.toLowerCase().includes(searchTerm)
+    );
+
+    populateFileList(filteredFiles, listElementToPopulate, currentFileType);
+}
 
 // --- Event Listeners ---
 
@@ -330,13 +357,17 @@ jpgTab.addEventListener('click', async () => {
     pngTab.classList.remove('active');
     jpgFileList.classList.remove('hidden');
     pngFileList.classList.add('hidden');
+    fileSearchInput.value = ''; // Clear search on tab change
     await fetchFileNames('jpgurl.txt', 'jpg'); // Fetch JPG names
     selectedFileType = 'jpg'; // Update current type when tab changes
     // If currently selected file is not a JPG, clear selection
-    if (selectedFileDisplay.textContent && !selectedFileDisplay.textContent.includes('(Selected: ') || selectedFileDisplay.textContent.includes('.png')) {
+    if (selectedFileDisplay.textContent && (!selectedFileDisplay.textContent.includes('(Selected: ') || selectedFileDisplay.textContent.includes('.png'))) {
         selectedFileName = '';
         selectedFileDisplay.textContent = '';
         noSelectionMessage.style.display = 'block';
+    } else {
+        // If current selection is a JPG, ensure it's re-highlighted after fetching
+        applySearchFilter();
     }
 
     // Enforce JPG transparency rules
@@ -351,13 +382,17 @@ pngTab.addEventListener('click', async () => {
     jpgTab.classList.remove('active');
     pngFileList.classList.remove('hidden');
     jpgFileList.classList.add('hidden');
+    fileSearchInput.value = ''; // Clear search on tab change
     await fetchFileNames('pnglist.txt', 'png'); // Fetch PNG names
     selectedFileType = 'png'; // Update current type when tab changes
     // If currently selected file is not a PNG, clear selection
-    if (selectedFileDisplay.textContent && !selectedFileDisplay.textContent.includes('(Selected: ') || selectedFileDisplay.textContent.includes('.jpg')) {
+    if (selectedFileDisplay.textContent && (!selectedFileDisplay.textContent.includes('(Selected: ') || selectedFileDisplay.textContent.includes('.jpg'))) {
         selectedFileName = '';
         selectedFileDisplay.textContent = '';
         noSelectionMessage.style.display = 'block';
+    } else {
+        // If current selection is a PNG, ensure it's re-highlighted after fetching
+        applySearchFilter();
     }
 
     // Allow PNG transparency
@@ -366,19 +401,19 @@ pngTab.addEventListener('click', async () => {
     redrawCanvasBackground();
 });
 
+// Search input listener
+fileSearchInput.addEventListener('keyup', applySearchFilter);
+
 // --- Initialization on window load ---
 window.onload = function() {
     initializeCanvas();
-    // Initially populate JPG tab on load
+    // Initially populate JPG tab on load, which will also fetch the names
     jpgTab.click();
 };
 
-// Handle canvas resizing for responsiveness
-window.addEventListener('resize', () => {
-    // Re-initialize canvas to adjust to new container size or just re-draw if no size change.
-    // For a drawing app, changing canvas size clears it. So, we'll keep the logical resolution fixed
-    // but make the *display* flexible with CSS.
-    // If you want actual canvas resolution to change with window size, you'd need to save/restore image data.
-    // For now, it sticks to user-defined resolution.
-    // No direct canvas width/height update here to preserve drawing, rely on CSS for scaling.
-});
+// The canvas's actual width/height are set by JS `canvas.width = X; canvas.height = Y;`
+// The CSS (`.canvas-container` and `#drawingCanvas`) ensures that if the canvas's intrinsic
+// resolution is larger than the available display area, scrollbars appear, preventing it
+// from "filling up the entire page" and pushing other elements off-screen.
+// We don't need a specific `window.addEventListener('resize')` for canvas scaling as its
+// logical size remains fixed by user input, and its display is handled by CSS overflows.

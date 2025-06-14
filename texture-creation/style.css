@@ -104,6 +104,28 @@ body {
     border-top: 2px solid #00ff00; /* More prominent top border for active */
 }
 
+/* Styling for the new search input */
+#file-search-input {
+    padding: 0.5rem 0.75rem; /* px-3 py-2 */
+    font-size: 0.875rem; /* text-sm */
+    background-color: #2a2a2a; /* bg-gray-800 */
+    border: 1px solid #008000; /* border border-green-700 */
+    color: #00ff00; /* text-green-400 */
+    border-radius: 0.5rem; /* rounded-md */
+    outline: none; /* focus:outline-none */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#file-search-input::placeholder {
+    color: #6b7280; /* gray-500 */
+    opacity: 0.7;
+}
+
+#file-search-input:focus {
+    border-color: #00ff00; /* focus:ring-green-400 */
+    box-shadow: 0 0 0 1px #00ff00; /* focus:ring-1 */
+}
+
 /* File list container */
 #file-list-container {
     border: 1px solid #008000; /* border border-green-700 */
@@ -223,35 +245,39 @@ input[type="range"]:focus::-moz-range-thumb {
 }
 
 
-/* Canvas and its container */
+/* Canvas and its container adjustments */
 .canvas-container {
     position: relative;
     border: 2px solid #008000; /* border-2 border-green-700 */
     border-radius: 0.5rem; /* rounded-lg */
-    overflow: hidden; /* overflow-hidden */
+    overflow: auto; /* IMPORTANT: Add scrollbars if content overflows */
     margin-bottom: 1rem; /* mb-4 */
     box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.4); /* Stronger glow for canvas */
-    flex-shrink: 0; /* Prevent canvas from shrinking */
+    
+    /* Set a max display size for the container to prevent it from pushing other content off-screen.
+       The canvas inside will retain its intrinsic resolution and cause scrollbars if larger. */
+    max-width: calc(100vw - 4rem); /* Account for main-content padding on both sides */
+    max-height: calc(100vh - 20rem); /* Approximate space needed by header, controls, and margins */
+                                     /* This might need fine-tuning, 20rem is a guess for the controls block */
+}
+
+/* On smaller screens, the sidebar is on top, so less horizontal space taken up. */
+@media (max-width: 768px) {
+    .canvas-container {
+        max-width: calc(100vw - 2rem); /* Account for 1rem padding on each side of main-content */
+        max-height: calc(100vh - 25rem); /* More aggressive height limit on mobile */
+    }
 }
 
 #drawingCanvas {
-    display: block; /* block */
+    /* The canvas's intrinsic width/height are set by JS.
+       We specifically *don't* want to force it to fill 100% of its container
+       if its intrinsic resolution is very high, as the user wants to see it
+       at its actual resolution, with scrollbars if it overflows. */
+    display: block; /* Ensures it behaves as a block element */
     background-color: #1a1a1a; /* Default background for canvas */
 }
 
-#overlay-message {
-    position: absolute;
-    inset: 0; /* inset-0 */
-    display: flex;
-    align-items: center; /* items-center */
-    justify-content: center; /* justify-center */
-    background-color: rgba(26, 26, 26, 0.9); /* bg-gray-900 bg-opacity-90 */
-    color: #ef4444; /* text-red-500 */
-    border-radius: 0.5rem; /* rounded-lg */
-    z-index: 20; /* Ensure it's above canvas */
-    padding: 1rem;
-    text-align: center;
-}
 
 /* Message box for errors/info */
 #message-box {
