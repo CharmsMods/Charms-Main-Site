@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Code Creator</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Load Tailwind CSS from CDN for utility classes not overridden by custom CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration (placed here for demonstration,
+        // as it applies utility classes directly. In a build system, this would be processed)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"Cascadia Code PL"', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+                    },
+                    colors: {
+                        'green-400': '#00ff00', // Neon green for text/accents
+                        'green-700': '#008000', // Darker green for borders/secondary
+                        'green-600': '#00B300', // Green for selected items
+                        'green-800': '#004d00', // Even darker green for subtle lines
+                        'gray-900': '#1a1a1a', // Main dark background
+                        'gray-800': '#2a2a2a', // Slightly lighter dark for inputs/buttons
+                        'gray-700': '#3a3a3a', // Even lighter dark for hover/active states
+                        'red-900': '#8b0000', // For error messages
+                        'red-700': '#b91c1c', // For error message borders
+                        'red-300': '#fca5a5', // For error message text
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+
+    <div id="app-container" class="flex flex-col md:flex-row h-screen font-mono text-green-400 bg-gray-900">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-full md:w-1/4 p-4 border-b md:border-r border-green-700 flex flex-col">
+            <!-- Tabs for JPG/PNG lists -->
+            <div class="flex mb-4">
+                <button id="jpg-tab" class="tab-button active flex-1 py-2 text-center rounded-tl-lg">JPG Files</button>
+                <button id="png-tab" class="tab-button flex-1 py-2 text-center rounded-tr-lg">PNG Files</button>
+            </div>
+            <!-- List container for files -->
+            <div id="file-list-container" class="flex-grow overflow-y-auto border border-green-700 rounded-lg p-2">
+                <!-- File lists will be injected here by JS -->
+                <ul id="jpg-file-list" class="hidden"></ul>
+                <ul id="png-file-list" class="hidden"></ul>
+                <div id="no-selection-message" class="text-center text-sm italic text-gray-500 mt-4">Select a file name from above.</div>
+                <div id="loading-message" class="text-center text-sm italic text-gray-500 mt-4 hidden">Loading file names...</div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="main-content" class="flex-1 p-4 flex flex-col items-center justify-center relative">
+            <h1 class="text-2xl mb-4">Image Code Creator <span id="selected-file-display" class="text-sm text-green-500 ml-2"></span></h1>
+
+            <!-- Canvas and Controls -->
+            <div class="canvas-container relative border-2 border-green-700 rounded-lg overflow-hidden mb-4">
+                <canvas id="drawingCanvas" class="block"></canvas>
+                <div id="overlay-message" class="absolute inset-0 flex items-center justify-center bg-gray-900 bg-opacity-90 text-red-500 hidden rounded-lg text-lg p-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-xl mb-4">
+                <div class="input-group">
+                    <label for="bgColor">Background Color:</label>
+                    <input type="color" id="bgColor" value="#1a1a1a" class="w-full h-10 border border-green-700 rounded-md bg-gray-800 p-1 cursor-pointer">
+                </div>
+                <div class="input-group">
+                    <label for="resX">Resolution (W x H):</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="resX" value="800" min="100" class="input-field w-1/2">
+                        <input type="number" id="resY" value="600" min="100" class="input-field w-1/2">
+                    </div>
+                </div>
+                <div class="input-group col-span-1 md:col-span-2">
+                    <input type="checkbox" id="drawTransparent" class="mr-2 h-4 w-4 text-green-500 rounded focus:ring-green-500 cursor-pointer">
+                    <label for="drawTransparent">Draw with Transparent Background (PNG only)</label>
+                </div>
+                <div class="input-group">
+                    <label for="penColor">Pen Color:</label>
+                    <input type="color" id="penColor" value="#00ff00" class="w-full h-10 border border-green-700 rounded-md bg-gray-800 p-1 cursor-pointer">
+                </div>
+                <div class="input-group">
+                    <label for="penSize">Pen Size:</label>
+                    <input type="range" id="penSize" min="1" max="50" value="5" class="w-full cursor-pointer appearance-none bg-green-700 rounded-lg h-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <button id="clearCanvas" class="action-button">Clear Canvas</button>
+                <button id="exportImage" class="action-button">Export Image</button>
+            </div>
+            <div id="message-box" class="absolute bottom-4 p-3 bg-red-900 text-red-300 border border-red-700 rounded-md hidden"></div>
+        </div>
+    </div>
+
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
