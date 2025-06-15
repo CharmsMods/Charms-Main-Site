@@ -1,0 +1,231 @@
+/* Root variables for consistent theming */
+:root {
+    --primary: #6366f1;
+    --secondary: #8b5cf6;
+    --accent: #06b6d4;
+    --bg: #0f172a;
+    --text: #e2e8f0;
+    --glow: #60a5fa;
+    --highlight: #f59e0b;
+    --tech: #10b981; /* Reused from previous context for a tech-like emphasis */
+    --ai: #ec4899;   /* Reused from previous context for an AI-like emphasis */
+}
+
+/* Universal box-sizing for consistent layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling: font, overflow, min-height, and background handling */
+body {
+    font-family: 'Arial', sans-serif;
+    color: var(--text);
+    overflow: hidden; /* Prevent default scrolling */
+    min-height: 100vh;
+    position: relative;
+    background: none; /* No default body background, handled by transition layers */
+}
+
+/* Base class for all background layers, ensuring fixed position and transition */
+.background-transition-layer {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Placed below content */
+    opacity: 0; /* All layers start hidden */
+    transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1); /* Longer transition for smoother fade */
+}
+
+/* Background colors based on active section for each step */
+body[data-current-section="browser-intro"] { --text: #374151; } /* Light theme for intro */
+body[data-current-section="browser-downloads"] { --text: #6b21a8; } /* Purple */
+body[data-current-section="browser-extract"] { --text: #059669; } /* Teal */
+body[data-current-section="browser-new-folder"] { --text: #b45309; } /* Orange/Yellow */
+body[data-current-section="browser-keep-open"] { --text: #7c3aed; } /* Blue */
+body[data-current-section="browser-open-browser"] { --text: #be123c; } /* Red/Pink */
+body[data-current-section="browser-extensions"] { --text: #16a34a; } /* Green */
+body[data-current-section="browser-developer-mode"] { --text: #2563eb; } /* Light Blue */
+body[data-current-section="browser-drag-drop"] { --text: #783a60; } /* Plum */
+body[data-current-section="browser-enable"] { --text: #0a7e8c; } /* Dark Teal */
+body[data-current-section="browser-enjoy"] { --text: #e2e8f0; } /* Dark for enjoy section */
+
+
+/* Grid background for specific sections (like the final step) */
+.grid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2; /* Below background layers */
+    opacity: 0; /* Hidden by default */
+    transition: opacity 1s ease-in-out;
+}
+
+/* Show grid only on the last step (browser-enjoy) */
+body[data-current-section="browser-enjoy"] .grid-bg {
+    opacity: 1;
+}
+
+.grid-line {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: opacity 0.3s ease-out; /* For mouse interaction */
+}
+
+.grid-line:nth-child(1) { top: 25%; left: 0; width: 100%; height: 1px; }
+.grid-line:nth-child(2) { top: 50%; left: 0; width: 100%; height: 1px; }
+.grid-line:nth-child(3) { top: 75%; left: 0; width: 100%; height: 1px; }
+.grid-line:nth-child(4) { left: 25%; top: 0; height: 100%; width: 1px; }
+.grid-line:nth-child(5) { left: 75%; top: 0; height: 100%; width: 1px; }
+
+/* Main content container */
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Text section styling */
+.text-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50px); /* Initially slightly off and hidden */
+    opacity: 0;
+    width: 80%; /* Adjust as needed */
+    max-width: 900px;
+    text-align: center;
+    pointer-events: none; /* Allows mouse events to pass through unless active */
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* CRITICAL FOR SECTION VISIBILITY */
+/* When a section is active, it becomes visible and centered */
+.text-section.active {
+    opacity: 1;
+    transform: translate(-50%, -50%); /* Center when active */
+    pointer-events: auto; /* Allow interaction when active */
+}
+
+/* Large text styling */
+.large-text {
+    font-size: clamp(2rem, 5vw, 4rem); /* Responsive font size */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    display: flex; /* Use flexbox to align words in a line */
+    flex-wrap: wrap; /* Allow words to wrap to the next line */
+    justify-content: center; /* Center words within the line */
+}
+
+/* Word animation styling */
+.word-animate {
+    display: inline-block; /* Essential for transform and opacity animations */
+    opacity: 0;
+    transform: translateY(50px); /* Words start below their final position */
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Individual word transition */
+    margin: 0 5px; /* Space between words */
+    white-space: nowrap; /* Keep words on one line if possible */
+}
+
+/* CRITICAL FOR WORD VISIBILITY AND ANIMATION */
+/* When the 'reveal' class is added by JavaScript, words become visible and animate into place */
+.word-animate.reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* When the 'hide' class is added by JavaScript, words become invisible and animate out */
+.word-animate.hide {
+    opacity: 0;
+    transform: translateY(-50px);
+}
+
+/* Specific text color classes */
+.glow-text {
+    color: var(--glow);
+    text-shadow: 0 0 10px rgba(96, 165, 250, 0.5); /* Subtle glow */
+}
+
+.highlight-text {
+    color: var(--highlight);
+    text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* Signature text for the end */
+.signature {
+    margin-top: 40px;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 500;
+}
+
+.small-text {
+    font-size: clamp(1rem, 2vw, 1.5rem); /* Smaller font size for signature */
+}
+
+/* Particles background for specific sections */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Below background layers */
+    pointer-events: none;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 1s ease-in-out;
+}
+
+/* Show particles only on the last step (browser-enjoy) */
+body[data-current-section="browser-enjoy"] .particles {
+    opacity: 1;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    animation: particle-move 20s infinite linear alternate, particle-glow 3s infinite alternate;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* For mouse interaction */
+}
+
+.particle:nth-child(1) { width: 10px; height: 10px; top: 10%; left: 20%; animation-delay: 0s; }
+.particle:nth-child(2) { width: 15px; height: 15px; top: 30%; left: 80%; animation-delay: 2s; }
+.particle:nth-child(3) { width: 8px; height: 8px; top: 50%; left: 40%; animation-delay: 4s; }
+.particle:nth-child(4) { width: 12px; height: 12px; top: 70%; left: 10%; animation-delay: 6s; }
+.particle:nth-child(5) { width: 18px; height: 18px; top: 20%; left: 60%; animation-delay: 8s; }
+.particle:nth-child(6) { width: 9px; height: 9px; top: 80%; left: 90%; animation-delay: 10s; }
+.particle:nth-child(7) { width: 14px; height: 14px; top: 40%; left: 5%; animation-delay: 12s; }
+.particle:nth-child(8) { width: 11px; height: 11px; top: 60%; left: 70%; animation-delay: 14s; }
+
+@keyframes particle-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(100px, 50px); }
+}
+
+@keyframes particle-glow {
+    0%, 100% { opacity: 0.1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.02); }
+}
+
+/* Hover effects for animated words */
+.word-animate:hover {
+    transform: translateY(-5px) rotateX(15deg);
+    color: #3b82f6; /* Default hover color */
+    text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+    cursor: pointer;
+}
+
+/* Adjust hover effects for specific dark background sections (like enjoy section) */
+body[data-current-section="browser-enjoy"] .word-animate:hover {
+    color: #60a5fa;
+    text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
