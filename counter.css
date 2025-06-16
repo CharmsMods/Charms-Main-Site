@@ -1,0 +1,27 @@
+.visitor-counter {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 150, 136, 0.85); /* teal-ish, semi-transparent */
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  cursor: default;
+  z-index: 9999;
+  transition: background-color 0.3s ease;
+}
+
+.visitor-counter i {
+  font-size: 1.2rem;
+}
+
+.visitor-counter:hover {
+  background: rgba(0, 150, 136, 1); /* stronger color on hover */
+}
