@@ -1,8 +1,0 @@
-{
-  "name": "netlify-site",
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "@netlify/blobs": "^0.10.0"
-  }
-}

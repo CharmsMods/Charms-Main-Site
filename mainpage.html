@@ -110,25 +110,6 @@
     </div>
   </div>
 
-  <!-- VISITOR COUNTER SECTION -->
-  <div class="visitor-counter">
-    <i class="fas fa-users"></i>
-    <span>Visitor Count: </span>
-    <span id="visitor-count">Loading...</span>
-  </div>
-
-  <script>
-    // Visitor counter fetch
-    fetch('/.netlify/functions/visitor-count')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('visitor-count').textContent = data.count;
-      })
-      .catch(() => {
-        document.getElementById('visitor-count').textContent = 'N/A';
-      });
-  </script>
-
   <script>
     // Get references to key DOM elements using their IDs.
     const menuIcon = document.getElementById('menuIcon');
