@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Image Converter</title>
+    <title>Multi-File Converter & Exporter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -191,12 +191,17 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-3xl font-bold text-center text-gray-800 rounded-lg p-2">Multi-Image Converter</h1>
+        <h1 class="text-3xl font-bold text-center text-gray-800 rounded-lg p-2">Multi-File Converter & Exporter</h1>
 
         <div id="dropZone" class="drop-zone">
-            Drag & Drop Images or Folders Here or Click to Upload
+            Drag & Drop Files or Folders Here or Click to Upload
         </div>
-        <input type="file" id="hiddenFileInput" accept=".png, .jpg, .jpeg, .webp, .avif, .tiff, .tif" multiple webkitdirectory directory>
+        <input type="file" id="hiddenFileInput" multiple webkitdirectory directory>
+
+        <div id="loadingBarContainer" class="hidden w-full bg-gray-200 rounded-full h-4 mt-4 relative">
+            <div id="loadingBar" class="bg-blue-600 h-4 rounded-full transition-all duration-100 ease-out" style="width: 0%;"></div>
+            <div id="loadingText" class="absolute inset-0 flex items-center justify-center text-xs font-semibold text-white">0%</div>
+        </div>
 
         <div id="generalMessageBox" class="message-box hidden rounded-lg"></div>
 
@@ -204,7 +209,15 @@
             <h2 class="text-2xl font-bold text-gray-800">Global Image Adjustments</h2>
 
             <div>
-                <label class="text-lg font-medium text-gray-700 mb-2 block">Visual Adjustments:</label>
+                <label class="text-lg font-medium text-gray-700 mb-2 block">Upload Options:</label>
+                <div class="flex items-center gap-4">
+                    <input type="checkbox" id="disablePreviewsCheckbox" class="form-checkbox h-5 w-5 text-blue-600 rounded" checked>
+                    <label for="disablePreviewsCheckbox" class="text-gray-700">Disable Image Previews when Uploading</label>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-lg font-medium text-gray-700 mb-2 block">Visual Adjustments (Images Only):</label>
                 <div class="flex items-center gap-4">
                     <input type="checkbox" id="globalInvertColors" class="form-checkbox h-5 w-5 text-blue-600 rounded">
                     <label for="globalInvertColors" class="text-gray-700">Invert Colors</label>
@@ -216,7 +229,7 @@
             </div>
 
             <div>
-                <label class="text-lg font-medium text-gray-700 mb-2 block">Scaling Options:</label>
+                <label class="text-lg font-medium text-gray-700 mb-2 block">Scaling Options (Images Only):</label>
                 <div class="flex items-center gap-4">
                     <input type="checkbox" id="globalEnableScaling" class="form-checkbox h-5 w-5 text-blue-600 rounded">
                     <label for="globalEnableScaling" class="text-gray-700">Enable Scaling</label>
@@ -238,7 +251,7 @@
             </div>
 
             <div>
-                <label for="globalOutputFormat" class="text-lg font-medium text-gray-700 mb-2 block">Convert To:</label>
+                <label for="globalOutputFormat" class="text-lg font-medium text-gray-700 mb-2 block">Convert To (Images Only):</label>
                 <select id="globalOutputFormat" class="rounded-lg p-2 w-full">
                     <option value="image/png">PNG (Lossless)</option>
                     <option value="image/jpeg">JPG (Highest Quality)</option>
@@ -248,15 +261,15 @@
                 </select>
                 <div class="flex items-center gap-2 mt-4">
                     <input type="checkbox" id="keepOriginalTypeCheckbox" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-                    <label for="keepOriginalTypeCheckbox" class="text-gray-700">Keep Original File Type (for Export All)</label>
+                    <label for="keepOriginalTypeCheckbox" class="text-gray-700">Keep Original File Type (for Export All Images)</label>
                 </div>
             </div>
 
             <button id="convertAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
-                Convert All & Download
+                Convert All Images & Download
             </button>
             <button id="exportZipBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
-                Export All Images as Zip
+                Export All Files as Zip
             </button>
         </div>
 
@@ -265,9 +278,11 @@
             </div>
 
         <p class="text-sm text-gray-600 mt-2 rounded-lg p-2 bg-blue-50">
-            <strong>Note:</strong> Direct client-side conversion to AVIF and TIFF using native browser APIs is generally not supported for a "simple webpage" without significant external libraries or server-side processing. PNG conversion is lossless. JPG and WEBP will be converted at the highest possible quality (minimal compression).
+            <strong>Note:</strong> This tool can process various file types.
             <br>
-            If "Keep Original File Type" is selected for ZIP export, visual adjustments (invert colors, saturation, scaling) will be applied to PNG, JPG, and WEBP images. However, for AVIF and TIFF files, adjustments cannot be applied, and the original file will be exported directly.
+            For <strong>image files</strong> (PNG, JPG, WEBP), visual adjustments and scaling can be applied. If "Keep Original File Type" is selected for ZIP export, these images will retain their format after adjustments. AVIF and TIFF images are supported for input and can be included in the ZIP, but visual adjustments cannot be applied to them via browser canvas; they will be exported as their original raw files (without adjustments) when "Keep Original File Type" is enabled, or if selected as the target conversion format.
+            <br>
+            <strong>Non-image files</strong> will always be included in the ZIP archive in their original form without any processing or conversion.
         </p>
     </div>
 
@@ -278,6 +293,12 @@
         const imageGrid = document.getElementById('imageGrid');
         const generalMessageBox = document.getElementById('generalMessageBox');
 
+        // New elements for loading bar and preview control
+        const disablePreviewsCheckbox = document.getElementById('disablePreviewsCheckbox');
+        const loadingBarContainer = document.getElementById('loadingBarContainer');
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingText = document.getElementById('loadingText');
+
         // Global adjustment elements
         const globalInvertColorsCheckbox = document.getElementById('globalInvertColors');
         const globalSaturationSlider = document.getElementById('globalSaturation');
@@ -287,11 +308,11 @@
         const globalScaleHeightInput = document.getElementById('globalScaleHeight');
         const globalMaintainAspectRatioCheckbox = document.getElementById('globalMaintainAspectRatio');
         const globalOutputFormatSelect = document.getElementById('globalOutputFormat');
-        const keepOriginalTypeCheckbox = document.getElementById('keepOriginalTypeCheckbox'); // New checkbox element
+        const keepOriginalTypeCheckbox = document.getElementById('keepOriginalTypeCheckbox');
         const convertAllBtn = document.getElementById('convertAllBtn');
         const exportZipBtn = document.getElementById('exportZipBtn');
 
-        // Map to store state for each image, keyed by a unique ID
+        // Map to store state for each file, keyed by a unique ID
         const imageStates = new Map();
 
         // Global state for adjustments and scaling
@@ -299,15 +320,20 @@
             invertColors: false,
             saturation: 100,
             enableScaling: false,
-            scaleWidth: null, // Will be set to original width of the first image or cleared if no images
-            scaleHeight: null, // Will be set to original height of the first image or cleared if no images
+            scaleWidth: null,
+            scaleHeight: null,
             maintainAspectRatio: false,
             outputFormat: 'image/png',
-            keepOriginalType: false // New setting
+            keepOriginalType: false,
+            displayPreviews: false // New setting, default to false (meaning previews are disabled by default)
         };
 
+        // Counters for loading progress
+        let totalFilesToLoad = 0;
+        let filesLoadedCount = 0;
+
         // Utility to generate unique IDs
-        const generateUniqueId = () => `image-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+        const generateUniqueId = () => `file-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
         // Function to display general messages
         function showGeneralMessage(message, type) {
@@ -315,14 +341,33 @@
             generalMessageBox.className = `message-box ${type} block`;
         }
 
-        // Function to draw an image onto its canvas with applied global filters and scaling
-        function drawImageWithFiltersAndScale(cardId) {
-            const imageState = imageStates.get(cardId);
-            if (!imageState || !imageState.originalImage) {
+        // Function to update loading bar progress
+        function updateLoadingProgress() {
+            if (totalFilesToLoad === 0) {
+                loadingBarContainer.classList.add('hidden');
                 return;
             }
+            const progress = (filesLoadedCount / totalFilesToLoad) * 100;
+            loadingBar.style.width = `${progress}%`;
+            loadingText.textContent = `${Math.round(progress)}%`;
 
-            const { originalImage, canvas, ctx } = imageState;
+            if (filesLoadedCount === totalFilesToLoad) {
+                // Delay hiding for a smoother transition and to ensure "All files loaded" message is seen
+                setTimeout(() => {
+                    loadingBarContainer.classList.add('hidden');
+                    showGeneralMessage('All files loaded.', 'info');
+                }, 500);
+            }
+        }
+
+        // Function to draw an image onto its canvas with applied global filters and scaling
+        function drawImageWithFiltersAndScale(cardId) {
+            const fileState = imageStates.get(cardId);
+            if (!fileState || !fileState.isImage || !fileState.originalImage || !fileState.canvas || !fileState.ctx) {
+                return; // Only draw if it's an image and image data is loaded and has a canvas
+            }
+
+            const { originalImage, canvas, ctx } = fileState;
             const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio } = globalSettings;
 
             let finalWidth = originalImage.width;
@@ -388,8 +433,10 @@
 
         // Function to update all image previews based on global settings
         function updateAllPreviews() {
-            imageStates.forEach((value, key) => {
-                drawImageWithFiltersAndScale(key);
+            imageStates.forEach((fileState, key) => {
+                if (fileState.isImage) { // Only update if it's an image
+                    drawImageWithFiltersAndScale(key);
+                }
             });
         }
 
@@ -408,54 +455,86 @@
                 globalSettings.scaleHeight = null;
                 globalSettings.maintainAspectRatio = false;
             } else {
-                // Set placeholders to original dimensions of the first image if available
-                if (imageStates.size > 0) {
-                    const firstImageState = imageStates.values().next().value;
-                    if (firstImageState && firstImageState.originalImage) {
-                        globalScaleWidthInput.placeholder = `Original: ${firstImageState.originalImage.width}px`;
-                        globalScaleHeightInput.placeholder = `Original: ${firstImageState.originalImage.height}px`;
-                        globalSettings.scaleWidth = firstImageState.originalImage.width;
-                        globalSettings.scaleHeight = firstImageState.originalImage.height;
+                // Set placeholders to original dimensions of the first *image* if available
+                let firstImageState = null;
+                for (const fileState of imageStates.values()) {
+                    if (fileState.isImage && fileState.originalImage) {
+                        firstImageState = fileState;
+                        break;
                     }
+                }
+
+                if (firstImageState) {
+                    globalScaleWidthInput.placeholder = `Original: ${firstImageState.originalImage.width}px`;
+                    globalScaleHeightInput.placeholder = `Original: ${firstImageState.originalImage.height}px`;
+                    globalSettings.scaleWidth = firstImageState.originalImage.width;
+                    globalSettings.scaleHeight = firstImageState.originalImage.height;
+                } else {
+                    globalScaleWidthInput.placeholder = `Original Width`;
+                    globalScaleHeightInput.placeholder = `Original Height`;
                 }
             }
             updateAllPreviews(); // Update previews based on the new scaling state
         }
 
 
-        // Function to create and append an image card to the grid
-        // Added relativePath parameter
-        function createImageCard(file, originalImage, relativePath) {
-            const cardId = generateUniqueId();
-            // Display webkitRelativePath if available, otherwise just file name
+        // Function to create and append a file card to the grid
+        function addOrUpdateFileCard(cardId, file, originalImage, relativePath, isImage, statusMessage = '') {
+            const existingCard = document.getElementById(`card-${cardId}`);
+            if (existingCard) {
+                existingCard.remove(); // Remove existing card if re-adding
+            }
+
             const displayName = relativePath && relativePath.length > 0 ? relativePath : file.name;
+
+            let cardContentHtml;
+            let canvas = null;
+            let ctx = null;
+
+            if (isImage && originalImage) { // Only create canvas if it's an image AND originalImage is loaded
+                cardContentHtml = `
+                    <canvas id="canvas-${cardId}" class="w-full h-auto rounded-lg shadow-md"></canvas>
+                `;
+            } else {
+                cardContentHtml = `
+                    <div class="p-4 bg-gray-100 rounded-lg text-gray-700 text-sm">
+                        <p><strong>Type:</strong> ${file.type || 'Unknown'}</p>
+                        <p><strong>Size:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+                        ${statusMessage ? `<p class="text-red-500">${statusMessage}</p>` : ''}
+                    </div>
+                `;
+            }
 
             const cardHtml = `
                 <div id="card-${cardId}" class="image-card">
                     <h3 class="text-xl font-semibold text-gray-800 break-words">${displayName}</h3>
-                    <canvas id="canvas-${cardId}" class="w-full h-auto rounded-lg shadow-md"></canvas>
+                    ${cardContentHtml}
                     <button id="removeBtn-${cardId}" class="remove-btn bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out">
-                        Remove Image
+                        Remove File
                     </button>
                 </div>
             `;
             imageGrid.insertAdjacentHTML('beforeend', cardHtml);
 
-            // Store references to DOM elements and initial state
-            const canvas = document.getElementById(`canvas-${cardId}`);
-            const ctx = canvas.getContext('2d');
+            if (isImage && originalImage) {
+                canvas = document.getElementById(`canvas-${cardId}`);
+                ctx = canvas.getContext('2d');
+            }
             const removeBtn = document.getElementById(`removeBtn-${cardId}`);
 
             imageStates.set(cardId, {
                 file: file,
-                originalImage: originalImage,
-                canvas: canvas,
-                ctx: ctx,
-                relativePath: relativePath // Store the relative path
+                originalImage: originalImage, // Will be null if previews disabled or non-image
+                canvas: canvas, // Will be null if previews disabled or non-image
+                ctx: ctx, // Will be null if previews disabled or non-image
+                relativePath: relativePath,
+                isImage: isImage // True if detected as image type, regardless of preview status
             });
 
-            // Initial draw with current global settings
-            drawImageWithFiltersAndScale(cardId);
+            // If it's an image AND originalImage is loaded (i.e., previews enabled and loaded successfully), perform initial draw
+            if (isImage && originalImage) {
+                drawImageWithFiltersAndScale(cardId);
+            }
 
             // Add Event Listeners for this card's elements
             removeBtn.addEventListener('click', () => {
@@ -468,40 +547,67 @@
         // Handle files from drag-and-drop or file input
         function handleFiles(files) {
             showGeneralMessage('', ''); // Clear general messages
+            imageGrid.innerHTML = ''; // Clear existing files when new ones are loaded
 
-            Array.from(files).forEach(file => {
-                // Check for allowed image types for each file
-                const allowedTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/avif', 'image/tiff'];
-                // Ignore directories themselves, only process image files
-                if (file.type === '' && file.size === 0 && file.webkitRelativePath.endsWith('/')) {
-                    // This is likely a directory entry, skip it
-                    return;
-                }
-                if (!allowedTypes.includes(file.type)) {
-                    showGeneralMessage(`Skipped "${file.name}": Unsupported file type.`, 'error');
-                    return;
-                }
+            totalFilesToLoad = 0;
+            filesLoadedCount = 0;
+            imageStates.clear(); // Clear existing image states
 
-                // If webkitRelativePath exists, it's a file from a folder
+            const filesArray = Array.from(files).filter(file => {
+                // Filter out directories (folders themselves, not their contents)
+                return !(file.type === '' && file.size === 0 && file.webkitRelativePath.endsWith('/'));
+            });
+
+            totalFilesToLoad = filesArray.length;
+            if (totalFilesToLoad === 0) {
+                showGeneralMessage('No files found to load.', 'info');
+                return;
+            }
+
+            loadingBarContainer.classList.remove('hidden');
+            updateLoadingProgress(); // Initialize loading bar
+
+            filesArray.forEach(file => {
                 const relativePath = file.webkitRelativePath || '';
+                const cardId = generateUniqueId();
+                const displayName = relativePath && relativePath.length > 0 ? relativePath : file.name;
 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.onload = function() {
-                        // Pass file.webkitRelativePath to createImageCard
-                        createImageCard(file, img, relativePath);
-                        showGeneralMessage(`Loaded "${relativePath || file.name}".`, 'info');
+                const imageMimeTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/avif', 'image/tiff'];
+                const isSupportedImageType = imageMimeTypes.includes(file.type);
+
+                if (isSupportedImageType && globalSettings.displayPreviews) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = function() {
+                            addOrUpdateFileCard(cardId, file, img, relativePath, true);
+                            filesLoadedCount++;
+                            updateLoadingProgress();
+                            // showGeneralMessage(`Loaded image "${displayName}".`, 'info'); // Commented out to reduce message spam
+                        };
+                        img.onerror = function() {
+                            showGeneralMessage(`Error loading image "${displayName}". It might be corrupted or an unsupported image format for display. Adding as non-previewable file.`, 'error');
+                            addOrUpdateFileCard(cardId, file, null, relativePath, false, `(Image preview failed)`); // Mark as not image for preview, but retain original type
+                            filesLoadedCount++;
+                            updateLoadingProgress();
+                        };
+                        img.src = e.target.result;
                     };
-                    img.onerror = function() {
-                        showGeneralMessage(`Error loading image "${relativePath || file.name}".`, 'error');
+                    reader.onerror = function() {
+                        showGeneralMessage(`Error reading file "${displayName}". Adding as non-previewable file.`, 'error');
+                        addOrUpdateFileCard(cardId, file, null, relativePath, false, `(File read failed)`); // Mark as not image for preview, but retain original type
+                        filesLoadedCount++;
+                        updateLoadingProgress();
                     };
-                    img.src = e.target.result;
-                };
-                reader.onerror = function() {
-                    showGeneralMessage(`Error reading file "${relativePath || file.name}".`, 'error');
-                };
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
+                } else {
+                    // This is a non-image file, or previews are disabled
+                    // isImage parameter indicates if the file *is* an image type, even if we're not showing a preview
+                    addOrUpdateFileCard(cardId, file, null, relativePath, isSupportedImageType, `(No preview: ${globalSettings.displayPreviews ? 'Non-image' : 'Previews disabled'})`);
+                    filesLoadedCount++;
+                    updateLoadingProgress();
+                    // showGeneralMessage(`Loaded ${isSupportedImageType ? 'image' : 'non-image'} file "${displayName}" without preview.`, 'info'); // Commented out to reduce message spam
+                }
             });
         }
 
@@ -526,7 +632,13 @@
             globalSettings.scaleWidth = globalScaleWidthInput.value;
             if (globalSettings.maintainAspectRatio && globalScaleWidthInput.value) {
                 // Get original dimensions from the first image for aspect ratio calculation
-                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                let firstImageState = null;
+                for (const fileState of imageStates.values()) {
+                    if (fileState.isImage && fileState.originalImage) {
+                        firstImageState = fileState;
+                        break;
+                    }
+                }
                 if (firstImageState && firstImageState.originalImage) {
                     const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
                     const newHeight = Math.round(parseInt(globalScaleWidthInput.value) / originalAspectRatio);
@@ -543,7 +655,13 @@
             globalSettings.scaleHeight = globalScaleHeightInput.value;
             if (globalSettings.maintainAspectRatio && globalScaleHeightInput.value) {
                 // Get original dimensions from the first image for aspect ratio calculation
-                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                let firstImageState = null;
+                for (const fileState of imageStates.values()) {
+                    if (fileState.isImage && fileState.originalImage) {
+                        firstImageState = fileState;
+                        break;
+                    }
+                }
                 if (firstImageState && firstImageState.originalImage) {
                     const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
                     const newWidth = Math.round(parseInt(globalScaleHeightInput.value) * originalAspectRatio);
@@ -560,7 +678,13 @@
             globalSettings.maintainAspectRatio = globalMaintainAspectRatioCheckbox.checked;
             // If aspect ratio is now maintained, update the other dimension if one is set
             if (globalSettings.maintainAspectRatio) {
-                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                let firstImageState = null;
+                for (const fileState of imageStates.values()) {
+                    if (fileState.isImage && fileState.originalImage) {
+                        firstImageState = fileState;
+                        break;
+                    }
+                }
                 if (firstImageState && firstImageState.originalImage) {
                     const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
                     if (globalScaleWidthInput.value && !globalScaleHeightInput.value) {
@@ -613,20 +737,42 @@
             }
         });
 
+        // Event listener for the new "Disable Image Previews" checkbox
+        disablePreviewsCheckbox.addEventListener('change', () => {
+            globalSettings.displayPreviews = !disablePreviewsCheckbox.checked; // Invert logic: checked means NO previews
+            imageGrid.innerHTML = ''; // Clear current previews
+            // Re-process existing files based on new preview setting
+            const currentFiles = Array.from(imageStates.values()).map(state => state.file);
+            if (currentFiles.length > 0) {
+                // Clear existing states and re-handle files to apply new preview setting
+                imageStates.clear();
+                handleFiles(currentFiles); // This will re-trigger the loading bar and card creation
+            }
+        });
 
-        // Global Convert All & Download Button (Unchanged behavior for now)
+
+        // Global Convert All & Download Button (Unchanged behavior for now - only processes images)
         convertAllBtn.addEventListener('click', async () => {
             if (imageStates.size === 0) {
-                showGeneralMessage('Please load at least one image to convert.', 'error');
+                showGeneralMessage('Please load at least one file to convert.', 'error');
                 return;
             }
 
             showGeneralMessage('Starting conversion of all images...', 'info');
             let conversionCount = 0;
 
-            for (const [cardId, imageState] of imageStates.entries()) {
-                const { file, originalImage, relativePath } = imageState;
+            for (const [cardId, fileState] of imageStates.entries()) {
+                const { file, originalImage, relativePath, isImage } = fileState;
                 const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio, outputFormat } = globalSettings;
+
+                if (!isImage) {
+                    showGeneralMessage(`Skipping direct download for non-image file "${relativePath || file.name}". Only images can be converted and downloaded individually.`, 'info');
+                    continue; // Skip non-image files for this button
+                }
+                if (!originalImage) {
+                     showGeneralMessage(`Skipping image "${relativePath || file.name}" for direct download as its preview failed to load.`, 'error');
+                     continue;
+                }
 
                 let finalWidth = originalImage.width;
                 let finalHeight = originalImage.height;
@@ -683,13 +829,14 @@
                 offscreenCtx.drawImage(originalImage, 0, 0, finalWidth, finalHeight);
 
                 let outputExtension = '';
+                let skipCanvasDownload = false;
                 switch (outputFormat) {
                     case 'image/png': outputExtension = 'png'; break;
                     case 'image/jpeg': outputExtension = 'jpg'; break;
                     case 'image/webp': outputExtension = 'webp'; break;
-                    case 'image/avif': outputExtension = 'avif'; break;
-                    case 'image/tiff': outputExtension = 'tiff'; break;
-                    default: outputExtension = 'dat';
+                    case 'image/avif': outputExtension = 'avif'; skipCanvasDownload = true; break; // Browser doesn't natively support toDataURL/toBlob for AVIF
+                    case 'image/tiff': outputExtension = 'tiff'; skipCanvasDownload = true; break; // Browser doesn't natively support toDataURL/toBlob for TIFF
+                    default: outputExtension = 'dat'; skipCanvasDownload = true;
                 }
 
                 // For direct download, we just use the new file name (flattened path)
@@ -697,7 +844,7 @@
                 const downloadFileName = `${fileNameWithoutExtension}_converted.${outputExtension}`;
 
 
-                if (outputFormat === 'image/png' || outputFormat === 'image/jpeg' || outputFormat === 'image/webp') {
+                if (!skipCanvasDownload) {
                     const quality = 1.0;
                     try {
                         const imageDataURL = offscreenCanvas.toDataURL(outputFormat, quality);
@@ -712,9 +859,9 @@
                     } catch (e) {
                         showGeneralMessage(`Error converting "${relativePath || file.name}": ${e.message}.`, 'error');
                     }
-                } else if (outputFormat === 'image/avif' || outputFormat === 'image/tiff') {
+                } else {
                      showGeneralMessage(
-                        `Conversion for "${relativePath || file.name}" to ${outputExtension.toUpperCase()} is not natively supported by the browser. Skipping for direct download.`,
+                        `Conversion for "${relativePath || file.name}" to ${outputExtension.toUpperCase()} is not natively supported by the browser for direct download. Skipping.`,
                         'error'
                     );
                 }
@@ -726,27 +873,55 @@
             }
         });
 
-        // Export All Images as Zip Button (Updated with Keep Original File Type logic)
+        // Export All Files as Zip Button (Updated with Keep Original File Type logic for images and direct inclusion for non-images)
         exportZipBtn.addEventListener('click', async () => {
             if (imageStates.size === 0) {
-                showGeneralMessage('Please load at least one image to export.', 'error');
+                showGeneralMessage('Please load at least one file to export.', 'error');
                 return;
             }
 
-            showGeneralMessage('Preparing images for ZIP export...', 'info');
+            showGeneralMessage('Preparing files for ZIP export...', 'info');
             const zip = new JSZip();
             let processedCount = 0; // Track successfully processed files for the ZIP
 
             const blobPromises = [];
 
-            for (const [cardId, imageState] of imageStates.entries()) {
-                const { file, originalImage, relativePath } = imageState;
+            for (const [cardId, fileState] of imageStates.entries()) {
+                const { file, originalImage, relativePath, isImage } = fileState;
                 const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio, outputFormat, keepOriginalType } = globalSettings;
 
-                // Determine the target output format for this specific file in the ZIP
+                // Determine the path and name for the file inside the ZIP
+                let zipFilePath;
+                const originalFileNameWithExt = file.name; // Keep original full name for splitting
+
+                if (!isImage || !originalImage || (isImage && !globalSettings.displayPreviews && !keepOriginalType)) {
+                    // This block handles:
+                    // 1. Non-image files
+                    // 2. Image files where `originalImage` failed to load (e.g., corrupted, unsupported browser render)
+                    // 3. Image files where `displayPreviews` is false AND `keepOriginalType` is false
+                    //    In this case, if we didn't load the `originalImage` due to previews being disabled,
+                    //    we can't apply adjustments/conversion, so we just add the original file.
+                    zipFilePath = relativePath && relativePath.length > 0 ? relativePath : originalFileNameWithExt;
+                    blobPromises.push(new Promise(resolve => {
+                        zip.file(zipFilePath, file);
+                        processedCount++;
+                        // More specific message based on condition
+                        if (!isImage) {
+                            showGeneralMessage(`Added "${zipFilePath}" to ZIP (non-image, original file).`, 'info');
+                        } else if (!originalImage) {
+                            showGeneralMessage(`Added "${zipFilePath}" to ZIP (image preview failed, original file).`, 'info');
+                        } else if (!globalSettings.displayPreviews) {
+                             showGeneralMessage(`Added "${zipFilePath}" to ZIP (image, previews disabled, original file).`, 'info');
+                        }
+                        resolve();
+                    }));
+                    continue; // Skip image-specific processing for this file
+                }
+
+                // --- Image Processing Logic (only for valid images where originalImage is loaded) ---
                 let targetMimeType;
                 let targetExtension;
-                let skipCanvasProcessing = false;
+                let skipCanvasProcessing = false; // Flag for AVIF/TIFF or other non-canvas supported outputs
 
                 if (keepOriginalType) {
                     targetMimeType = file.type;
@@ -754,9 +929,9 @@
                         case 'image/png': targetExtension = 'png'; break;
                         case 'image/jpeg': targetExtension = 'jpg'; break; // Normalize .jpeg to .jpg
                         case 'image/webp': targetExtension = 'webp'; break;
-                        case 'image/avif': targetExtension = 'avif'; skipCanvasProcessing = true; break; // Directly add original blob
-                        case 'image/tiff': targetExtension = 'tiff'; skipCanvasProcessing = true; break; // Directly add original blob
-                        default: targetMimeType = 'image/png'; targetExtension = 'png'; // Fallback for unknown original types
+                        case 'image/avif': targetExtension = 'avif'; skipCanvasProcessing = true; break; // Directly add original blob if original is AVIF
+                        case 'image/tiff': targetExtension = 'tiff'; skipCanvasProcessing = true; break; // Directly add original blob if original is TIFF
+                        default: targetMimeType = 'image/png'; targetExtension = 'png'; // Fallback for unknown original image types (should ideally not happen with previous type check)
                     }
                 } else {
                     targetMimeType = outputFormat;
@@ -770,21 +945,18 @@
                     }
                 }
 
-                // Determine the path and name for the file inside the ZIP
-                let zipFilePath;
-                const originalFileNameWithExt = file.name; // Keep original full name for splitting
-
+                // If canvas processing is skipped for an image (e.g., AVIF/TIFF, or chosen output not supported by canvas)
                 if (skipCanvasProcessing) {
-                     // For directly added files (AVIF/TIFF with keepOriginalType OR unsupported output format chosen)
                     zipFilePath = relativePath && relativePath.length > 0 ? relativePath : originalFileNameWithExt;
-                    if (!keepOriginalType) { // If it was supposed to be converted but couldn't be
+                    // If it was supposed to be converted but couldn't be by canvas
+                    if (!keepOriginalType) {
                         const parts = (relativePath || originalFileNameWithExt).split('/');
                         const namePart = parts.pop().split('.').slice(0, -1).join('.');
                         parts.push(`${namePart}_converted.${targetExtension}`);
                         zipFilePath = parts.join('/');
-                        showGeneralMessage(`Original file "${relativePath || file.name}" added directly to ZIP as "${zipFilePath}" (adjustments skipped, conversion to chosen format not supported).`, 'info');
-                    } else {
-                        showGeneralMessage(`Original file "${relativePath || file.name}" added directly to ZIP (adjustments skipped for unsupported original type).`, 'info');
+                        showGeneralMessage(`Original image "${relativePath || file.name}" added directly to ZIP as "${zipFilePath}" (adjustments skipped, conversion to chosen format not supported).`, 'info');
+                    } else { // original type was unsupported and kept
+                        showGeneralMessage(`Original image "${relativePath || file.name}" added directly to ZIP (adjustments skipped for unsupported original type).`, 'info');
                     }
 
                     blobPromises.push(new Promise(resolve => {
@@ -792,14 +964,14 @@
                         processedCount++;
                         resolve();
                     }));
-                    continue; // Skip canvas processing for this file
+                    continue; // Skip canvas processing for this image
                 }
 
-
+                // --- Canvas Image Processing ---
                 let finalWidth = originalImage.width;
                 let finalHeight = originalImage.height;
 
-                // Scaling logic (remains the same as before)
+                // Scaling logic (same as before)
                 if (enableScaling) {
                     let inputWidth = parseInt(scaleWidth);
                     let inputHeight = parseInt(scaleHeight);
@@ -850,7 +1022,6 @@
 
                 offscreenCtx.drawImage(originalImage, 0, 0, finalWidth, finalHeight);
 
-
                 // Determine the ZIP file path and name for canvas-processed images
                 if (keepOriginalType) {
                     // Keep original name/path, but ensure extension matches what toBlob creates (e.g., .jpeg -> .jpg)
@@ -886,18 +1057,18 @@
                     if (processedCount > 0) {
                         zip.generateAsync({ type: "blob" })
                             .then(function(content) {
-                                saveAs(content, "converted_images.zip");
-                                showGeneralMessage(`Successfully exported ${processedCount} image(s) to "converted_images.zip".`, 'info');
+                                saveAs(content, "exported_files.zip"); // Changed zip name to be more general
+                                showGeneralMessage(`Successfully exported ${processedCount} file(s) to "exported_files.zip".`, 'info');
                             })
                             .catch(function(error) {
                                 showGeneralMessage(`Error creating ZIP file: ${error.message}.`, 'error');
                             });
                     } else {
-                        showGeneralMessage('No images were successfully added to the ZIP.', 'error');
+                        showGeneralMessage('No files were successfully added to the ZIP.', 'error');
                     }
                 })
                 .catch(error => {
-                    showGeneralMessage(`An error occurred during blob generation: ${error.message}`, 'error');
+                    showGeneralMessage(`An error occurred during file processing for ZIP: ${error.message}`, 'error');
                 });
         });
 
