@@ -1,167 +1,209 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Only Css Animation #01</title>
-  <link rel="stylesheet" href="./loading-animation.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Theme Mouse Follow Animation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inconsolata', monospace; /* Terminal and thin font */
+            background-color: #000000; /* Pure Black initial background */
+            display: flex;
+            flex-direction: column; /* Allow stacking of elements */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrollbars from mouse circle */
+            margin: 0;
+            position: relative;
+            cursor: none; /* Hide default mouse cursor */
+            transition: background-color 3s ease-in-out; /* Smooth transition for body background */
+        }
 
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10; /* Ensure text is above everything except the mouse follower */
+        }
+
+        /* Mouse Follower Circle */
+        .mouse-follower {
+            position: absolute;
+            width: 40px; /* Size of the circle */
+            height: 40px;
+            background-color: #f0f0f0; /* Light grey/white color */
+            border-radius: 50%;
+            transform: translate(-50%, -50%); /* Center the circle on the cursor */
+            pointer-events: none; /* Allow clicks to pass through */
+            opacity: 0.8;
+            filter: blur(8px); /* Soft blur effect */
+            transition: width 0.1s ease-out, height 0.1s ease-out, opacity 0.1s ease-out; /* Smooth size transition */
+            z-index: 20; /* Ensure mouse follower is on top of content */
+        }
+
+        /* Text Styles */
+        .overlay-text {
+            color: #ffffff; /* Initial more visible white */
+            opacity: 0.4; /* Initial opacity for "Charm" */
+            font-size: 4rem; /* Increased size for impact */
+            font-weight: 700; /* Bold for "Charm" */
+            text-transform: uppercase;
+            letter-spacing: 0.8rem; /* Increased spacing */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1); /* Subtle white shadow */
+            pointer-events: none;
+            margin-bottom: 10px; /* Space between Charm and Loading */
+            white-space: nowrap; /* Prevent "Charm" from wrapping */
+            transition: color 3s ease-in-out, opacity 3s ease-in-out; /* Transition for fade */
+        }
+
+        .loading-text {
+            color: #ffffff; /* Initial more visible white */
+            opacity: 0.6; /* Initial opacity for "loading" */
+            font-size: 1.2rem;
+            font-weight: 300; /* Thin for "loading" */
+            letter-spacing: 0.3rem;
+            text-transform: lowercase;
+            pointer-events: none;
+            animation: pulse-loading 2s infinite ease-in-out; /* Pulsing animation for loading */
+            white-space: nowrap; /* Prevent "loading" from wrapping */
+            transition: color 3s ease-in-out, opacity 3s ease-in-out; /* Transition for fade */
+        }
+
+        /* Loading text pulse animation */
+        @keyframes pulse-loading {
+            0% { opacity: 0.6; transform: scale(1); } /* Adjusted to initial opacity */
+            50% { opacity: 0.9; transform: scale(1.05); }
+            100% { opacity: 0.6; transform: scale(1); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .overlay-text {
+                font-size: 2.5rem;
+                letter-spacing: 0.5rem;
+            }
+            .loading-text {
+                font-size: 1rem;
+                letter-spacing: 0.2rem;
+            }
+            .mouse-follower {
+                width: 30px;
+                height: 30px;
+                filter: blur(6px);
+            }
+        }
+        @media (max-width: 480px) {
+            .overlay-text {
+                font-size: 1.8rem;
+                letter-spacing: 0.4rem;
+            }
+            .loading-text {
+                font-size: 0.8rem;
+                letter-spacing: 0.15rem;
+            }
+            .mouse-follower {
+                width: 25px;
+                height: 25px;
+                filter: blur(5px);
+            }
+        }
+
+        /* Class for text fading to black */
+        .text-fade-to-black {
+            color: #000000; /* Pure black */
+            opacity: 1; /* Fully opaque black */
+        }
+
+        /* Keyframes for flashing colors */
+        @keyframes flash-colors {
+            0% { color: #FF0000; transform: scale(3); } /* Red, normal size */
+            16% { color: #FFFF00; transform: scale(3.5); } /* Yellow, quite a bit larger */
+            33% { color: #00FF00; transform: scale(3); } /* Green, normal size */
+            50% { color: #00FFFF; transform: scale(3.5); } /* Cyan, quite a bit larger */
+            66% { color: #0000FF; transform: scale(3); } /* Blue, normal size */
+            83% { color: #FF00FF; transform: scale(3.5); } /* Magenta, quite a bit larger */
+            100% { color: #FF0000; transform: scale(6); } /* Red, normal size */
+        }
+
+        /* Class to apply flashing animation */
+        .flash-active {
+            animation: flash-colors 0.2s infinite steps(1); /* Fast, discrete flashes */
+            transition: none !important; /* IMPORTANT: Override any existing color/opacity/transform transitions */
+            color: #FF0000; /* Ensure it starts with red flash */
+            opacity: 1 !important; /* Ensure visibility during flash */
+            /* Do not set transform here, let the animation handle it */
+        }
+    </style>
 </head>
-<body>
-<body>
-    <div class="animation01">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+<body class="">
+    <div class="mouse-follower" id="mouseFollower"></div>
+    <div class="main-content">
+        <div class="overlay-text">Charm</div>
+        <div class="loading-text">loading</div>
     </div>
-    <div class="animation02">
-        <div></div>
-        <div></div>
-    </div>
-    <div class="animation03">
-        <div class="circle">
-            <div class="circle_element01"></div>
-        </div>
-        <div class="circle">
-            <div class="circle_element02"></div>
-        </div>
-        <div class="circle">
-            <div class="circle_element03"></div>
-        </div>
-        <div class="animation04">
-            <div class="line_wrapper line_wrapper01">
-                <span class="line line01"></span>
-            </div>
-            <div class="rotate45">
-                <div class="line_wrapper line_wrapper02">
-                    <span class="line line02"></span>
-                </div>
-            </div>
-            <div class="line_wrapper line_wrapper03">
-                <span class="line line03"></span>
-            </div>
-            <div class="rotate135">
-                <div class="line_wrapper line_wrapper04">
-                    <span class="line line04"></span>
-                </div>
-            </div>
-            <div class="line_wrapper line_wrapper05">
-                <span class="line line05"></span>
-            </div>
-            <div class="rotate-135">
-                <div class="line_wrapper line_wrapper06">
-                    <span class="line line06"></span>
-                </div>
-            </div>
-            <div class="line_wrapper line_wrapper07">
-                <span class="line line07"></span>
-            </div>
-            <div class="rotate-45">
-                <div class="line_wrapper line_wrapper08">
-                    <span class="line line08"></span>
-                </div>
-            </div>
-        </div>
-        <div class="animation05">
-            <div class="double_wrapper02 green02">
-                <div class="double_wrapper01 green01">
-                    <div class="double_block green00"></div>
-                </div>
-            </div>
-            <div class="double_wrapper02 navy02">
-                <div class="double_wrapper01 navy01">
-                    <div class="double_block navy00"></div>
-                </div>
-            </div>
-            <div class="double_wrapper02 yellow02">
-                <div class="double_wrapper01 yellow01">
-                    <div class="double_block yellow00"></div>
-                </div>
-            </div>
-            <div class="double_wrapper02 blue02">
-                <div class="double_wrapper01 blue01">
-                    <div class="double_block blue00"></div>
-                </div>
-            </div>
-            <div class="double_wrapper02 red02">
-                <div class="double_wrapper01 red01">
-                    <div class="double_block red00"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="animation06">
-        <div class="rhombus05">
-            <div class="rhombus04">
-                <div class="rhombus03">
-                    <div class="rhombus02">
-                        <div class="rhombus01"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="animation07">
-        <div class="circle">
-            <div class="circle_element01"></div>
-        </div>
-        <div class="line_wrapper line_wrapper01">
-            <span class="line line01"></span>
-        </div>
-        <div class="rotate60">
-            <div class="line_wrapper line_wrapper02">
-                <span class="line line02"></span>
-            </div>
-        </div>
-        <div class="rotate120">
-            <div class="line_wrapper line_wrapper03">
-                <span class="line line03"></span>
-            </div>
-        </div>
-        <div class="line_wrapper line_wrapper04">
-            <span class="line line04"></span>
-        </div>
-        <div class="rotate-120">
-            <div class="line_wrapper line_wrapper05">
-                <span class="line line05"></span>
-            </div>
-        </div>
-        <div class="rotate-60">
-            <div class="line_wrapper line_wrapper06">
-                <span class="line line06"></span>
-            </div>
-        </div>
-    </div>
-    <div class="animation08">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-
-    <div id="fade-overlay"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const animationDuration = 2.8 + 1.5; // animation08 delay + duration
-            const fadeDuration = 1; // seconds for the fade out effect
+        const mouseFollower = document.getElementById('mouseFollower');
+        const overlayText = document.querySelector('.overlay-text');
+        const loadingText = document.querySelector('.loading-text');
 
-            const fadeOverlay = document.getElementById('fade-overlay');
-            fadeOverlay.style.transition = `opacity ${fadeDuration}s ease-in-out`;
+        // Function to update the mouse follower's position
+        function updateMouseFollower(e) {
+            mouseFollower.style.left = `${e.clientX}px`;
+            mouseFollower.style.top = `${e.clientY}px`;
+        }
 
-            setTimeout(() => {
-                // Start fade out
-                fadeOverlay.style.opacity = '1';
+        // Add event listener for mouse movement
+        document.addEventListener('mousemove', updateMouseFollower);
 
-                // Redirect after fade out completes
-                setTimeout(() => {
-                    window.location.href = "mainpage.html";
-                }, fadeDuration * 1000); // Convert seconds to milliseconds
-            }, animationDuration * 1000); // Convert seconds to milliseconds
+        // Optional: Make the mouse follower slightly larger on hover for interaction feedback
+        document.body.addEventListener('mouseenter', () => {
+             mouseFollower.style.width = '50px';
+             mouseFollower.style.height = '50px';
+             mouseFollower.style.opacity = '1';
         });
+
+        document.body.addEventListener('mouseleave', () => {
+             mouseFollower.style.width = '40px';
+             mouseFollower.style.height = '40px';
+             mouseFollower.style.opacity = '0.8';
+        });
+
+        // --- Fade, Text Color Change, Flash, and Redirect Logic ---
+        // Step 1: Wait for 1.5 seconds
+        setTimeout(() => {
+            // Step 2: Start the 3-second fade for the body background to white
+            document.body.style.backgroundColor = '#FFFFFF';
+
+            // Step 2a: Start the 3-second fade for the text color and opacity to black/opaque
+            overlayText.classList.add('text-fade-to-black');
+            loadingText.classList.add('text-fade-to-black');
+
+            // Step 2b: Start flashing colors right before the end of the fade
+            // The fade starts at 1.5s. It takes 3 seconds. Ends at 4.5s.
+            // Flash should start at 4 seconds (0.5s before end, from page load time).
+            setTimeout(() => {
+                // To ensure flashing overrides, explicitly remove previous transition classes
+                // and then apply the flash class which has !important on its animation.
+                overlayText.classList.remove('text-fade-to-black');
+                loadingText.classList.remove('text-fade-to-black');
+
+                // Add the flash-active class
+                overlayText.classList.add('flash-active');
+                loadingText.classList.add('flash-active');
+
+            }, 2500); // This timeout is relative to the start of the background fade (1.5s mark)
+
+            // Step 3: After the fade is completely finished (3 seconds after it started), redirect
+            setTimeout(() => {
+                window.location.href = "mainpage.html";
+            }, 3000); // This timeout is relative to the start of the background fade (1.5s mark)
+        }, 1500); // 1500 milliseconds = 1.5 seconds initial wait
     </script>
-</body>
 </body>
 </html>
