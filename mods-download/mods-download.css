@@ -1,140 +1,126 @@
 /*
- * Updated mods-download.css for Colorful & Dynamic Theme
+ * Updated mods-download.css for a Black & White Theme
  *
  * This stylesheet defines the visual appearance of the mod download page,
- * implementing a vibrant, energetic color scheme with updated
- * translucent, "glassy" mod cards using glass morphism principles.
+ * implementing a sleek, monochrome color scheme with translucent,
+ * "glassy" mod cards using glass morphism principles.
  *
  * All original functionality styling is retained where possible,
- * with aesthetic updates to match the colorful button reference.
+ * with aesthetic updates to match a black and white reference.
  *
- * UPDATED: Mod names on cards are now plain white.
- * UPDATED: Removed max-width constraint on the main container to allow
- * mod cards to expand horizontally across the full screen width.
+ * UPDATED: Color palette shifted to black, white, and various shades of grey.
+ * UPDATED: Mod names on cards remain plain white for consistency.
+ * UPDATED: Background circles and button gradients adjusted for monochrome.
  */
 
-/* --- Color Palette Definition (New Vibrant Palette) --- */
-/* These CSS variables define the primary colors for the new vibrant theme. */
+/* --- Color Palette Definition (Black & White Theme) --- */
 :root {
-    --color-primary-dark: #2C2C3E;     /* Deep dark for backgrounds and base text */
-    --color-background-gradient-start: #1A1A2E; /* Dark base for vibrant background */
-    --color-background-gradient-end: #0F0F1A;   /* Even darker for depth */
+    --color-primary-dark: #1A1A1A;     /* Deep dark for backgrounds and base text */
+    --color-background-gradient-start: #0A0A0A; /* Very dark base for subtle depth */
+    --color-background-gradient-end: #000000;   /* Pure black for deepest parts */
 
-    --color-accent-blue: #00FFFF;      /* Bright aqua - similar to magnetic button gradient */
-    --color-accent-pink: #FC6767;      /* Vivid pink - similar to magnetic button gradient */
-    --color-accent-purple: #9D44F0;    /* Lively purple */
-    --color-accent-green: #39FF14;     /* Electric green */
+    /* Accent colors now subtle shades of grey for visual distinction */
+    --color-accent-light-grey: #BBBBBB; /* Light grey for highlights */
+    --color-accent-medium-grey: #777777; /* Medium grey for subtle accents */
+    --color-accent-dark-grey: #444444;   /* Dark grey for deeper tones */
+    --color-accent-border: #AAAAAA;     /* A slightly lighter grey for borders */
 
-    --color-glass-base: rgba(255, 255, 255, 0.08); /* Very light, very transparent base for glass */
-    --color-glass-border: rgba(255, 255, 255, 0.2); /* Subtle white border for glass */
-    --color-text-light: #E0E0E0;       /* Light text for dark backgrounds */
-    --color-text-medium: #B0B0B0;      /* Medium text for secondary info */
+    --color-glass-base: rgba(255, 255, 255, 0.05); /* Very light, very transparent base for glass */
+    --color-glass-border: rgba(255, 255, 255, 0.15); /* Subtle white border for glass */
+    --color-text-light: #F0F0F0;       /* Light text for dark backgrounds */
+    --color-text-medium: #CCCCCC;      /* Medium text for secondary info */
 
     /* RGB values for rgba() usage */
-    --color-primary-dark-rgb: 44, 44, 62;
+    --color-primary-dark-rgb: 26, 26, 26;
     --color-glass-rgb: 255, 255, 255;
 }
 
 /* --- General Body and Container Styling --- */
-/* Sets the overall background and font for the page to establish the theme. */
 body {
-    font-family: 'Inter', sans-serif; /* Using Inter for a clean, modern look */
-    background: linear-gradient(135deg, var(--color-background-gradient-start) 0%, var(--color-background-gradient-end) 100%); /* Dynamic background */
-    color: var(--color-text-light); /* Default text color for good contrast */
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--color-background-gradient-start) 0%, var(--color-background-gradient-end) 100%);
+    color: var(--color-text-light);
     margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items to the start to allow scrolling */
-    min-height: 100vh; /* Ensure it takes full viewport height */
-    box-sizing: border-box; /* Include padding in element's total width and height */
-    overflow-y: auto; /* Enable scrolling for content */
-    perspective: 1000px; /* Essential for 3D transforms on children */
-    position: relative; /* Needed for positioning background circles */
-    overflow-x: hidden; /* Prevent horizontal scroll from circles */
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+    perspective: 1000px;
+    position: relative;
+    overflow-x: hidden;
 }
 
 .container {
     width: 100%;
-    /* Removed: max-width: 1200px; to allow full horizontal expansion */
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
-    z-index: 10; /* Ensure content is above background circles */
-    position: relative; /* Create new stacking context */
+    z-index: 10;
+    position: relative;
 }
 
 /* --- Header Styling --- */
-/* Styles for the main title and subtitle, ensuring they are prominent and legible. */
 header {
     margin-bottom: 40px;
 }
 
 header h1 {
-    font-size: 3.8em; /* Slightly larger for impact */
-    font-weight: 800; /* Bolder */
-    color: var(--color-accent-blue); /* Vibrant color for main title */
+    font-size: 3.8em;
+    font-weight: 800;
+    color: #FFFFFF; /* Pure white for main title */
     margin-bottom: 10px;
-    letter-spacing: 2px; /* More prominent letter spacing */
-    text-shadow: 0 0 15px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.4); /* Neon-like glow */
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 255, 255, 0.2); /* Subtle white glow */
 }
 
 header .subtitle {
-    font-size: 1.3em; /* Slightly larger */
-    color: var(--color-text-medium); /* Subtler color */
+    font-size: 1.3em;
+    color: var(--color-text-medium);
     margin-top: 0;
     font-weight: 400;
 }
 
 /* --- Mods Grid Layout --- */
-/* Uses CSS Grid to create a responsive layout for the mod cards. */
 .mods-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
-    gap: 30px; /* Spacing between cards */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
     padding: 20px 0;
 }
 
 /* --- Mod Card Styling (The "Glassy" Effect with Glass Morphism) --- */
-/*
- * This is the core styling for the mod cards, featuring a unique cut-corner
- * shape, a translucent background, and a subtle "floating" effect.
- * The backdrop-filter creates the privacy window / frosted glass effect.
- */
 .mod-card {
-    /* Glass Morphism Base */
-    background: var(--color-glass-base); /* Very light, very transparent base */
-    border: 1px solid var(--color-glass-border); /* Subtle, light border */
+    background: var(--color-glass-base);
+    border: 1px solid var(--color-glass-border);
     box-shadow:
-        0 4px 6px rgba(0, 0, 0, 0.1), /* Closer shadow */
-        0 10px 20px rgba(0, 0, 0, 0.15), /* Elevation shadow */
-        0 30px 60px rgba(0, 0, 0, 0.18); /* Diffused elevation shadow (slightly reduced opacity) */
-    backdrop-filter: blur(10px) saturate(180%); /* Stronger blur and saturation for glass effect */
-    -webkit-backdrop-filter: blur(10px) saturate(180%); /* Safari support */
-    border-radius: 16px; /* Slightly more rounded corners for softness */
+        0 4px 6px rgba(0, 0, 0, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.15),
+        0 30px 60px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    border-radius: 16px;
     padding: 25px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother, more dramatic transitions */
-
-    /* Unique Cut-Corner Shape */
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
     clip-path: polygon(
-        0% 20px,       /* Top-left (start 20px down) */
-        20px 0%,       /* Top-left (end 20px right) */
-        calc(100% - 20px) 0%, /* Top-right (start 20px left) */
-        100% 20px,     /* Top-right (end 20px down) */
-        100% calc(100% - 20px), /* Bottom-right (start 20px up) */
-        calc(100% - 20px) 100%, /* Bottom-right (end 20px left) */
-        20px 100%,     /* Bottom-left (start 20px right) */
-        0% calc(100% - 20px) /* Bottom-left (end 20px up) */
+        0% 20px,
+        20px 0%,
+        calc(100% - 20px) 0%,
+        100% 20px,
+        100% calc(100% - 20px),
+        calc(100% - 20px) 100%,
+        20px 100%,
+        0% calc(100% - 20px)
     );
-
-    /* Initial animation for cards to fade in */
     opacity: 0;
-    transform: translateY(30px) translateZ(0); /* Start slightly lower, 0 Z for initial state */
-    animation: fadeInSlideUp 0.8s forwards ease-out; /* Longer animation for softer entry */
-    transform-style: preserve-3d; /* Allows child elements to exist in 3D space relative to parent */
-    position: relative; /* Needed for stacking context with shadows/transforms */
+    transform: translateY(30px) translateZ(0);
+    animation: fadeInSlideUp 0.8s forwards ease-out;
+    transform-style: preserve-3d;
+    position: relative;
 }
 
 /* Keyframe for initial card fade-in animation */
@@ -150,32 +136,25 @@ header .subtitle {
 }
 
 /* --- Mod Card Hover Effect --- */
-/*
- * On hover, the card becomes more translucent and the blur increases,
- * simulating a "privacy window" or "ice" effect, with a subtle glow.
- */
 .mod-card:hover {
-    background: rgba(var(--color-glass-rgb), 0.15); /* Slightly less transparent on hover */
+    background: rgba(var(--color-glass-rgb), 0.1); /* Slightly more transparent on hover */
     box-shadow:
-        0 8px 12px rgba(0, 0, 0, 0.2), /* Closer shadow on hover */
-        0 20px 40px rgba(0, 0, 0, 0.3), /* Medium shadow for more pronounced lift */
-        0 60px 120px rgba(0, 0, 0, 0.4), /* Large, diffused shadow for strong elevation */
-        0 0 25px var(--color-accent-blue), /* Vibrant blue glow */
-        0 0 50px var(--color-accent-purple); /* Vibrant purple glow */
-    backdrop-filter: blur(15px) saturate(200%); /* Even stronger blur/saturation on hover */
-    -webkit-backdrop-filter: blur(15px) saturate(200%); /* Safari support */
-    /* More pronounced lift and a subtle 3D rotation */
+        0 8px 12px rgba(0, 0, 0, 0.2),
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 60px 120px rgba(0, 0, 0, 0.4),
+        0 0 20px var(--color-accent-light-grey); /* Subtle light grey glow */
+    backdrop-filter: blur(15px) saturate(200%);
+    -webkit-backdrop-filter: blur(15px) saturate(200%);
     transform: translateY(-15px) translateZ(50px) rotateX(2deg) rotateY(-2deg);
 }
 
 /* --- Mod Card Content Styling --- */
 .mod-card h2 {
-    font-size: 2em; /* Slightly larger */
+    font-size: 2em;
     margin-bottom: 15px;
     font-weight: 700;
-    color: white; /* Plain white color for mod names */
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.6); /* Subtle shadow for better legibility */
-    /* Removed rainbow effect properties */
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 .mod-card p {
@@ -189,26 +168,25 @@ header .subtitle {
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: opacity 0.3s ease, visibility 0.3s ease; /* Added for smooth hiding */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 /* --- Download Button Styling --- */
-/* Professional and inviting download button. */
 .download-button {
-    background: linear-gradient(45deg, var(--color-accent-blue), var(--color-accent-purple)); /* Vibrant gradient button */
+    background: linear-gradient(45deg, var(--color-accent-dark-grey), var(--color-accent-medium-grey)); /* Grey gradient button */
     color: white;
     border: none;
-    padding: 14px 30px; /* Slightly larger padding */
-    border-radius: 10px; /* More rounded corners */
-    font-size: 1.2em; /* Slightly larger font */
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-size: 1.2em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    margin-bottom: 15px; /* Space below button */
-    outline: none; /* Remove outline on focus */
-    position: relative; /* For pseudo-elements */
-    overflow: hidden; /* For hover effect */
+    margin-bottom: 15px;
+    outline: none;
+    position: relative;
+    overflow: hidden;
     z-index: 1;
 }
 
@@ -219,32 +197,32 @@ header .subtitle {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, var(--color-accent-purple), var(--color-accent-blue)); /* Inverted gradient for hover */
+    background: linear-gradient(45deg, var(--color-accent-medium-grey), var(--color-accent-dark-grey)); /* Inverted grey gradient for hover */
     z-index: -1;
     transition: transform 0.3s ease;
-    transform: scaleX(0); /* Hidden by default */
+    transform: scaleX(0);
     transform-origin: right;
 }
 
 .download-button:hover::before {
-    transform: scaleX(1); /* Expands on hover */
+    transform: scaleX(1);
     transform-origin: left;
 }
 
 .download-button:hover {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 255, 255, 0.7); /* Larger shadow and glow on hover */
-    transform: translateY(-3px); /* Slight lift */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 255, 255, 0.5); /* Stronger shadow and white glow */
+    transform: translateY(-3px);
 }
 
 .download-button:active {
-    transform: translateY(0); /* Press effect */
+    transform: translateY(0);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Styling for "Coming Soon" button */
 .download-button.coming-soon {
-    background: #555; /* Muted grey for coming soon */
-    color: #CCC;
+    background: #333; /* Darker muted grey for coming soon */
+    color: #999;
     cursor: not-allowed;
     opacity: 0.8;
     font-style: italic;
@@ -252,17 +230,16 @@ header .subtitle {
 }
 
 .download-button.coming-soon:hover {
-    background: #555;
+    background: #333;
     transform: none;
     box-shadow: none;
 }
 
 .download-button.coming-soon::before {
-    transform: scaleX(0); /* No hover effect for coming soon */
+    transform: scaleX(0);
 }
 
 /* --- Download Loading Animation --- */
-/* Adapts the download animation within cards to the new color scheme. */
 .download-loading-animation {
     position: absolute;
     top: 0;
@@ -272,13 +249,12 @@ header .subtitle {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(var(--color-primary-dark-rgb), 0.9); /* Semi-transparent dark overlay */
+    background-color: rgba(var(--color-primary-dark-rgb), 0.9);
     z-index: 10;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    border-radius: 16px; /* Match card border-radius */
-    /* Reuse the same clip-path as the mod-card for consistent shape */
+    border-radius: 16px;
     clip-path: polygon(
         0% 20px,
         20px 0%,
@@ -289,7 +265,7 @@ header .subtitle {
         20px 100%,
         0% calc(100% - 20px)
     );
-    overflow: hidden; /* Important: ensures content stays within the clipped path */
+    overflow: hidden;
 }
 
 .download-loading-animation.show {
@@ -302,7 +278,7 @@ header .subtitle {
     padding: 0;
     font-family: 'Arial Narrow', sans-serif;
     font-weight: 100;
-    font-size: 1.2em; /* Slightly larger */
+    font-size: 1.2em;
     text-align: center;
     width: 100%;
 }
@@ -316,14 +292,14 @@ header .subtitle {
     transform: rotateX(-90deg);
 }
 
-/* Updated animation delays and colors to match vibrant scheme */
-.download-loading-animation h1 .let1 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.1s; color: var(--color-accent-blue); }
-.download-loading-animation h1 .let2 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.2s; color: var(--color-accent-pink); }
-.download-loading-animation h1 .let3 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.3s; color: var(--color-accent-purple); }
-.download-loading-animation h1 .let4 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.4s; color: var(--color-accent-green); }
-.download-loading-animation h1 .let5 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.5s; color: var(--color-accent-blue); }
-.download-loading-animation h1 .let6 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.6s; color: var(--color-accent-pink); }
-.download-loading-animation h1 .let7 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.7s; color: var(--color-accent-purple); }
+/* Updated animation delays and colors to match monochrome scheme */
+.download-loading-animation h1 .let1 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.1s; color: var(--color-accent-light-grey); }
+.download-loading-animation h1 .let2 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.2s; color: var(--color-accent-medium-grey); }
+.download-loading-animation h1 .let3 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.3s; color: var(--color-accent-dark-grey); }
+.download-loading-animation h1 .let4 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.4s; color: var(--color-accent-light-grey); }
+.download-loading-animation h1 .let5 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.5s; color: var(--color-accent-medium-grey); }
+.download-loading-animation h1 .let6 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.6s; color: var(--color-accent-dark-grey); }
+.download-loading-animation h1 .let7 { animation: drop 1.2s ease-in-out infinite; animation-delay: 0.7s; color: var(--color-accent-light-grey); }
 
 @keyframes drop {
     0% {
@@ -355,62 +331,59 @@ header .subtitle {
 
 
 /* --- Mod Tray and Image Grid --- */
-/* Styles for the expandable section of the card containing images. */
 .mod-tray {
-    max-height: 0; /* Initially hidden */
+    max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
     width: 100%;
-    padding: 0 10px; /* Initial padding */
+    padding: 0 10px;
 }
 
 .mod-tray.show-images {
-    /* MaxHeight will be set by JS, but transition is here */
-    padding: 20px 10px; /* Padding when expanded */
+    padding: 20px 10px;
 }
 
 .image-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Flexible image columns */
-    gap: 15px; /* Spacing between images */
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
     padding: 10px 0;
-    background-color: rgba(var(--color-primary-dark-rgb), 0.3); /* Subtle background for image tray */
+    background-color: rgba(var(--color-primary-dark-rgb), 0.3);
     border-radius: 12px;
     padding: 15px;
-    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 .image-grid img {
     width: 100%;
-    height: 100px; /* Fixed height for image previews */
-    object-fit: cover; /* Cover the area, cropping if necessary */
-    border-radius: 10px; /* Slightly more rounded */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
     cursor: zoom-in;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3); /* More pronounced border */
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .image-grid img:hover {
-    transform: scale(1.08); /* More zoom on hover */
+    transform: scale(1.08);
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.4);
-    border-color: var(--color-accent-blue); /* Accent color on hover */
+    border-color: var(--color-accent-light-grey); /* Light grey accent on hover */
 }
 
 /* --- Fullscreen Modal for Images --- */
-/* Provides a clean, dark overlay for viewing images in detail. */
 .fullscreen-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Dark, semi-transparent overlay */
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure it's on top */
-    display: none; /* Hidden by default */
-    backdrop-filter: blur(5px); /* Subtle blur for the background */
+    z-index: 1000;
+    display: none;
+    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
 
@@ -418,16 +391,16 @@ header .subtitle {
     max-width: 90%;
     max-height: 90%;
     object-fit: contain;
-    border: 5px solid var(--color-accent-blue); /* Vibrant border around the image */
-    border-radius: 16px; /* Rounded corners */
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--color-accent-pink); /* Stronger shadow and glow */
+    border: 5px solid var(--color-accent-light-grey); /* Light grey border around the image */
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 255, 255, 0.4); /* Stronger shadow and white glow */
 }
 
 .fullscreen-modal .close-button {
     position: absolute;
     top: 25px;
     right: 35px;
-    font-size: 3.5em; /* Larger close button */
+    font-size: 3.5em;
     color: var(--color-text-light);
     cursor: pointer;
     font-weight: bold;
@@ -436,28 +409,27 @@ header .subtitle {
 }
 
 .fullscreen-modal .close-button:hover {
-    color: var(--color-accent-pink); /* Accent color on hover */
-    transform: rotate(90deg) scale(1.1); /* Rotate and slight scale */
+    color: var(--color-accent-light-grey); /* Light grey accent on hover */
+    transform: rotate(90deg) scale(1.1);
 }
 
 /* --- Custom Message Modal (for "Coming Soon") --- */
-/* Styled to be consistent with the overall theme. */
 #messageModal {
-    background-color: rgba(var(--color-primary-dark-rgb), 0.85); /* Slightly lighter overlay than fullscreen image */
+    background-color: rgba(var(--color-primary-dark-rgb), 0.85);
 }
 
 .modal-content {
-    background: linear-gradient(135deg, rgba(var(--color-primary-dark-rgb), 0.9), rgba(var(--color-primary-dark-rgb), 0.7)); /* Gradient background for modal content */
+    background: linear-gradient(135deg, rgba(var(--color-primary-dark-rgb), 0.9), rgba(var(--color-primary-dark-rgb), 0.7));
     color: var(--color-text-light);
-    padding: 35px; /* More padding */
-    border-radius: 16px; /* More rounded */
+    padding: 35px;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5); /* Stronger shadow */
-    max-width: 450px; /* Slightly wider */
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+    max-width: 450px;
     width: 90%;
-    transform: translateY(-30px); /* Initial state for animation */
-    animation: fadeInSlideDown 0.4s forwards ease-out; /* Slightly longer animation */
-    border: 1px solid rgba(var(--color-glass-rgb), 0.2); /* Glass border */
+    transform: translateY(-30px);
+    animation: fadeInSlideDown 0.4s forwards ease-out;
+    border: 1px solid rgba(var(--color-glass-rgb), 0.2);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
@@ -474,14 +446,14 @@ header .subtitle {
 }
 
 #modalMessage {
-    font-size: 1.5em; /* Larger font */
+    font-size: 1.5em;
     margin-bottom: 30px;
     font-weight: 600;
-    color: var(--color-accent-blue); /* Accent color for message */
+    color: var(--color-accent-light-grey); /* Light grey accent for message */
 }
 
 #modalCloseButton {
-    background: linear-gradient(45deg, var(--color-accent-pink), var(--color-accent-purple)); /* Vibrant gradient button */
+    background: linear-gradient(45deg, var(--color-accent-medium-grey), var(--color-accent-dark-grey)); /* Grey gradient button */
     color: white;
     padding: 12px 25px;
     border-radius: 10px;
@@ -492,7 +464,7 @@ header .subtitle {
 }
 
 #modalCloseButton:hover {
-    background: linear-gradient(45deg, var(--color-accent-purple), var(--color-accent-pink)); /* Inverted gradient on hover */
+    background: linear-gradient(45deg, var(--color-accent-dark-grey), var(--color-accent-medium-grey)); /* Inverted grey gradient on hover */
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
 }
@@ -506,8 +478,7 @@ header .subtitle {
   align-items: center;
   width: 100%;
   max-width: 450px;
-  /* Added specific styling for the wrapper within the mods-download context */
-  margin: 40px auto 20px auto; /* Center it and provide margin */
+  margin: 40px auto 20px auto;
 }
 
 /* --- Main Navigation Buttons (Magnetic with Break Effect) --- */
@@ -518,19 +489,19 @@ header .subtitle {
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--color-primary-dark); /* Dark text for light background */
-  font-weight: 700; /* Bolder text */
-  font-size: 1.4rem; /* Base font size for button text */
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 1.4rem;
   width: 100%;
-  height: 220px; /* Slightly taller for more impact */
-  border-radius: 20px; /* More rounded corners */
+  height: 220px;
+  border-radius: 20px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.98); /* Almost opaque white for strong contrast */
-  backdrop-filter: blur(15px) saturate(180%); /* Stronger frosted glass effect */
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(15px) saturate(180%);
   -webkit-backdrop-filter: blur(15px) saturate(180%);
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Stronger initial shadow */
-  border: 2px solid rgba(255, 255, 255, 0.4); /* More pronounced border */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   transform: translateY(0);
   text-align: center;
 }
@@ -543,10 +514,10 @@ header .subtitle {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, var(--color-accent-blue), var(--color-accent-pink), var(--color-accent-purple)); /* Full vibrant gradient */
+  background: linear-gradient(45deg, var(--color-accent-light-grey), var(--color-accent-medium-grey), var(--color-accent-dark-grey)); /* Monochrome gradient */
   transform: skewX(-45deg);
   transform-origin: center;
-  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother, longer slide */
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 1;
 }
 
@@ -556,8 +527,8 @@ header .subtitle {
 }
 
 /* --- Text Color Change on Hover for Main Nav Buttons --- */
-.magnetic-button-wrapper:hover .main-nav-button.magnetic-button {
-  color: white; /* Text becomes white on hover */
+.magnetic-button-wrapper:hover .main-nav-button {
+  color: white;
 }
 
 /* --- Button Fragments for Break Effect --- */
@@ -574,51 +545,51 @@ header .subtitle {
 
 .fragment {
   position: relative;
-  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncier transition for movement */
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   transform-origin: center;
   z-index: 2;
 }
 
 .fragment-1 {
-  margin-bottom: 0.6rem; /* More space between fragments */
+  margin-bottom: 0.6rem;
 }
 
 .fragment-1 span {
   position: relative;
   z-index: 2;
   display: block;
-  font-size: 1.8rem; /* Larger font size for the main button title */
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for definition */
+  font-size: 1.8rem;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .fragment-2 .nav-description {
   position: relative;
   z-index: 2;
-  font-size: 1.1rem; /* Slightly larger font size for the descriptive text */
-  color: var(--color-text-medium); /* Default color for description */
+  font-size: 1.1rem;
+  color: var(--color-text-medium);
   font-weight: 500;
   line-height: 1.5;
 }
 
 /* --- Update Description Text Color on Hover --- */
 .magnetic-button-wrapper:hover .fragment-2 .nav-description {
-  color: rgba(255, 255, 255, 0.95); /* Brighter white on hover */
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* --- Magnetic Hover Effect (Button Transformation) --- */
 .magnetic-button-wrapper:hover .main-nav-button {
-  transform: translateY(-10px) scale(1.05); /* Moves up more and grows slightly more */
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25); /* Expands and darkens the shadow */
-  border-color: rgba(var(--color-accent-blue-rgb), 0.6); /* Vibrant border color */
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.6); /* White border on hover */
 }
 
 /* --- Break Apart Effect on Hover --- */
 .magnetic-button-wrapper:hover .fragment-1 {
-  transform: translateX(-20px) translateY(-8px) rotate(-3deg); /* Moves further and rotates more */
+  transform: translateX(-20px) translateY(-8px) rotate(-3deg);
 }
 
 .magnetic-button-wrapper:hover .fragment-2 {
-  transform: translateX(20px) translateY(8px) rotate(3deg); /* Moves further and rotates more */
+  transform: translateX(20px) translateY(8px) rotate(3deg);
 }
 
 /* --- Subtle Glow Effect (::before pseudo-element) --- */
@@ -629,14 +600,14 @@ header .subtitle {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(0, 255, 255, 0.1), rgba(252, 103, 103, 0.1), rgba(157, 68, 240, 0.1)); /* Vibrant gradient glow */
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(187, 187, 187, 0.1), rgba(119, 119, 119, 0.1)); /* Monochrome gradient glow */
   z-index: 1;
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
 .magnetic-button-wrapper:hover .main-nav-button::before {
-  opacity: 1; /* Fully visible on hover */
+  opacity: 1;
 }
 
 /* --- Keyframes for the 'fadeInUp' animation --- */
@@ -651,16 +622,15 @@ header .subtitle {
   }
 }
 
-/* --- Background Circles for Glass Morphism Effect (New Vibrant Colors) --- */
-/* These circles provide a visual element behind the cards to make the blur effect noticeable. */
+/* --- Background Circles for Glass Morphism Effect (Monochrome) --- */
 .background-circle {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, var(--color-accent-blue) 0%, rgba(0, 255, 255, 0) 70%); /* Vibrant radial gradient */
-    filter: blur(80px); /* Heavy blur for soft glows */
-    z-index: 1; /* Ensure they are behind the content */
-    animation: floatCircles 20s infinite ease-in-out alternate; /* Slower, gentler floating animation */
-    opacity: 0.2; /* More subtle */
+    background: radial-gradient(circle, var(--color-accent-light-grey) 0%, rgba(255, 255, 255, 0) 70%); /* Light grey radial gradient */
+    filter: blur(80px);
+    z-index: 1;
+    animation: floatCircles 20s infinite ease-in-out alternate;
+    opacity: 0.15; /* More subtle in monochrome */
 }
 
 /* Specific positioning and sizing for individual circles */
@@ -669,7 +639,7 @@ header .subtitle {
     height: 400px;
     top: 5%;
     left: -15%;
-    background: radial-gradient(circle, var(--color-accent-purple) 0%, rgba(157, 68, 240, 0) 70%);
+    background: radial-gradient(circle, var(--color-accent-dark-grey) 0%, rgba(0, 0, 0, 0) 70%); /* Dark grey circle */
     animation-delay: 0s;
 }
 
@@ -678,7 +648,7 @@ header .subtitle {
     height: 500px;
     bottom: 0%;
     right: -20%;
-    background: radial-gradient(circle, var(--color-accent-pink) 0%, rgba(252, 103, 103, 0) 70%);
+    background: radial-gradient(circle, var(--color-accent-medium-grey) 0%, rgba(0, 0, 0, 0) 70%); /* Medium grey circle */
     animation-delay: 5s;
 }
 
@@ -688,7 +658,7 @@ header .subtitle {
     top: 40%;
     left: 10%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, var(--color-accent-blue) 0%, rgba(0, 255, 255, 0) 70%);
+    background: radial-gradient(circle, var(--color-accent-light-grey) 0%, rgba(255, 255, 255, 0) 70%); /* Light grey circle */
     animation-delay: 10s;
 }
 
@@ -697,7 +667,7 @@ header .subtitle {
     height: 450px;
     top: -10%;
     right: 15%;
-    background: radial-gradient(circle, var(--color-accent-green) 0%, rgba(57, 255, 20, 0) 70%);
+    background: radial-gradient(circle, var(--color-accent-dark-grey) 0%, rgba(0, 0, 0, 0) 70%); /* Dark grey circle */
     animation-delay: 15s;
 }
 
@@ -736,7 +706,7 @@ header .subtitle {
     }
 
     .mods-grid {
-        grid-template-columns: 1fr; /* Stack cards on small screens */
+        grid-template-columns: 1fr;
     }
 
     .mod-card {
@@ -795,7 +765,7 @@ header .subtitle {
     .background-circle:nth-child(4) { width: 300px; height: 300px; top: -5%; right: 10%; }
 
     .main-nav-button.magnetic-button {
-        height: 180px; /* Adjust height for smaller screens */
+        height: 180px;
     }
 }
 
@@ -813,7 +783,7 @@ header .subtitle {
     }
 
     .main-nav-button.magnetic-button {
-        height: 160px; /* Further adjust height for smallest screens */
+        height: 160px;
         font-size: 1.2rem;
     }
 
