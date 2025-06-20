@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Image Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        /* Custom styles to ensure "Inter" font and rounded corners */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to start to prevent extreme vertical centering issues on small screens */
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 95%; /* Responsive width */
+            width: 1200px; /* Max width for desktop */
+            background-color: #ffffff;
+            padding: 32px;
+            border-radius: 16px; /* Rounded corners for the main container */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 24px; /* Space between sections */
+        }
+        .drop-zone {
+            border: 4px dashed #9ca3af;
+            padding: 40px;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #6b7280;
+            background-color: #f9fafb;
+            border-radius: 12px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .drop-zone.dragover {
+            border-color: #3b82f6;
+            background-color: #e0f2fe;
+            color: #1d4ed8;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 24px;
+        }
+        .image-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .image-card canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+        }
+        .image-card button,
+        .image-card select,
+        .image-card input[type="number"] {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            background-color: #ffffff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        /* Global buttons */
+        .global-controls button,
+        #convertAllBtn {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 12px 20px; /* Larger padding for global buttons */
+            font-size: 1.125rem; /* Larger font size */
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .global-controls button:hover,
+        #convertAllBtn:hover {
+            background-color: #2563eb;
+        }
+
+        #exportZipBtn {
+            background-color: #10b981; /* Green for export zip button */
+        }
+        #exportZipBtn:hover {
+            background-color: #059669;
+        }
+
+        .image-card .remove-btn {
+            background-color: #ef4444; /* Red for remove button */
+        }
+        .image-card .remove-btn:hover {
+            background-color: #dc2626;
+        }
+        input[type="number"][disabled],
+        input[type="checkbox"][disabled] + label {
+            background-color: #e5e7eb;
+            cursor: not-allowed;
+            color: #9ca3af;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #d1d5db;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            transition: background 0.15s ease-in-out;
+        }
+        input[type="range"]::-webkit-slider-thumb:active {
+            cursor: grabbing;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            transition: background 0.15s ease-in-out;
+        }
+        input[type="range"]::-moz-range-thumb:active {
+            cursor: grabbing;
+        }
+        .message-box {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid;
+            display: none;
+            margin-top: 10px;
+        }
+        .message-box.error {
+            background-color: #fee2e2;
+            color: #ef4444;
+            border-color: #fca5a5;
+        }
+        .message-box.info {
+            background-color: #e0f2fe;
+            color: #0c6a9b;
+            border-color: #7dd3fc;
+        }
+        /* Hide default file input button */
+        #hiddenFileInput {
+            display: none;
+        }
+        .global-controls > div {
+            background-color: #f9fafb; /* Lighter background for control groups */
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .global-controls input[type="number"] {
+            cursor: text; /* Allow normal text cursor for number inputs */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-center text-gray-800 rounded-lg p-2">Multi-Image Converter</h1>
+
+        <div id="dropZone" class="drop-zone">
+            Drag & Drop Images Here or Click to Upload
+        </div>
+        <input type="file" id="hiddenFileInput" accept=".png, .jpg, .jpeg, .webp, .avif, .tiff, .tif" multiple>
+
+        <div id="generalMessageBox" class="message-box hidden rounded-lg"></div>
+
+        <div class="global-controls flex flex-col gap-6">
+            <h2 class="text-2xl font-bold text-gray-800">Global Image Adjustments</h2>
+
+            <div>
+                <label class="text-lg font-medium text-gray-700 mb-2 block">Visual Adjustments:</label>
+                <div class="flex items-center gap-4">
+                    <input type="checkbox" id="globalInvertColors" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                    <label for="globalInvertColors" class="text-gray-700">Invert Colors</label>
+                </div>
+                <div class="flex flex-col gap-2 mt-4">
+                    <label for="globalSaturation" class="text-gray-700">Saturation: <span id="globalSaturationValue">100</span>%</label>
+                    <input type="range" id="globalSaturation" min="0" max="200" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+            </div>
+
+            <div>
+                <label class="text-lg font-medium text-gray-700 mb-2 block">Scaling Options:</label>
+                <div class="flex items-center gap-4">
+                    <input type="checkbox" id="globalEnableScaling" class="form-checkbox h-5 w-5 text-blue-600 rounded">
+                    <label for="globalEnableScaling" class="text-gray-700">Enable Scaling</label>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 mt-4">
+                    <div class="flex flex-col flex-1">
+                        <label for="globalScaleWidth" class="text-gray-700 mb-1">Width (px):</label>
+                        <input type="number" id="globalScaleWidth" min="1" placeholder="Original Width" class="p-2 border rounded-md" disabled>
+                    </div>
+                    <div class="flex flex-col flex-1">
+                        <label for="globalScaleHeight" class="text-gray-700 mb-1">Height (px):</label>
+                        <input type="number" id="globalScaleHeight" min="1" placeholder="Original Height" class="p-2 border rounded-md" disabled>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 mt-4">
+                    <input type="checkbox" id="globalMaintainAspectRatio" class="form-checkbox h-5 w-5 text-blue-600 rounded" disabled>
+                    <label for="globalMaintainAspectRatio" class="text-gray-700">Maintain Aspect Ratio</label>
+                </div>
+            </div>
+
+            <div>
+                <label for="globalOutputFormat" class="text-lg font-medium text-gray-700 mb-2 block">Convert To:</label>
+                <select id="globalOutputFormat" class="rounded-lg p-2 w-full">
+                    <option value="image/png">PNG (Lossless)</option>
+                    <option value="image/jpeg">JPG (Highest Quality)</option>
+                    <option value="image/webp">WEBP (Highest Quality)</option>
+                    <option value="image/avif">AVIF (Limited Browser Support)</option>
+                    <option value="image/tiff">TIFF (Limited Browser Support)</option>
+                </select>
+            </div>
+
+            <button id="convertAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
+                Convert All & Download
+            </button>
+            <button id="exportZipBtn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 ease-in-out">
+                Export All Images as Zip
+            </button>
+        </div>
+
+
+        <div id="imageGrid" class="image-grid">
+            </div>
+
+        <p class="text-sm text-gray-600 mt-2 rounded-lg p-2 bg-blue-50">
+            <strong>Note:</strong> Direct client-side conversion to AVIF and TIFF using native browser APIs is generally not supported for a "simple webpage" without significant external libraries or server-side processing. PNG conversion is lossless. JPG and WEBP will be converted at the highest possible quality (minimal compression).
+        </p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const dropZone = document.getElementById('dropZone');
+        const hiddenFileInput = document.getElementById('hiddenFileInput');
+        const imageGrid = document.getElementById('imageGrid');
+        const generalMessageBox = document.getElementById('generalMessageBox');
+
+        // Global adjustment elements
+        const globalInvertColorsCheckbox = document.getElementById('globalInvertColors');
+        const globalSaturationSlider = document.getElementById('globalSaturation');
+        const globalSaturationValueSpan = document.getElementById('globalSaturationValue');
+        const globalEnableScalingCheckbox = document.getElementById('globalEnableScaling');
+        const globalScaleWidthInput = document.getElementById('globalScaleWidth');
+        const globalScaleHeightInput = document.getElementById('globalScaleHeight');
+        const globalMaintainAspectRatioCheckbox = document.getElementById('globalMaintainAspectRatio');
+        const globalOutputFormatSelect = document.getElementById('globalOutputFormat');
+        const convertAllBtn = document.getElementById('convertAllBtn');
+        const exportZipBtn = document.getElementById('exportZipBtn'); // New export button
+
+        // Map to store state for each image, keyed by a unique ID
+        const imageStates = new Map();
+
+        // Global state for adjustments and scaling
+        const globalSettings = {
+            invertColors: false,
+            saturation: 100,
+            enableScaling: false,
+            scaleWidth: null, // Will be set to original width of the first image or cleared if no images
+            scaleHeight: null, // Will be set to original height of the first image or cleared if no images
+            maintainAspectRatio: false,
+            outputFormat: 'image/png'
+        };
+
+        // Utility to generate unique IDs
+        const generateUniqueId = () => `image-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+        // Function to display general messages
+        function showGeneralMessage(message, type) {
+            generalMessageBox.textContent = message;
+            generalMessageBox.className = `message-box ${type} block`;
+        }
+
+        // Function to draw an image onto its canvas with applied global filters and scaling
+        function drawImageWithFiltersAndScale(cardId) {
+            const imageState = imageStates.get(cardId);
+            if (!imageState || !imageState.originalImage) {
+                return;
+            }
+
+            const { originalImage, canvas, ctx } = imageState;
+            const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio } = globalSettings;
+
+            let finalWidth = originalImage.width;
+            let finalHeight = originalImage.height;
+
+            // Scaling logic
+            if (enableScaling) {
+                let inputWidth = parseInt(scaleWidth);
+                let inputHeight = parseInt(scaleHeight);
+
+                const isValidWidth = !isNaN(inputWidth) && inputWidth > 0;
+                const isValidHeight = !isNaN(inputHeight) && inputHeight > 0;
+
+                const originalAspectRatio = originalImage.width / originalImage.height;
+
+                if (maintainAspectRatio) {
+                    if (isValidWidth && !isValidHeight) {
+                        finalWidth = inputWidth;
+                        finalHeight = Math.round(inputWidth / originalAspectRatio);
+                    } else if (!isValidWidth && isValidHeight) {
+                        finalHeight = inputHeight;
+                        finalWidth = Math.round(inputHeight * originalAspectRatio);
+                    } else if (isValidWidth && isValidHeight) {
+                        const ratioW = inputWidth / originalImage.width;
+                        const ratioH = inputHeight / originalImage.height;
+                        const ratio = Math.min(ratioW, ratioH);
+                        finalWidth = Math.round(originalImage.width * ratio);
+                        finalHeight = Math.round(originalImage.height * ratio);
+                    } else {
+                         // No valid dimensions for aspect ratio scaling, use original
+                         finalWidth = originalImage.width;
+                         finalHeight = originalImage.height;
+                    }
+                } else {
+                    if (isValidWidth) {
+                        finalWidth = inputWidth;
+                    }
+                    if (isValidHeight) {
+                        finalHeight = inputHeight;
+                    }
+                }
+            }
+
+            // Set canvas dimensions
+            canvas.width = finalWidth;
+            canvas.height = finalHeight;
+
+            // Apply filters to the canvas context
+            let filterString = '';
+            if (invertColors) {
+                filterString += 'invert(100%) ';
+            }
+            filterString += `saturate(${saturation}%)`;
+            ctx.filter = filterString.trim();
+
+            // Clear canvas and draw image
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear before drawing
+            ctx.drawImage(originalImage, 0, 0, finalWidth, finalHeight);
+
+            // Reset filter to avoid affecting subsequent draws of other images if this context is reused (important for future potential features)
+            ctx.filter = 'none';
+        }
+
+        // Function to update all image previews based on global settings
+        function updateAllPreviews() {
+            imageStates.forEach((value, key) => {
+                drawImageWithFiltersAndScale(key);
+            });
+        }
+
+        // Function to toggle disabled state of global scaling inputs
+        function toggleGlobalScalingInputs() {
+            const isDisabled = !globalSettings.enableScaling;
+            globalScaleWidthInput.disabled = isDisabled;
+            globalScaleHeightInput.disabled = isDisabled;
+            globalMaintainAspectRatioCheckbox.disabled = isDisabled;
+
+            if (isDisabled) {
+                globalScaleWidthInput.value = '';
+                globalScaleHeightInput.value = '';
+                globalMaintainAspectRatioCheckbox.checked = false;
+                globalSettings.scaleWidth = null;
+                globalSettings.scaleHeight = null;
+                globalSettings.maintainAspectRatio = false;
+            } else {
+                // Set placeholders to original dimensions of the first image if available
+                if (imageStates.size > 0) {
+                    const firstImageState = imageStates.values().next().value;
+                    if (firstImageState && firstImageState.originalImage) {
+                        globalScaleWidthInput.placeholder = `Original: ${firstImageState.originalImage.width}px`;
+                        globalScaleHeightInput.placeholder = `Original: ${firstImageState.originalImage.height}px`;
+                        globalSettings.scaleWidth = firstImageState.originalImage.width;
+                        globalSettings.scaleHeight = firstImageState.originalImage.height;
+                    }
+                }
+            }
+            updateAllPreviews(); // Update previews based on the new scaling state
+        }
+
+
+        // Function to create and append an image card to the grid
+        function createImageCard(file, originalImage) {
+            const cardId = generateUniqueId();
+            const cardHtml = `
+                <div id="card-${cardId}" class="image-card">
+                    <h3 class="text-xl font-semibold text-gray-800 break-words">${file.name}</h3>
+                    <canvas id="canvas-${cardId}" class="w-full h-auto rounded-lg shadow-md"></canvas>
+                    <button id="removeBtn-${cardId}" class="remove-btn bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 ease-in-out">
+                        Remove Image
+                    </button>
+                </div>
+            `;
+            imageGrid.insertAdjacentHTML('beforeend', cardHtml);
+
+            // Store references to DOM elements and initial state
+            const canvas = document.getElementById(`canvas-${cardId}`);
+            const ctx = canvas.getContext('2d');
+            const removeBtn = document.getElementById(`removeBtn-${cardId}`);
+
+            imageStates.set(cardId, {
+                file: file,
+                originalImage: originalImage,
+                canvas: canvas,
+                ctx: ctx,
+            });
+
+            // Initial draw with current global settings
+            drawImageWithFiltersAndScale(cardId);
+
+            // Add Event Listeners for this card's elements
+            removeBtn.addEventListener('click', () => {
+                imageStates.delete(cardId);
+                document.getElementById(`card-${cardId}`).remove();
+                showGeneralMessage(`Removed "${file.name}".`, 'info');
+            });
+        }
+
+        // Handle files from drag-and-drop or file input
+        function handleFiles(files) {
+            showGeneralMessage('', ''); // Clear general messages
+
+            Array.from(files).forEach(file => {
+                // Check for allowed image types for each file
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/webp', 'image/avif', 'image/tiff'];
+                if (!allowedTypes.includes(file.type)) {
+                    showGeneralMessage(`Skipped "${file.name}": Unsupported file type.`, 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        createImageCard(file, img); // Pass original img object
+                        showGeneralMessage(`Loaded "${file.name}".`, 'info');
+                    };
+                    img.onerror = function() {
+                        showGeneralMessage(`Error loading image "${file.name}".`, 'error');
+                    };
+                    img.src = e.target.result;
+                };
+                reader.onerror = function() {
+                    showGeneralMessage(`Error reading file "${file.name}".`, 'error');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Global Event Listeners for adjustments
+        globalInvertColorsCheckbox.addEventListener('change', () => {
+            globalSettings.invertColors = globalInvertColorsCheckbox.checked;
+            updateAllPreviews();
+        });
+
+        globalSaturationSlider.addEventListener('input', () => {
+            globalSettings.saturation = parseInt(globalSaturationSlider.value);
+            globalSaturationValueSpan.textContent = globalSettings.saturation;
+            updateAllPreviews();
+        });
+
+        globalEnableScalingCheckbox.addEventListener('change', () => {
+            globalSettings.enableScaling = globalEnableScalingCheckbox.checked;
+            toggleGlobalScalingInputs();
+        });
+
+        globalScaleWidthInput.addEventListener('input', () => {
+            globalSettings.scaleWidth = globalScaleWidthInput.value;
+            if (globalSettings.maintainAspectRatio && globalScaleWidthInput.value) {
+                // Get original dimensions from the first image for aspect ratio calculation
+                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                if (firstImageState && firstImageState.originalImage) {
+                    const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
+                    const newHeight = Math.round(parseInt(globalScaleWidthInput.value) / originalAspectRatio);
+                    if (!isNaN(newHeight)) {
+                        globalScaleHeightInput.value = newHeight;
+                        globalSettings.scaleHeight = newHeight;
+                    }
+                }
+            }
+            updateAllPreviews();
+        });
+
+        globalScaleHeightInput.addEventListener('input', () => {
+            globalSettings.scaleHeight = globalScaleHeightInput.value;
+            if (globalSettings.maintainAspectRatio && globalScaleHeightInput.value) {
+                // Get original dimensions from the first image for aspect ratio calculation
+                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                if (firstImageState && firstImageState.originalImage) {
+                    const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
+                    const newWidth = Math.round(parseInt(globalScaleHeightInput.value) * originalAspectRatio);
+                    if (!isNaN(newWidth)) {
+                        globalScaleWidthInput.value = newWidth;
+                        globalSettings.scaleWidth = newWidth;
+                    }
+                }
+            }
+            updateAllPreviews();
+        });
+
+        globalMaintainAspectRatioCheckbox.addEventListener('change', () => {
+            globalSettings.maintainAspectRatio = globalMaintainAspectRatioCheckbox.checked;
+            // If aspect ratio is now maintained, update the other dimension if one is set
+            if (globalSettings.maintainAspectRatio) {
+                const firstImageState = imageStates.size > 0 ? imageStates.values().next().value : null;
+                if (firstImageState && firstImageState.originalImage) {
+                    const originalAspectRatio = firstImageState.originalImage.width / firstImageState.originalImage.height;
+                    if (globalScaleWidthInput.value && !globalScaleHeightInput.value) {
+                         const newHeight = Math.round(parseInt(globalScaleWidthInput.value) / originalAspectRatio);
+                         if (!isNaN(newHeight)) {
+                            globalScaleHeightInput.value = newHeight;
+                            globalSettings.scaleHeight = newHeight;
+                         }
+                    } else if (globalScaleHeightInput.value && !globalScaleWidthInput.value) {
+                        const newWidth = Math.round(parseInt(globalScaleHeightInput.value) * originalAspectRatio);
+                        if (!isNaN(newWidth)) {
+                            globalScaleWidthInput.value = newWidth;
+                            globalSettings.scaleWidth = newWidth;
+                        }
+                    } else if (globalScaleWidthInput.value && globalScaleHeightInput.value) {
+                        // Re-calculate to fit within bounding box if both are set
+                        const inputWidth = parseInt(globalScaleWidthInput.value);
+                        const inputHeight = parseInt(globalScaleHeightInput.value);
+                        const ratioW = inputWidth / firstImageState.originalImage.width;
+                        const ratioH = inputHeight / firstImageState.originalImage.height;
+                        const ratio = Math.min(ratioW, ratioH);
+                        const finalWidth = Math.round(firstImageState.originalImage.width * ratio);
+                        const finalHeight = Math.round(firstImageState.originalImage.height * ratio);
+                        globalScaleWidthInput.value = finalWidth;
+                        globalScaleHeightInput.value = finalHeight;
+                        globalSettings.scaleWidth = finalWidth;
+                        globalSettings.scaleHeight = finalHeight;
+                    }
+                }
+            }
+            updateAllPreviews();
+        });
+
+        globalOutputFormatSelect.addEventListener('change', () => {
+            globalSettings.outputFormat = globalOutputFormatSelect.value;
+        });
+
+        // Global Convert All & Download Button
+        convertAllBtn.addEventListener('click', async () => {
+            if (imageStates.size === 0) {
+                showGeneralMessage('Please load at least one image to convert.', 'error');
+                return;
+            }
+
+            showGeneralMessage('Starting conversion of all images...', 'info');
+            let conversionCount = 0;
+
+            for (const [cardId, imageState] of imageStates.entries()) {
+                const { file, originalImage } = imageState;
+                const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio, outputFormat } = globalSettings;
+
+                let finalWidth = originalImage.width;
+                let finalHeight = originalImage.height;
+
+                // Scaling logic (same as in drawImageWithFiltersAndScale but for a new canvas)
+                if (enableScaling) {
+                    let inputWidth = parseInt(scaleWidth);
+                    let inputHeight = parseInt(scaleHeight);
+
+                    const isValidWidth = !isNaN(inputWidth) && inputWidth > 0;
+                    const isValidHeight = !isNaN(inputHeight) && inputHeight > 0;
+
+                    const originalAspectRatio = originalImage.width / originalImage.height;
+
+                    if (maintainAspectRatio) {
+                        if (isValidWidth && !isValidHeight) {
+                            finalWidth = inputWidth;
+                            finalHeight = Math.round(inputWidth / originalAspectRatio);
+                        } else if (!isValidWidth && isValidHeight) {
+                            finalHeight = inputHeight;
+                            finalWidth = Math.round(inputHeight * originalAspectRatio);
+                        } else if (isValidWidth && isValidHeight) {
+                            const ratioW = inputWidth / originalImage.width;
+                            const ratioH = inputHeight / originalImage.height;
+                            const ratio = Math.min(ratioW, ratioH);
+                            finalWidth = Math.round(originalImage.width * ratio);
+                            finalHeight = Math.round(originalImage.height * ratio);
+                        } else {
+                            // Invalid scaling inputs for aspect ratio, use original
+                            finalWidth = originalImage.width;
+                            finalHeight = originalImage.height;
+                        }
+                    } else {
+                        if (isValidWidth) {
+                            finalWidth = inputWidth;
+                        }
+                        if (isValidHeight) {
+                            finalHeight = inputHeight;
+                        }
+                    }
+                }
+
+                const offscreenCanvas = document.createElement('canvas'); // Use offscreen for actual conversion
+                offscreenCanvas.width = finalWidth;
+                offscreenCanvas.height = finalHeight;
+                const offscreenCtx = offscreenCanvas.getContext('2d');
+
+                // Apply filters to the offscreen canvas context
+                let filterString = '';
+                if (invertColors) {
+                    filterString += 'invert(100%) ';
+                }
+                filterString += `saturate(${saturation}%)`;
+                offscreenCtx.filter = filterString.trim();
+
+                offscreenCtx.drawImage(originalImage, 0, 0, finalWidth, finalHeight);
+
+                let outputExtension = '';
+                switch (outputFormat) {
+                    case 'image/png': outputExtension = 'png'; break;
+                    case 'image/jpeg': outputExtension = 'jpg'; break;
+                    case 'image/webp': outputExtension = 'webp'; break;
+                    case 'image/avif': outputExtension = 'avif'; break;
+                    case 'image/tiff': outputExtension = 'tiff'; break;
+                    default: outputExtension = 'dat';
+                }
+
+                if (outputFormat === 'image/png' || outputFormat === 'image/jpeg' || outputFormat === 'image/webp') {
+                    const quality = 1.0;
+                    try {
+                        const imageDataURL = offscreenCanvas.toDataURL(outputFormat, quality);
+                        const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
+                        const downloadFileName = `${fileNameWithoutExtension}_converted.${outputExtension}`;
+
+                        // Trigger download
+                        const a = document.createElement('a');
+                        a.href = imageDataURL;
+                        a.download = downloadFileName;
+                        document.body.appendChild(a); // Append to body to make it clickable
+                        a.click(); // Programmatically click the link
+                        document.body.removeChild(a); // Remove the link after click
+
+                        conversionCount++;
+                    } catch (e) {
+                        showGeneralMessage(`Error converting "${file.name}": ${e.message}.`, 'error');
+                    }
+                } else if (outputFormat === 'image/avif' || outputFormat === 'image/tiff') {
+                     showGeneralMessage(
+                        `Conversion for "${file.name}" to ${outputExtension.toUpperCase()} is not natively supported by the browser. Skipping.`,
+                        'error'
+                    );
+                }
+            }
+            if (conversionCount > 0) {
+                showGeneralMessage(`Successfully converted and downloaded ${conversionCount} image(s).`, 'info');
+            } else {
+                showGeneralMessage('No images were successfully converted or downloaded.', 'error');
+            }
+        });
+
+        // New Export All Images as Zip Button
+        exportZipBtn.addEventListener('click', async () => {
+            if (imageStates.size === 0) {
+                showGeneralMessage('Please load at least one image to export.', 'error');
+                return;
+            }
+
+            showGeneralMessage('Preparing images for ZIP export...', 'info');
+            const zip = new JSZip();
+            let addedCount = 0;
+
+            for (const [cardId, imageState] of imageStates.entries()) {
+                const { file, originalImage } = imageState;
+                const { invertColors, saturation, enableScaling, scaleWidth, scaleHeight, maintainAspectRatio, outputFormat } = globalSettings;
+
+                let finalWidth = originalImage.width;
+                let finalHeight = originalImage.height;
+
+                // Scaling logic (same as in convertAllBtn)
+                if (enableScaling) {
+                    let inputWidth = parseInt(scaleWidth);
+                    let inputHeight = parseInt(scaleHeight);
+
+                    const isValidWidth = !isNaN(inputWidth) && inputWidth > 0;
+                    const isValidHeight = !isNaN(inputHeight) && inputHeight > 0;
+
+                    const originalAspectRatio = originalImage.width / originalImage.height;
+
+                    if (maintainAspectRatio) {
+                        if (isValidWidth && !isValidHeight) {
+                            finalWidth = inputWidth;
+                            finalHeight = Math.round(inputWidth / originalAspectRatio);
+                        } else if (!isValidWidth && isValidHeight) {
+                            finalHeight = inputHeight;
+                            finalWidth = Math.round(inputHeight * originalAspectRatio);
+                        } else if (isValidWidth && isValidHeight) {
+                            const ratioW = inputWidth / originalImage.width;
+                            const ratioH = inputHeight / originalImage.height;
+                            const ratio = Math.min(ratioW, ratioH);
+                            finalWidth = Math.round(originalImage.width * ratio);
+                            finalHeight = Math.round(originalImage.height * ratio);
+                        } else {
+                            finalWidth = originalImage.width;
+                            finalHeight = originalImage.height;
+                        }
+                    } else {
+                        if (isValidWidth) {
+                            finalWidth = inputWidth;
+                        }
+                        if (isValidHeight) {
+                            finalHeight = inputHeight;
+                        }
+                    }
+                }
+
+                const offscreenCanvas = document.createElement('canvas');
+                offscreenCanvas.width = finalWidth;
+                offscreenCanvas.height = finalHeight;
+                const offscreenCtx = offscreenCanvas.getContext('2d');
+
+                let filterString = '';
+                if (invertColors) {
+                    filterString += 'invert(100%) ';
+                }
+                filterString += `saturate(${saturation}%)`;
+                offscreenCtx.filter = filterString.trim();
+
+                offscreenCtx.drawImage(originalImage, 0, 0, finalWidth, finalHeight);
+
+                let outputExtension = '';
+                switch (outputFormat) {
+                    case 'image/png': outputExtension = 'png'; break;
+                    case 'image/jpeg': outputExtension = 'jpg'; break;
+                    case 'image/webp': outputExtension = 'webp'; break;
+                    default: outputExtension = 'png'; // Default to PNG for unsupported types in zip
+                }
+
+                // Check for native browser support before adding to zip
+                if (outputFormat === 'image/avif' || outputFormat === 'image/tiff') {
+                    showGeneralMessage(`Conversion for "${file.name}" to ${outputExtension.toUpperCase()} is not natively supported for ZIP export. Exporting as PNG.`, 'info');
+                    // Fallback to PNG for AVIF/TIFF when zipping
+                    offscreenCanvas.toBlob(function(blob) {
+                        if (blob) {
+                            const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
+                            const zipFileName = `${fileNameWithoutExtension}_converted.png`;
+                            zip.file(zipFileName, blob);
+                            addedCount++;
+                            if (addedCount === imageStates.size) {
+                                generateAndSaveZip(zip);
+                            }
+                        } else {
+                            showGeneralMessage(`Failed to create blob for "${file.name}".`, 'error');
+                        }
+                    }, 'image/png', 1.0); // Use PNG as fallback
+                } else {
+                    offscreenCanvas.toBlob(function(blob) {
+                        if (blob) {
+                            const fileNameWithoutExtension = file.name.split('.').slice(0, -1).join('.');
+                            const zipFileName = `${fileNameWithoutExtension}_converted.${outputExtension}`;
+                            zip.file(zipFileName, blob);
+                            addedCount++;
+                            if (addedCount === imageStates.size) {
+                                generateAndSaveZip(zip);
+                            }
+                        } else {
+                            showGeneralMessage(`Failed to create blob for "${file.name}".`, 'error');
+                        }
+                    }, outputFormat, 1.0);
+                }
+            }
+
+            function generateAndSaveZip(zipInstance) {
+                zipInstance.generateAsync({ type: "blob" })
+                    .then(function(content) {
+                        saveAs(content, "converted_images.zip");
+                        showGeneralMessage(`Successfully exported ${addedCount} image(s) to "converted_images.zip".`, 'info');
+                    })
+                    .catch(function(error) {
+                        showGeneralMessage(`Error creating ZIP file: ${error.message}.`, 'error');
+                    });
+            }
+        });
+
+
+        // Drag and Drop Event Listeners
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add('dragover');
+            e.dataTransfer.dropEffect = 'copy';
+        });
+
+        dropZone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        });
+
+        // Click to Upload functionality
+        dropZone.addEventListener('click', () => {
+            hiddenFileInput.click();
+        });
+
+        hiddenFileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFiles(e.target.files);
+                e.target.value = ''; // Clear the input so same file can be selected again
+            }
+        });
+    </script>
+</body>
+</html>

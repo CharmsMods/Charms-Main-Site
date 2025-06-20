@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Game Mod Code Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Dynamic Game Mod Code Generator</h1>
+            <p>Create custom CSS and JavaScript modifications for your game with an intuitive interface</p>
+        </header>
+
+        <div class="main-layout">
+            <div class="controls-panel">
+                <div class="panel-header">
+                    <h2>Customization Options</h2>
+                    <div class="tab-switcher">
+                        <button class="tab-btn" data-tab="css">CSS Styling</button>
+                        <button class="tab-btn active" data-tab="js">JavaScript Features</button>
+                    </div>
+                </div>
+
+                <div class="panel-content">
+                    <div class="options-panel" id="css-options">
+                        <p>CSS customization options will appear here once you provide the CSS files.</p>
+                    </div>
+
+                    <div class="options-panel active" id="js-options">
+                        <div class="option-group">
+                            <h3>Player & Character Visuals</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableAnimatedScar">
+                                    <span class="checkmark"></span>
+                                    Enable Animated Scar Skin
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableCustomViewmodel">
+                                    <span class="checkmark"></span>
+                                    Enable Custom Viewmodel (Removes Hands)
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideBulletTrails">
+                                    <span class="checkmark"></span>
+                                    Hide Bullet Trails
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideWeaponOnADS">
+                                    <span class="checkmark"></span>
+                                    Hide Weapon on ADS
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="forceDefaultSkinOthers">
+                                    <span class="checkmark"></span>
+                                    Force Default Skin for Other Players
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="emissiveIntensity">Emissive Intensity (Glowing Skins)</label>
+                                <input type="range" id="emissiveIntensity" min="0" max="10000" value="1000" step="100">
+                                <span class="slider-value">1000</span>
+                            </div>
+                            <div class="select-group">
+                                <label for="weaponViewmodelPosition">Weapon Viewmodel Position</label>
+                                <select id="weaponViewmodelPosition">
+                                    <option value="default">Default</option>
+                                    <option value="down">Down</option>
+                                    <option value="high">High</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                            <div class="sub-options" id="customWeaponPositionOptions" style="display: none;">
+                                <div class="slider-group">
+                                    <label for="weaponXPosition">X Position</label>
+                                    <input type="range" id="weaponXPosition" min="-1" max="1" value="0" step="0.01">
+                                    <span class="slider-value">0</span>
+                                </div>
+                                <div class="slider-group">
+                                    <label for="weaponYPosition">Y Position</label>
+                                    <input type="range" id="weaponYPosition" min="-1" max="1" value="0" step="0.01">
+                                    <span class="slider-value">0</span>
+                                </div>
+                                <div class="slider-group">
+                                    <label for="weaponZPosition">Z Position</label>
+                                    <input type="range" id="weaponZPosition" min="-1" max="1" value="0.45" step="0.01">
+                                    <span class="slider-value">0.45</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <h3>Game Environment & Performance</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableShadowFixes">
+                                    <span class="checkmark"></span>
+                                    Enable Shadow Fixes
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableUltraShadows">
+                                    <span class="checkmark"></span>
+                                    Enable Ultra Shadows (Resource Intensive)
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableMapEffects">
+                                    <span class="checkmark"></span>
+                                    Enable Map Effects (Fog, Light changes)
+                                </label>
+                            </div>
+                            <div class="sub-options" id="mapEffectOptions" style="display: none;">
+                                <h4>Global Lighting</h4>
+                                <div class="slider-group">
+                                    <label for="globalExposure">Global Exposure</label>
+                                    <input type="range" id="globalExposure" min="0" max="4.5" value="1.0" step="0.01">
+                                    <span class="slider-value">1.0</span>
+                                </div>
+                                <div class="slider-group">
+                                    <label for="globalSkyboxIntensity">Global Skybox Intensity</label>
+                                    <input type="range" id="globalSkyboxIntensity" min="0" max="10" value="1.0" step="0.1">
+                                    <span class="slider-value">1.0</span>
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="globalMainLightColor">Global Main Light Color</label>
+                                    <input type="color" id="globalMainLightColor" value="#ffffff">
+                                </div>
+
+                                <h4>Map Specific Settings</h4>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="disableSierraBalconiesLibrary">
+                                        <span class="checkmark"></span>
+                                        Disable Sierra Balconies/Library
+                                    </label>
+                                </div>
+                                <div class="input-group">
+                                    <h5>Tundra Fog Settings</h5>
+                                    <div class="slider-group">
+                                        <label for="tundraFogDensity">Fog Density</label>
+                                        <input type="range" id="tundraFogDensity" min="0" max="0.01" value="0.0025" step="0.0001">
+                                        <span class="slider-value">0.0025</span>
+                                    </div>
+                                    <div class="slider-group">
+                                        <label for="tundraFogStart">Fog Start Distance</label>
+                                        <input type="range" id="tundraFogStart" min="0" max="100" value="44" step="1">
+                                        <span class="slider-value">44</span>
+                                    </div>
+                                    <div class="slider-group">
+                                        <label for="tundraFogEnd">Fog End Distance</label>
+                                        <input type="range" id="tundraFogEnd" min="50" max="300" value="160" step="1">
+                                        <span class="slider-value">160</span>
+                                    </div>
+                                    <div class="color-input-group">
+                                        <label for="tundraFogColor">Fog Color</label>
+                                        <input type="color" id="tundraFogColor" value="#cccccc">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4>Post-Processing Effects</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableBloom">
+                                    <span class="checkmark"></span>
+                                    Enable Bloom Effect
+                                </label>
+                            </div>
+                            <div class="sub-options" id="bloomOptions" style="display: none;">
+                                <div class="slider-group">
+                                    <label for="bloomIntensity">Bloom Intensity</label>
+                                    <input type="range" id="bloomIntensity" min="0" max="5" value="1.0" step="0.1">
+                                    <span class="slider-value">1.0</span>
+                                </div>
+                                <div class="slider-group">
+                                    <label for="bloomThreshold">Bloom Threshold</label>
+                                    <input type="range" id="bloomThreshold" min="0" max="1" value="0.5" step="0.01">
+                                    <span class="slider-value">0.5</span>
+                                </div>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableFXAA">
+                                    <span class="checkmark"></span>
+                                    Enable FXAA Effect
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <h3>User Interface (UI) & Overlays</h3>
+                            <div class="select-group">
+                                <label for="overlayTheme">Overlay UI Theme</label>
+                                <select id="overlayTheme">
+                                    <option value="default">Default</option>
+                                    <option value="red">Red Theme</option>
+                                    <option value="green">Green Theme</option>
+                                    <option value="purple">Purple Theme</option>
+                                    <option value="custom">Custom Colors</option>
+                                </select>
+                            </div>
+                            <div class="sub-options" id="customOverlayColors" style="display: none;">
+                                <div class="color-input-group">
+                                    <label for="meColor">Me Color</label>
+                                    <input type="color" id="meColor" value="#40e0ff">
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="healthColor">Health Color</label>
+                                    <input type="color" id="healthColor" value="#00ff00">
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="whiteColor">White Color</label>
+                                    <input type="color" id="whiteColor" value="#ffffff">
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="greenColor">Green Color</label>
+                                    <input type="color" id="greenColor" value="#00ff00">
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="grayColor">Gray Color</label>
+                                    <input type="color" id="grayColor" value="#808080">
+                                </div>
+                                <div class="color-input-group">
+                                    <label for="enemyColor">Enemy Color</label>
+                                    <input type="color" id="enemyColor" value="#ff0000">
+                                </div>
+                            </div>
+                            
+                            <h4>Visibility Toggles</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideAchievements">
+                                    <span class="checkmark"></span>
+                                    Hide Achievements
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideTaskElements">
+                                    <span class="checkmark"></span>
+                                    Hide Task Elements
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideSubtitle">
+                                    <span class="checkmark"></span>
+                                    Hide Subtitle
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideQuestMessages">
+                                    <span class="checkmark"></span>
+                                    Hide Quest Messages
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideAbilityBind">
+                                    <span class="checkmark"></span>
+                                    Hide Ability Bind
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideTimesAndScoreBackground">
+                                    <span class="checkmark"></span>
+                                    Hide Times and Score Background
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideBarBackground">
+                                    <span class="checkmark"></span>
+                                    Hide Bar Background
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hide728x90Banner">
+                                    <span class="checkmark"></span>
+                                    Hide 728x90 Banner
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideObjective">
+                                    <span class="checkmark"></span>
+                                    Hide Objective
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideReminder">
+                                    <span class="checkmark"></span>
+                                    Hide Reminder
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideCountBack">
+                                    <span class="checkmark"></span>
+                                    Hide Countdown
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideObjectiveTime">
+                                    <span class="checkmark"></span>
+                                    Hide Objective Time
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideWeaponDisplay">
+                                    <span class="checkmark"></span>
+                                    Hide Weapon Display
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideUnlockItemReward">
+                                    <span class="checkmark"></span>
+                                    Hide Unlock Item Reward
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideLeaderboardEntries">
+                                    <span class="checkmark"></span>
+                                    Hide Leaderboard Entries
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="hideBulletsCounter">
+                                    <span class="checkmark"></span>
+                                    Hide Bullets Counter
+                                </label>
+                            </div>
+
+                            <h4>UI Element Positions & Opacities</h4>
+                            <div class="slider-group">
+                                <label for="announcePositionX">Announce Position X</label>
+                                <input type="range" id="announcePositionX" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="announcePositionY">Announce Position Y</label>
+                                <input type="range" id="announcePositionY" min="-1000" max="1000" value="-530" step="1">
+                                <span class="slider-value">-530</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="healthBarPositionX">Health Bar Position X</label>
+                                <input type="range" id="healthBarPositionX" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="healthBarPositionY">Health Bar Position Y</label>
+                                <input type="range" id="healthBarPositionY" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="timesAndScorePositionX">Times & Score Position X</label>
+                                <input type="range" id="timesAndScorePositionX" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="timesAndScorePositionY">Times & Score Position Y</label>
+                                <input type="range" id="timesAndScorePositionY" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="leaderboardPositionX">Leaderboard Position X</label>
+                                <input type="range" id="leaderboardPositionX" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="leaderboardPositionY">Leaderboard Position Y</label>
+                                <input type="range" id="leaderboardPositionY" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="statsPositionX">Stats Position X</label>
+                                <input type="range" id="statsPositionX" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="statsPositionY">Stats Position Y</label>
+                                <input type="range" id="statsPositionY" min="-1000" max="1000" value="0" step="1">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="containerOpacity">Container Opacity</label>
+                                <input type="range" id="containerOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="questMessageOpacity">Quest Message Opacity</label>
+                                <input type="range" id="questMessageOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="announcementBottomOpacity">Announce Bottom Opacity</label>
+                                <input type="range" id="announcementBottomOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+
+                            <div class="text-input-group">
+                                <label for="objectiveTimeText">Objective Time Text</label>
+                                <input type="text" id="objectiveTimeText" value="Next Objective active in">
+                            </div>
+
+                            <h4>Custom Hitmarker Visuals</h4>
+                            <div class="slider-group">
+                                <label for="hitmarkerOpacity">Hitmarker Opacity</label>
+                                <input type="range" id="hitmarkerOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="hitmarkerScale">Hitmarker Scale</label>
+                                <input type="range" id="hitmarkerScale" min="0.1" max="2.0" value="1.0" step="0.01">
+                                <span class="slider-value">1.0</span>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableHitmarkerTween">
+                                    <span class="checkmark"></span>
+                                    Enable Hitmarker Tween Animation
+                                </label>
+                            </div>
+                            <div class="color-input-group">
+                                <label for="hitColor">Hit Color</label>
+                                <input type="color" id="hitColor" value="#ffffff">
+                            </div>
+                            <div class="color-input-group">
+                                <label for="bloodColor">Blood Color</label>
+                                <input type="color" id="bloodColor" value="#ff0000">
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <h3>Audio Controls</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableMatchEndingMusic">
+                                    <span class="checkmark"></span>
+                                    Enable Match Ending Music
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableInGameMusic">
+                                    <span class="checkmark"></span>
+                                    Enable In-Game Music
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="inGameMusicVolume">In-Game Music Volume</label>
+                                <input type="range" id="inGameMusicVolume" min="0" max="1" value="0.2" step="0.01">
+                                <span class="slider-value">0.2</span>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableMenuMusic">
+                                    <span class="checkmark"></span>
+                                    Enable Menu Music
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuMusicVolume">Menu Music Volume</label>
+                                <input type="range" id="menuMusicVolume" min="0" max="1" value="0.15" step="0.01">
+                                <span class="slider-value">0.15</span>
+                            </div>
+
+                            <h4>Character Sound Volumes</h4>
+                            <div class="slider-group">
+                                <label for="shinJumpVolume">Shin Jump Volume</label>
+                                <input type="range" id="shinJumpVolume" min="0" max="1" value="0.5" step="0.01">
+                                <span class="slider-value">0.5</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="liliumJumpVolume">Lilium Jump Volume</label>
+                                <input type="range" id="liliumJumpVolume" min="0" max="1" value="0.6" step="0.01">
+                                <span class="slider-value">0.6</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="liliumGruntVolume">Lilium Grunt Volume</label>
+                                <input type="range" id="liliumGruntVolume" min="0" max="1" value="1.0" step="0.01">
+                                <span class="slider-value">1.0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="liliumDeathVolume">Lilium Death Volume</label>
+                                <input type="range" id="liliumDeathVolume" min="0" max="1" value="1.0" step="0.01">
+                                <span class="slider-value">1.0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="echoJumpVolume">Echo Jump Volume</label>
+                                <input type="range" id="echoJumpVolume" min="0" max="1" value="1.0" step="0.01">
+                                <span class="slider-value">1.0</span>
+                            </div>
+
+                            <h4>Weapon Volume</h4>
+                            <div class="slider-group">
+                                <label for="weaponGlobalVolume">Global Weapon Volume</label>
+                                <input type="range" id="weaponGlobalVolume" min="0" max="1" value="1.0" step="0.01">
+                                <span class="slider-value">1.0</span>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <h3>Miscellaneous Features</h3>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="disableAdCrate">
+                                    <span class="checkmark"></span>
+                                    Disable Ad Crate Spawn
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="enableAnimatedMenu">
+                                    <span class="checkmark"></span>
+                                    Enable Animated Menu Background
+                                </label>
+                            </div>
+                            <div class="select-group">
+                                <label for="mapModePreset">Map Mode Preset</label>
+                                <select id="mapModePreset">
+                                    <option value="default">Default</option>
+                                    <option value="light">Light</option>
+                                    <option value="golden">Golden Hour</option>
+                                </select>
+                            </div>
+                            
+                            <h4>Auto-Chat with Custom Messages</h4>
+                            <div class="textarea-group">
+                                <label for="autoChatMessages">Messages (one per line)</label>
+                                <textarea id="autoChatMessages" rows="5" placeholder="Enter messages here..."></textarea>
+                            </div>
+                            <div class="text-input-group">
+                                <label for="autoChatHotkeys">Hotkeys (e.g., #, :)</label>
+                                <input type="text" id="autoChatHotkeys" value="#, /">
+                            </div>
+
+                            <h4>Menu CSS Customization</h4>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="menuLogoDisplay">
+                                    <span class="checkmark"></span>
+                                    Show Menu Logo
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuBackgroundOpacity">Menu Background Opacity</label>
+                                <input type="range" id="menuBackgroundOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="accountDetailsBoxDisplay">
+                                    <span class="checkmark"></span>
+                                    Show Account Details Box
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="friendRequestPopUpDisplay">
+                                    <span class="checkmark"></span>
+                                    Show Friend Request Pop-up
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="adLeaderboardDisplay">
+                                    <span class="checkmark"></span>
+                                    Show Ad Leaderboard
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="featuredStreamerDisplay">
+                                    <span class="checkmark"></span>
+                                    Show Featured Streamer
+                                </label>
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuButtonsOpacity">Menu Buttons Opacity</label>
+                                <input type="range" id="menuButtonsOpacity" min="0" max="1" value="1" step="0.01">
+                                <span class="slider-value">1</span>
+                            </div>
+                            <div class="color-input-group">
+                                <label for="menuButtonsBackgroundColor">Menu Buttons Background Color</label>
+                                <input type="color" id="menuButtonsBackgroundColor" value="#1a1a1a">
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuButtonsBorderRadius">Menu Buttons Border Radius</label>
+                                <input type="range" id="menuButtonsBorderRadius" min="0" max="20" value="6" step="1">
+                                <span class="slider-value">6</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuButtonsWidth">Menu Buttons Width</label>
+                                <input type="range" id="menuButtonsWidth" min="50" max="300" value="200" step="1">
+                                <span class="slider-value">200</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="menuButtonsHeight">Menu Buttons Height</label>
+                                <input type="range" id="menuButtonsHeight" min="20" max="100" value="50" step="1">
+                                <span class="slider-value">50</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-output-panel">
+                <div class="panel-header">
+                    <h2>Generated Code</h2>
+                    <div class="code-actions">
+                        <button class="copy-btn" id="copy-code">Copy Code</button>
+                        <button class="download-btn" id="download-code">Download</button>
+                    </div>
+                </div>
+
+                <div class="code-output">
+                    <div class="file-output" id="css-output">
+                        <pre><code class="language-css" id="css-code">/* CSS code will be generated here based on your selections */</code></pre>
+                    </div>
+                    <div class="file-output active" id="js-output">
+                        <pre><code class="language-javascript" id="js-code">/* JavaScript code will be generated here based on your selections */</code></pre>
+                    </div>
+                </div>
+
+                <div class="validation-status">
+                    <div class="status-indicator" id="validation-status">
+                        <span class="status-icon">✅</span>
+                        <span class="status-text">Code is valid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
