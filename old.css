@@ -1,47 +1,52 @@
 /*
- * Combined Stylesheet for Modding Hub
+ * mainpage.css
  *
- * This file combines the light theme from 'old.css' and the dark theme from 'mainpage.css'.
- * The 'old.css' content serves as the default (light) theme.
- * All styles from 'mainpage.css' are then applied conditionally using the 'body.dark-mode' selector,
- * ensuring they activate only when the dark mode is enabled, providing the exact dark theme experience.
+ * This stylesheet defines the comprehensive visual presentation for the Modding Hub main page.
+ * It features a highly dynamic and interactive design, incorporating a wide array of advanced
+ * CSS animations, detailed styling for various elements, and a seamless dark mode toggle.
+ * The focus is on creating a rich user experience with subtle and pronounced visual feedback.
  */
 
-/* --- Light Theme (from old.css) --- */
-/* Global Reset and Base Styles */
+/* --- Global Reset and Base Styles --- */
+/* Applies a universal reset to all elements, ensuring consistent rendering across browsers. */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
 }
 
-/* Body Styles (Base for Light Mode with CSS Variables) */
+/* --- Body Styles (Base for Light Mode with CSS Variables) --- */
+/* Sets the default font, ensures full viewport height, and defines a comprehensive
+ * set of CSS variables for the light mode color palette. These variables enable
+ * easy and smooth theme transitions.
+ */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  position: relative;
-  min-height: 100vh;
-  overflow-x: hidden;
-  line-height: 1.6;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  position: relative; /* Essential for positioning fixed/absolute children correctly */
+  min-height: 100vh; /* Guarantees the body stretches to at least the full viewport height */
+  overflow-x: hidden; /* Prevents horizontal scrollbars from appearing */
+  line-height: 1.6; /* Improved readability for text */
+  text-rendering: optimizeLegibility; /* Enhances text rendering quality */
+  -webkit-font-smoothing: antialiased; /* Smoothes fonts for WebKit browsers */
+  -moz-osx-font-smoothing: grayscale; /* Smoothes fonts for Firefox */
 
   /* CSS Variables for Light Mode Color Palette */
-  --text-color-primary: #2d3748;
-  --text-color-secondary: #718096;
-  --bg-color-main: rgba(255, 255, 255, 0.95);
-  --bg-color-dropdown: rgba(255, 255, 255, 0.98);
-  --border-color-button: rgba(255, 255, 255, 0.2);
-  --box-shadow-button: rgba(0, 0, 0, 0.08);
-  --box-shadow-profile-pic: rgba(0, 0, 0, 0.15);
-  --border-color-profile-pic: rgba(255, 255, 255, 0.8);
-  --dropdown-item-border: rgba(0, 0, 0, 0.05);
-  --menu-icon-bar-color: #00FFFF;
-  --body-bg-color: transparent;
-  --main-container-justify: center;
-  --particle-color: rgba(0, 123, 255, 0.3);
-  --toggle-icon-color: #ffc107;
+  --text-color-primary: #2d3748; /* Main headings and primary text color */
+  --text-color-secondary: #718096; /* Secondary text, taglines, descriptions */
+  --bg-color-main: rgba(255, 255, 255, 0.95); /* Background for main content sections/cards */
+  --bg-color-dropdown: rgba(255, 255, 255, 0.98); /* Background for the sliding dropdown menu */
+  --border-color-button: rgba(255, 255, 255, 0.2); /* Border for interactive elements */
+  --box-shadow-button: rgba(0, 0, 0, 0.08); /* Soft box shadow for interactive buttons */
+  --box-shadow-profile-pic: rgba(0, 0, 0, 0.15); /* Box shadow for the profile picture */
+  --border-color-profile-pic: rgba(255, 255, 255, 0.8); /* Border color for the profile picture */
+  --dropdown-item-border: rgba(0, 0, 0, 0.05); /* Subtle border separating dropdown items */
+  --menu-icon-bar-color: #00FFFF; /* Color of the hamburger menu bars (Aqua) */
+  --body-bg-color: transparent; /* Default body background, allowing background image to show */
+  --main-container-justify: center; /* Default vertical alignment for main content */
+  --particle-color: rgba(0, 123, 255, 0.3); /* Color for background particles in light mode */
+  --toggle-icon-color: #ffc107; /* Sun color for theme toggle */
 
+  /* Smooth Transitions for All Theme-Related Property Changes */
   transition:
     background-color 0.5s ease,
     color 0.5s ease,
@@ -49,7 +54,29 @@ body {
     box-shadow 0.5s ease;
 }
 
-/* Blurred Background Pseudo-element (Light Mode) */
+/* --- Dark Mode Styles --- */
+/* Overrides CSS variables when the 'dark-mode' class is applied to the <body>,
+ * transforming the page into a dark theme with darker backgrounds and lighter text.
+ */
+body.dark-mode {
+  --text-color-primary: #ecf0f1; /* Lighter text for main content in dark mode */
+  --text-color-secondary: #bdc3c7; /* Slightly darker secondary text */
+  --bg-color-main: rgba(44, 62, 80, 0.95); /* Dark background for main content cards/buttons */
+  --bg-color-dropdown: rgba(52, 73, 94, 0.98); /* Darker background for the dropdown menu */
+  --border-color-button: rgba(255, 255, 255, 0.1); /* Lighter border for buttons in dark mode */
+  --box-shadow-button: rgba(0, 0, 0, 0.3); /* Stronger box shadow for depth */
+  --box-shadow-profile-pic: rgba(0, 0, 0, 0.5); /* More prominent shadow for profile picture */
+  --border-color-profile-pic: rgba(255, 255, 255, 0.3); /* Lighter border for profile picture */
+  --dropdown-item-border: rgba(255, 255, 255, 0.1); /* Lighter border for dropdown items */
+  --menu-icon-bar-color: #fcccfd; /* Pinkish color for menu icon in dark mode */
+  --body-bg-color: #1a202c; /* Solid dark background color when image is hidden */
+  --main-container-justify: flex-start; /* Adjust vertical alignment for disappearing profile pic */
+  --particle-color: rgba(102, 179, 255, 0.2); /* Particle color for dark mode */
+  --toggle-icon-color: #f0f2f5; /* Moon color for theme toggle */
+}
+
+/* --- Blurred Background Pseudo-element (Light Mode) --- */
+/* Creates a fixed background image. Fully visible in light mode, fades out in dark mode. */
 body::before {
   content: '';
   position: fixed;
@@ -58,32 +85,44 @@ body::before {
   width: 100%;
   height: 100%;
   background: url('background.png') center center / cover no-repeat fixed;
-  z-index: -1;
-  opacity: 1;
-  transition: opacity 0.5s ease;
+  z-index: -1; /* Behind all other content */
+  opacity: 1; /* Fully visible in light mode */
+  transition: opacity 0.5s ease; /* Smooth fade transition */
 }
 
-/* Animated Background Particles */
+/* Hides the background image in dark mode. */
+body.dark-mode::before {
+  opacity: 0; /* Fades out the background image */
+}
+
+/* Applies a solid dark background color to the body in dark mode. */
+body.dark-mode {
+  background-color: var(--body-bg-color); /* Uses the dark mode body background color variable */
+}
+
+/* --- Animated Background Particles --- */
+/* Styles for small, decorative particles floating across the screen. */
 .bg-particles {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
+  pointer-events: none; /* Allows clicks to pass through */
+  overflow: hidden; /* Ensures particles don't spill outside container */
+  z-index: 0; /* Behind other content */
 }
 
 .particle {
   position: absolute;
-  background-color: var(--particle-color);
+  background-color: var(--particle-color); /* Dynamic color based on theme */
   border-radius: 50%;
   opacity: 0;
-  animation: moveParticles 20s infinite ease-in-out;
-  box-shadow: 0 0 8px var(--particle-color);
+  animation: moveParticles 20s infinite ease-in-out; /* Main particle animation */
+  box-shadow: 0 0 8px var(--particle-color); /* Subtle glow for particles */
 }
 
+/* Individual particle settings for varied animation (size, duration, delay, initial position) */
 .particle:nth-child(1) { width: 15px; height: 15px; animation-duration: 18s; animation-delay: 0s; left: 10%; top: -10%; }
 .particle:nth-child(2) { width: 22px; height: 22px; animation-duration: 22s; animation-delay: 2s; left: 20%; top: -20%; }
 .particle:nth-child(3) { width: 12px; height: 12px; animation-duration: 16s; animation-delay: 4s; left: 30%; top: -5%; }
@@ -101,10 +140,10 @@ body::before {
 .particle:nth-child(15) { width: 27px; height: 27px; animation-duration: 22s; animation-delay: 4.8s; left: 55%; top: -9%; }
 
 
-/* Keyframes for the 'moveParticles' animation: dynamic float with scale and opacity changes. */
+/* Keyframes for the 'moveParticles' animation: a dynamic float with scale and opacity changes. */
 @keyframes moveParticles {
   0% {
-    transform: translateY(0vh) translateX(0vw) scale(0.5);
+    transform: translateY(0vh) translateX(0vw) scale(0.5); /* Start at top of viewport */
     opacity: 0;
   }
   20% {
@@ -123,11 +162,12 @@ body::before {
   }
   100% {
     transform: translateY(100vh) translateX(0vw) scale(0.7);
-    opacity: 0;
+    opacity: 0; /* Fade out as they leave the bottom */
   }
 }
 
-/* Main Content Container */
+/* --- Main Content Container --- */
+/* Wraps primary content, uses flexbox for centering, adjusts based on theme. */
 .main-container {
   position: relative;
   min-height: 100vh;
@@ -136,15 +176,21 @@ body::before {
   align-items: center;
   justify-content: var(--main-container-justify);
   padding: 2rem;
-  padding-top: 20px;
-  transition: justify-content 0.8s ease-out;
+  padding-top: 20px; /* Additional top padding */
+  transition: justify-content 0.8s ease-out; /* Smooth transition for vertical alignment */
 }
 
-/* Header Section Styles */
+/* Adjust margin in dark mode to compensate for disappearing profile pic */
+body.dark-mode .header-section {
+    margin-bottom: 1rem; /* Reduced margin to bring text/buttons closer */
+}
+
+/* --- Header Section Styles --- */
+/* Contains introductory elements, with a subtle slide-in animation on load. */
 .header-section {
   text-align: center;
   margin-bottom: 3rem;
-  animation: slideInDown 1s ease-out;
+  animation: slideInDown 1s ease-out; /* Slide-in animation for the whole section */
   width: 100%;
   max-width: 600px;
   transition: margin-bottom 0.8s ease-out;
@@ -156,7 +202,8 @@ body::before {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Profile Picture Styles (Light Mode) */
+/* --- Profile Picture Styles (Light Mode) --- */
+/* Appearance of the profile picture with a hover effect and pulsing animation. */
 .profile-pic {
   width: 300px;
   height: 300px;
@@ -168,7 +215,7 @@ body::before {
   border: 4px solid var(--border-color-profile-pic);
   transform: translateY(0);
   transition: transform 0.8s ease-out, opacity 0.3s ease-out, margin-bottom 0.8s ease-out;
-  animation: pulseProfile 2s infinite alternate ease-in-out;
+  animation: pulseProfile 2s infinite alternate ease-in-out; /* New pulsing animation */
 }
 
 /* Profile picture hover effect. */
@@ -182,7 +229,17 @@ body::before {
   100% { transform: scale(1.02); }
 }
 
-/* Main Title (h1) Styles */
+/* --- Profile Picture Animation in Dark Mode --- */
+/* Profile picture moves up and fades out, becoming non-interactive. */
+body.dark-mode .profile-pic {
+  transform: translateY(-200px);
+  opacity: 0;
+  pointer-events: none;
+  margin-bottom: 0;
+}
+
+/* --- Main Title (h1) Styles --- */
+/* Defines the visual properties for the primary heading, with a fadeInDown animation. */
 h1 {
   font-size: 3rem;
   font-weight: 800;
@@ -190,9 +247,9 @@ h1 {
   margin-bottom: 1rem;
   letter-spacing: -1px;
   text-align: center;
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-  animation: fadeInDown 1s ease-out 0.2s forwards;
-  opacity: 0;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle text shadow */
+  animation: fadeInDown 1s ease-out 0.2s forwards; /* New animation with delay */
+  opacity: 0; /* Hidden initially for animation */
 }
 
 /* Keyframes for 'fadeInDown' text animation. */
@@ -201,16 +258,17 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Tagline Paragraph Styles */
+/* --- Tagline Paragraph Styles --- */
+/* Defines the visual properties for the descriptive tagline, with a fadeInUp animation. */
 .tagline {
   font-size: 1.25rem;
   color: var(--text-color-secondary);
   font-weight: 400;
   line-height: 1.5;
   text-align: center;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05);
-  animation: fadeInUp 1s ease-out 0.5s forwards;
-  opacity: 0;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.05); /* Subtle text shadow */
+  animation: fadeInUp 1s ease-out 0.5s forwards; /* New animation with delay */
+  opacity: 0; /* Hidden initially for animation */
 }
 
 /* Keyframes for 'fadeInUp' text animation. */
@@ -219,34 +277,38 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Main Navigation Container */
+/* --- Main Navigation Container --- */
+/* Organizes primary navigation links in a responsive grid, with a fade-in-up animation. */
 .main-nav-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem;
-  max-width: 1100px;
+  gap: 2.5rem; /* Increased gap for more spacing */
+  max-width: 1100px; /* Slightly wider container */
   width: 100%;
-  animation: fadeInUp 1s ease-out 0.3s both;
+  animation: fadeInUp 1s ease-out 0.3s both; /* Existing animation */
 }
 
-/* Magnetic Button Wrapper */
+/* --- Magnetic Button Wrapper --- */
+/* Wrapper for each navigation button, enables "magnetic" hover effect. */
 .magnetic-button-wrapper {
   position: relative;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Lighter initial shadow for wrapper */
   border-radius: 16px;
+  /* Removed overflow: hidden; to prevent clipping on hover transform */
   transition: box-shadow 0.3s ease;
 }
 
 /* Magnetic button wrapper hover effect. */
 .magnetic-button-wrapper:hover {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Darker shadow on hover */
 }
 
-/* Main Navigation Buttons (Magnetic with Break Effect) */
+/* --- Main Navigation Buttons (Magnetic with Break Effect) --- */
+/* Core styling for interactive navigation buttons with complex animations. */
 .main-nav-button.magnetic-button {
   position: relative;
   display: flex;
@@ -258,8 +320,8 @@ h1 {
   font-weight: 600;
   font-size: 1.3rem;
   width: 100%;
-  height: 220px;
-  max-width: 500px;
+  height: 220px; /* Slightly taller buttons */
+  max-width: 500px; /* Wider max-width for buttons */
   border-radius: 16px;
   overflow: hidden;
   background: var(--bg-color-main);
@@ -323,18 +385,18 @@ h1 {
   position: relative;
   z-index: 2;
   display: block;
-  font-size: 1.6rem;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  font-size: 1.6rem; /* Slightly larger font for main button text */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4); /* Stronger text shadow */
 }
 
 .fragment-2 .nav-description {
   position: relative;
   z-index: 2;
   color: var(--text-color-secondary);
-  font-size: 1.05rem;
+  font-size: 1.05rem; /* Slightly larger description font */
   font-weight: 400;
   line-height: 1.5;
-  text-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.2);
+  text-shadow: 0.5px 0.5px 2px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
 }
 
 /* Update description text color on hover. */
@@ -344,18 +406,18 @@ h1 {
 
 /* Magnetic hover effect for buttons: lift and scale. */
 .magnetic-button-wrapper:hover .main-nav-button {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
-  border-color: rgba(102, 126, 234, 0.5);
+  transform: translateY(-10px) scale(1.03); /* More pronounced lift and scale */
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2); /* Expands and darkens shadow */
+  border-color: rgba(102, 126, 234, 0.5); /* Changes border color on hover */
 }
 
 /* Break apart effect on hover for button fragments. */
 .magnetic-button-wrapper:hover .fragment-1 {
-  transform: translateX(-20px) translateY(-8px) rotate(-3deg);
+  transform: translateX(-20px) translateY(-8px) rotate(-3deg); /* More pronounced movement */
 }
 
 .magnetic-button-wrapper:hover .fragment-2 {
-  transform: translateX(20px) translateY(8px) rotate(3deg);
+  transform: translateX(20px) translateY(8px) rotate(3deg); /* More pronounced movement */
 }
 
 /* Subtle glow effect on hover for buttons. */
@@ -366,7 +428,7 @@ h1 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(108, 92, 231, 0.15), rgba(252, 204, 253, 0.15));
+  background: linear-gradient(45deg, rgba(108, 92, 231, 0.15), rgba(252, 204, 253, 0.15)); /* Stronger gradient for glow */
   z-index: 1;
   opacity: 1;
   transition: opacity 0.3s ease;
@@ -385,27 +447,28 @@ h1 {
   transition: opacity 0.3s ease;
 }
 
-/* Hamburger Menu Icon */
+/* --- Hamburger Menu Icon --- */
+/* Styles for the clickable icon that toggles the side-panel menu. */
 .menu-icon {
   position: fixed;
-  top: 25px;
-  left: 25px;
-  width: 55px;
+  top: 25px; /* Slightly adjusted position */
+  left: 25px; /* Slightly adjusted position */
+  width: 55px; /* Slightly larger icon */
   height: 45px;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-around; /* Changed to space-around for even bar distribution */
   cursor: pointer;
   z-index: 101;
-  padding: 8px;
+  padding: 8px; /* Added padding for easier clicking */
   border-radius: 8px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform for hover */
 }
 
 /* Menu icon hover effect. */
 .menu-icon:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-  transform: scale(1.05);
+  background-color: rgba(0, 0, 0, 0.08); /* Subtle background on hover */
+  transform: scale(1.05); /* Slight grow on hover */
 }
 body.dark-mode .menu-icon:hover {
     background-color: rgba(255, 255, 255, 0.08);
@@ -414,44 +477,45 @@ body.dark-mode .menu-icon:hover {
 
 .menu-icon .bar {
   width: 100%;
-  height: 5px;
+  height: 5px; /* Thicker bars */
   background: var(--menu-icon-bar-color);
   border-radius: 3px;
-  transition: all 0.4s cubic-bezier(0.86, 0, 0.07, 1);
+  transition: all 0.4s cubic-bezier(0.86, 0, 0.07, 1); /* Smoother transition for bar animation */
 }
 
 /* Menu icon active state: transforms bars into an 'X'. */
 .menu-icon.active .bar:nth-child(1) {
-  transform: translateY(15px) rotate(45deg);
+  transform: translateY(15px) rotate(45deg); /* Adjusted for new bar height */
 }
 
 .menu-icon.active .bar:nth-child(2) {
   opacity: 0;
-  transform: translateX(-50px);
+  transform: translateX(-50px); /* Slide out animation for middle bar */
 }
 
 .menu-icon.active .bar:nth-child(3) {
-  transform: translateY(-15px) rotate(-45deg);
+  transform: translateY(-15px) rotate(-45deg); /* Adjusted for new bar height */
 }
 
-/* Dropdown Menu */
+/* --- Dropdown Menu --- */
+/* Styles for the navigation menu that slides in from the left. */
 .dropdown-menu {
   position: fixed;
   top: 0;
   left: 0;
-  width: 280px;
+  width: 280px; /* Slightly wider dropdown menu */
   background: var(--bg-color-dropdown);
-  backdrop-filter: blur(18px);
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(18px); /* Stronger blur effect */
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
   transform: translateX(-100%);
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  padding-top: 90px;
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bounce effect for slide-in */
+  padding-top: 90px; /* More space from top */
   z-index: 99;
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  max-height: 100vh; /* Use 100vh directly for max height */
   overflow-y: auto;
-  border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px; /* More rounded corner */
 }
 
 /* Dropdown menu open state. */
@@ -461,15 +525,15 @@ body.dark-mode .menu-icon:hover {
 
 /* Dropdown section title for organized links. */
 .dropdown-section-title {
-  padding: 18px 25px 8px;
+  padding: 18px 25px 8px; /* Adjusted padding */
   color: var(--text-color-secondary);
-  font-size: 0.95em;
+  font-size: 0.95em; /* Slightly larger */
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 1.8px;
+  letter-spacing: 1.8px; /* More letter spacing */
   border-bottom: 1px solid var(--dropdown-item-border);
   margin-top: 15px;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.03); /* Subtle background for titles */
   text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -479,15 +543,15 @@ body.dark-mode .dropdown-section-title {
 
 /* Dropdown menu items with gradient hover animation. */
 .dropdown-item {
-  padding: 18px 25px;
+  padding: 18px 25px; /* More padding */
   text-decoration: none;
   color: var(--text-color-primary);
-  font-size: 1.15rem;
+  font-size: 1.15rem; /* Slightly larger font */
   border-bottom: 1px solid var(--dropdown-item-border);
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: color 0.3s ease, transform 0.2s ease;
+  transition: color 0.3s ease, transform 0.2s ease; /* Added transform transition */
 }
 
 /* Cyan and Pink Faded Hover Animation for Dropdown Items. */
@@ -502,7 +566,7 @@ body.dark-mode .dropdown-section-title {
   transform: translateX(-100%);
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: -1;
-  opacity: 0.85;
+  opacity: 0.85; /* Slightly less transparent */
 }
 
 /* Moves gradient overlay into full view on hover. */
@@ -513,25 +577,26 @@ body.dark-mode .dropdown-section-title {
 /* Changes text color to white on hover for readability. */
 .dropdown-item:hover {
   color: white;
-  transform: translateX(8px);
+  transform: translateX(8px); /* Slide effect on hover for dropdown items */
 }
 
-/* Theme Toggle Button */
+/* --- Theme Toggle Button --- */
+/* Styles for the sun/moon icon that controls the page's theme. */
 .theme-toggle {
   position: fixed;
-  top: 25px;
-  right: 25px;
-  font-size: 2.8rem;
+  top: 25px; /* Adjusted position */
+  right: 25px; /* Adjusted position */
+  font-size: 2.8rem; /* Even larger icon size */
   cursor: pointer;
-  color: var(--toggle-icon-color);
+  color: var(--toggle-icon-color); /* Dynamic color based on theme */
   z-index: 100;
-  transition: color 0.4s ease, transform 0.4s ease;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+  transition: color 0.4s ease, transform 0.4s ease; /* Longer transition for smoother animation */
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25); /* More prominent text shadow */
 }
 
 /* Theme toggle button hover effect: spin and grow. */
 .theme-toggle:hover {
-  transform: rotate(25deg) scale(1.15);
+  transform: rotate(25deg) scale(1.15); /* More pronounced spin and grow */
 }
 
 .theme-toggle i {
@@ -539,14 +604,14 @@ body.dark-mode .dropdown-section-title {
 }
 
 
-/* Responsive Design Media Queries */
+/* --- Responsive Design Media Queries --- */
 
 /* Tablet styles (up to 1024px wide) */
 @media (max-width: 1024px) {
   .main-nav-container {
     gap: 2rem;
-    grid-template-columns: repeat(1, 1fr);
-    max-width: 500px;
+    grid-template-columns: repeat(1, 1fr); /* Switch to single column for better tablet layout */
+    max-width: 500px; /* Limit width in single column mode */
   }
 
   .main-nav-button.magnetic-button {
@@ -624,12 +689,12 @@ body.dark-mode .dropdown-section-title {
 /* Small mobile styles (up to 480px wide) */
 @media (max-width: 480px) {
   .main-nav-button {
-    font-size: 1.1rem;
+    font-size: 1.1rem; /* Adjust to match the updated small mobile styles in the snippet */
   }
-  .main-nav-button > span {
-    font-size: 1.3rem;
+  .main-nav-button > span { /* This targets the text directly inside main-nav-button, adjust if 'fragment-1 span' is preferred */
+    font-size: 1.3rem; /* Adjust to match the updated small mobile styles in the snippet */
   }
-  .fragment-1 span {
+  .fragment-1 span { /* This is the more precise target for the main button text */
     font-size: 1.4rem;
   }
   .fragment-2 .nav-description {
@@ -682,174 +747,5 @@ body.dark-mode .dropdown-section-title {
     font-size: 2rem;
     top: 15px;
     right: 15px;
-  }
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Focus states for accessibility */
-.main-nav-button:focus,
-.dropdown-item:focus,
-.theme-toggle:focus,
-.menu-icon:focus {
-  outline: 2px solid #8b7355;
-  outline-offset: 2px;
-}
-
-.dark-mode .main-nav-button:focus,
-.dark-mode .dropdown-item:focus,
-.dark-mode .theme-toggle:focus,
-.dark-mode .menu-icon:focus {
-  outline-color: #d4c4a8;
-}
-
-/* --- Dark Theme (from mainpage.css, applied when body.dark-mode is active) --- */
-
-/* Dark mode body */
-body.dark-mode {
-  background: linear-gradient(135deg, #2c2419 0%, #1a1612 100%);
-  color: #e8dcc0;
-}
-
-/* Hides the background image in dark mode. */
-body.dark-mode::before {
-  opacity: 0;
-}
-
-/* Applies a solid dark background color to the body in dark mode. */
-body.dark-mode {
-  background-color: var(--body-bg-color);
-}
-
-/* Adjust margin in dark mode to compensate for disappearing profile pic */
-body.dark-mode .header-section {
-    margin-bottom: 1rem;
-}
-
-/* Profile Picture Animation in Dark Mode */
-body.dark-mode .profile-pic {
-  transform: translateY(-200px);
-  opacity: 0;
-  pointer-events: none;
-  margin-bottom: 0;
-}
-
-/* Hamburger menu icon */
-body.dark-mode .menu-icon {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-}
-
-body.dark-mode .menu-icon .bar {
-  background: #d4c4a8; /* Specific dark mode bar color */
-}
-
-/* Dropdown menu */
-body.dark-mode .dropdown-menu {
-  background: rgba(44, 36, 25, 0.95);
-  border-right: 1px solid rgba(212, 196, 168, 0.2);
-}
-
-body.dark-mode .dropdown-item {
-  color: #c7b299; /* Specific dark mode item color */
-}
-
-body.dark-mode .dropdown-item:hover {
-  background: rgba(212, 196, 168, 0.1); /* Specific dark mode hover background */
-  color: #d4c4a8; /* Specific dark mode hover color */
-}
-
-/* Theme toggle */
-body.dark-mode .theme-toggle {
-  color: #d4c4a8; /* Specific dark mode toggle color */
-}
-
-/* Background particles */
-body.dark-mode .particle {
-  background: rgba(212, 196, 168, 0.2); /* Specific dark mode particle color */
-}
-
-/* Profile picture */
-body.dark-mode .profile-pic {
-  border-color: rgba(212, 196, 168, 0.3);
-  box-shadow: 0 8px 32px rgba(212, 196, 168, 0.1);
-}
-
-body.dark-mode .profile-pic:hover {
-  box-shadow: 0 12px 40px rgba(212, 196, 168, 0.2);
-}
-
-/* H1 heading */
-body.dark-mode h1 {
-  color: #d4c4a8;
-}
-
-/* Tagline */
-body.dark-mode .tagline {
-  color: #c7b299;
-}
-
-/* Main nav buttons */
-body.dark-mode .main-nav-button {
-  background: rgba(44, 36, 25, 0.6);
-  border-color: rgba(212, 196, 168, 0.2);
-}
-
-body.dark-mode .main-nav-button::before {
-  background: radial-gradient(circle, rgba(212, 196, 168, 0.1) 0%, transparent 70%);
-}
-
-body.dark-mode .main-nav-button:hover {
-  background: rgba(44, 36, 25, 0.8);
-  box-shadow: 0 20px 40px rgba(212, 196, 168, 0.1);
-}
-
-/* Fragment 1 span */
-body.dark-mode .fragment-1 span {
-  color: #d4c4a8;
-}
-
-/* Nav description */
-body.dark-mode .nav-description {
-  color: #c7b299;
-}
-
-/* Focus states */
-body.dark-mode .main-nav-button:focus,
-body.dark-mode .dropdown-item:focus,
-body.dark-mode .theme-toggle:focus,
-body.dark-mode .menu-icon:focus {
-  outline-color: #d4c4a8;
-}
-
-/* Responsive design overrides for dark mode */
-@media (max-width: 768px) {
-  body.dark-mode .main-nav-button {
-    padding: 24px;
-  }
-  body.dark-mode .fragment-1 span {
-    font-size: 1.2rem;
-  }
-  body.dark-mode h1 {
-    font-size: 2.5rem;
-  }
-  body.dark-mode .tagline {
-    font-size: 1.1rem;
-  }
-  body.dark-mode .header-section {
-    margin-bottom: 60px;
-  }
-  body.dark-mode .profile-pic {
-    width: 100px;
-    height: 100px;
-  }
-}
-@media (max-width: 480px) {
-  body.dark-mode .main-nav-button {
-    font-size: 1rem;
   }
 }
