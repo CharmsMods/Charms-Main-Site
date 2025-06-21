@@ -35,24 +35,10 @@
     <a href="about/index.html" class="dropdown-item">About</a>
     <a href="image-converter/image-converter.html" class="dropdown-item">Image Converter</a>
     <a href="file-tree-visualizer/index.html" class="dropdown-item">File Tree Visualizer</a>
-
-
   </div>
 
   <div class="theme-toggle" id="themeToggle">
     <i class="fas fa-sun"></i>
-  </div>
-
-  <div class="bg-particles">
-    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
-    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
-    <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
-    <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
-    <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-    <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
-    <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
-    <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
   </div>
 
   <div class="main-container">
@@ -119,45 +105,18 @@
     </div>
   </div>
 
-  <script>
-    // Get references to key DOM elements using their IDs.
-    const menuIcon = document.getElementById('menuIcon');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const themeToggle = document.getElementById('themeToggle');
-    const body = document.body; // Direct reference to the <body> element for theme changes.
+  <div class="bg-particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+  </div>
 
-    // Event listener for the hamburger menu icon click.
-    // Toggles the 'open' class on the dropdown menu to show/hide it,
-    // and toggles the 'active' class on the menu icon for its animation.
-    menuIcon.addEventListener('click', () => {
-      dropdownMenu.classList.toggle('open');
-      menuIcon.classList.toggle('active');
-    });
-
-    // Event listener for clicks anywhere on the document.
-    // This allows the dropdown menu to close if the user clicks outside
-    // of the menu itself or the menu icon.
-    document.addEventListener('click', (event) => {
-      // Check if the clicked target is neither part of the dropdown menu
-      // nor the menu icon.
-      if (!dropdownMenu.contains(event.target) && !menuIcon.contains(event.target)) {
-        dropdownMenu.classList.remove('open'); // Close the dropdown menu.
-        menuIcon.classList.remove('active'); // Reset the menu icon animation.
-      }
-    });
-
-    // Event listener for the theme toggle button click.
-    // This handles switching between light and dark modes.
-    themeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark-mode'); // Add or remove the 'dark-mode' class on the body.
-
-      // Based on whether 'dark-mode' is now active, update the toggle icon.
-      if (body.classList.contains('dark-mode')) {
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Display moon icon for dark mode.
-      } else {
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Display sun icon for light mode.
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
